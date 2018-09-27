@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.nhahv.speechrecognitionpoint.ui.main.MainFragment
 import com.nhahv.speechrecognitionpoint.util.FileExcelManager
 import com.nhahv.speechrecognitionpoint.util.PermissionUtil
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
     private val CODE_EXTERNAL_STORAGE = 100
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
         PermissionUtil.requestPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, CODE_EXTERNAL_STORAGE) { FileExcelManager.getExcelFile() }
+
+        SharedPrefs.getInstance(this)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

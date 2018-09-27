@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment
 import android.view.*
 import com.nhahv.speechrecognitionpoint.FileExcelActivity
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.data.model.Student
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 
 class MainFragment : Fragment() {
 
@@ -29,7 +32,6 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -47,6 +49,12 @@ class MainFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val items = SharedPrefs.getInstance(activity!!.applicationContext).get(PREF_STUDENT, ArrayList<Student>())
+        println("===================== $items")
     }
 
 }

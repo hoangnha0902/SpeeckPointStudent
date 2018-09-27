@@ -1,4 +1,4 @@
-package com.nhahv.speechrecognitionpoint.base
+package com.nhahv.speechrecognitionpoint
 
 import android.support.annotation.LayoutRes
 import android.support.v7.widget.RecyclerView

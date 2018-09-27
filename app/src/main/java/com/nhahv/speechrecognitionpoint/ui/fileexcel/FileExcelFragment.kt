@@ -6,13 +6,15 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.R
-import com.nhahv.speechrecognitionpoint.base.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.data.FileExcel
+import com.nhahv.speechrecognitionpoint.data.model.Student
 import com.nhahv.speechrecognitionpoint.util.FileExcelManager
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
-import java.util.*
 
 class FileExcelFragment : Fragment() {
 
@@ -26,7 +28,9 @@ class FileExcelFragment : Fragment() {
         override fun onClick(item: FileExcel, position: Int) {
             Thread().run {
                 item.path?.let {
-                    viewModel.importStudent(it)
+                    val students: ArrayList<Student> = viewModel.importStudent(it)
+                    SharedPrefs.getInstance(activity!!.applicationContext).put(PREF_STUDENT, students)
+                    activity?.finish()
                 }
             }
         }
@@ -67,5 +71,4 @@ class FileExcelFragment : Fragment() {
             view.fileTime.text = excelFile.time
         }
     }
-
 }
