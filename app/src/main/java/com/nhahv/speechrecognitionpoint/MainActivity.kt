@@ -40,7 +40,5 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                 }
             }
         }
-
     }
-
 }

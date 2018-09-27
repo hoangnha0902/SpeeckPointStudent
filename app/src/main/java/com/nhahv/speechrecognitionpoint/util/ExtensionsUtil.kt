@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.widget.Toast
 import android.widget.Toast.makeText
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 fun Toast.showToast(context: Context, message: String) {
     makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -30,7 +31,12 @@ inline fun <reified T> SharedPreferences.get(key: String, defaultValue: T): T {
         Float::class -> getFloat(key, defaultValue as Float) as T
         Long::class -> getLong(key, defaultValue as Long) as T
         String::class -> getString(key, defaultValue as String) as T
-        else -> Gson().fromJson(getString(key, ""), T::class.java) as T
+        else -> {
+            getString(key, defaultValue as String) as T
+        }
     }
 }
+
+inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
+
 

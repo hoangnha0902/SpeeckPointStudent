@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/stt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="STT"
+        app:layout_constraintBottom_toTopOf="@+id/studentNumber"
+        app:layout_constraintEnd_toEndOf="@+id/studentName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/studentNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="180000005602"
+        app:layout_constraintBottom_toTopOf="@+id/studentName"
+        app:layout_constraintEnd_toEndOf="@+id/studentName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stt" />
+
+    <TextView
+        android:id="@+id/studentName"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="Nguyễn Đức Tuấn Anh"
+        app:layout_constraintBottom_toBottomOf="@+id/tbmPoint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/studentNumber" />
+
+    <TextView
+        android:id="@+id/hkPoint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Học Kỳ: "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/studentName"
+        app:layout_constraintTop_toBottomOf="@+id/p45Point" />
+
+    <TextView
+        android:id="@+id/mouthPoint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Miệng:"
+        app:layout_constraintStart_toStartOf="@+id/hkPoint"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/p15Point"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="P15:"
+        app:layout_constraintStart_toStartOf="@+id/hkPoint"
+        app:layout_constraintTop_toBottomOf="@+id/mouthPoint" />
+
+    <TextView
+        android:id="@+id/p45Point"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Viết:"
+        app:layout_constraintStart_toStartOf="@+id/hkPoint"
+        app:layout_constraintTop_toBottomOf="@+id/p15Point" />
+
+    <TextView
+        android:id="@+id/tbmPoint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TBM:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/hkPoint"
+        app:layout_constraintTop_toBottomOf="@+id/hkPoint" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/material_grey_300"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tbmPoint" />
+
+    <TextView
+        android:id="@+id/m1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="m1"
+        app:layout_constraintBottom_toBottomOf="@+id/mouthPoint"
+        app:layout_constraintEnd_toStartOf="@+id/m2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/mouthPoint" />
+
+    <TextView
+        android:id="@+id/m2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="m2"
+        app:layout_constraintBottom_toBottomOf="@+id/m1"
+        app:layout_constraintEnd_toStartOf="@+id/m3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/m1" />
+
+    <TextView
+        android:id="@+id/m3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="m3"
+        app:layout_constraintBottom_toBottomOf="@+id/m2"
+        app:layout_constraintEnd_toStartOf="@+id/m4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/m2" />
+
+    <TextView
+        android:id="@+id/m4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="m4"
+        app:layout_constraintBottom_toBottomOf="@+id/m3"
+        app:layout_constraintEnd_toStartOf="@+id/m5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/m3" />
+
+    <TextView
+        android:id="@+id/m5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="m5"
+        app:layout_constraintBottom_toBottomOf="@+id/m4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/m4" />
+
+    <TextView
+        android:id="@+id/p1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="p1"
+        app:layout_constraintBottom_toBottomOf="@+id/p15Point"
+        app:layout_constraintEnd_toStartOf="@+id/p2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/p15Point"
+        app:layout_constraintStart_toStartOf="@+id/m1" />
+
+    <TextView
+        android:id="@+id/p2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="p2"
+        app:layout_constraintBottom_toBottomOf="@+id/p1"
+        app:layout_constraintEnd_toStartOf="@+id/p3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/p1" />
+
+    <TextView
+        android:id="@+id/p3"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:text="p3"
+        app:layout_constraintBottom_toBottomOf="@+id/p2"
+        app:layout_constraintEnd_toStartOf="@+id/p4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/p2" />
+
+    <TextView
+        android:id="@+id/p4"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:text="p4"
+        app:layout_constraintBottom_toBottomOf="@+id/p3"
+        app:layout_constraintEnd_toStartOf="@+id/p5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/p3" />
+
+    <TextView
+        android:id="@+id/p5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="p5"
+        app:layout_constraintBottom_toBottomOf="@+id/p4"
+        app:layout_constraintEnd_toEndOf="@+id/m5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/p4" />
+
+    <TextView
+        android:id="@+id/v1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="v1"
+        app:layout_constraintBottom_toBottomOf="@+id/p45Point"
+        app:layout_constraintEnd_toStartOf="@+id/v2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/p45Point"
+        app:layout_constraintStart_toStartOf="@+id/p1" />
+
+    <TextView
+        android:id="@+id/v2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="v2"
+        app:layout_constraintBottom_toBottomOf="@+id/v1"
+        app:layout_constraintEnd_toStartOf="@+id/v3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/v1" />
+
+    <TextView
+        android:id="@+id/v3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="v3"
+        app:layout_constraintBottom_toBottomOf="@+id/v2"
+        app:layout_constraintEnd_toStartOf="@+id/v4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/v2" />
+
+    <TextView
+        android:id="@+id/v4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="v4"
+        app:layout_constraintBottom_toBottomOf="@+id/v3"
+        app:layout_constraintEnd_toStartOf="@+id/v5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/v3" />
+
+    <TextView
+        android:id="@+id/v5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="v5"
+        app:layout_constraintBottom_toBottomOf="@+id/v4"
+        app:layout_constraintEnd_toEndOf="@+id/m5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/v4" />
+
+    <TextView
+        android:id="@+id/hk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hk"
+        app:layout_constraintBottom_toBottomOf="@+id/hkPoint"
+        app:layout_constraintEnd_toEndOf="@+id/v3"
+        app:layout_constraintStart_toStartOf="@+id/v3"
+        app:layout_constraintTop_toBottomOf="@+id/v3" />
+
+    <TextView
+        android:id="@+id/tbm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tbm"
+        app:layout_constraintBottom_toBottomOf="@+id/tbmPoint"
+        app:layout_constraintEnd_toEndOf="@+id/hk"
+        app:layout_constraintStart_toStartOf="@+id/hk" />
+</android.support.constraint.ConstraintLayout>

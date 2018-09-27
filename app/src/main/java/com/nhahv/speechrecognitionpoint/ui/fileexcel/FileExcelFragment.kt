@@ -63,7 +63,7 @@ class FileExcelFragment : Fragment() {
             listener: BaseRecyclerViewAdapter.OnItemListener<FileExcel>)
         : BaseRecyclerViewAdapter<FileExcel>(items, R.layout.item_excel_files, listener) {
 
-        override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: BaseViewHolder<FileExcel>, position: Int) {
             super.onBindViewHolder(holder, position)
             val view = holder.itemView
             val excelFile = items[position]
