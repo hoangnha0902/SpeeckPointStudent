@@ -28,7 +28,8 @@ class FileExcelFragment : Fragment() {
         override fun onClick(item: FileExcel, position: Int) {
             Thread().run {
                 item.path?.let {
-                    val students: ArrayList<Student> = viewModel.importStudent(it)
+                    println("====================== $it")
+                    val students: ArrayList<Student> = viewModel.importStudentApache(it)
                     SharedPrefs.getInstance(activity!!.applicationContext).put(PREF_STUDENT, students)
                     activity?.finish()
                 }

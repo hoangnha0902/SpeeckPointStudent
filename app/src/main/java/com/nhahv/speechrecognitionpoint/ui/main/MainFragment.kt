@@ -83,8 +83,10 @@ class MainFragment : Fragment() {
 
     private fun getStudentList(): ArrayList<Student> {
         val value = SharedPrefs.getInstance(activity!!.applicationContext).get(PREF_STUDENT, "")
-        val students: ArrayList<Student> = Gson().fromJson<ArrayList<Student>>(value)
-        return students
+        if(value.isEmpty()){
+            return ArrayList()
+        }
+        return Gson().fromJson<ArrayList<Student>>(value)
     }
 
 
