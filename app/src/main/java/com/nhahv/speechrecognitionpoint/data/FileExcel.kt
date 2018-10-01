@@ -1,6 +1,5 @@
 package com.nhahv.speechrecognitionpoint.data
 
-import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 

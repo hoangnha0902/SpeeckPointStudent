@@ -79,7 +79,7 @@ class Student(var stt: String = "0", var numberStudent: String = "", var name: S
             total += hk.toDouble() * 3
             radio += 3
         }
-        return (round(total / radio, 2)).toString()
+        return (round(total / radio, 1)).toString()
 
     }
 

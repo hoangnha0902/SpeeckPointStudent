@@ -9,10 +9,8 @@ import android.view.ViewGroup
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.FileExcel
-import com.nhahv.speechrecognitionpoint.data.model.Student
 import com.nhahv.speechrecognitionpoint.util.FileExcelManager
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
+import com.nhahv.speechrecognitionpoint.util.ReadWriteExcelFile
 import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
 
@@ -26,12 +24,20 @@ class FileExcelFragment : Fragment() {
     private val excelFiles: ArrayList<FileExcel> = ArrayList()
     private val excelFileAdapter = ExcelFilesAdapter(excelFiles, object : BaseRecyclerViewAdapter.OnItemListener<FileExcel> {
         override fun onClick(item: FileExcel, position: Int) {
+            println("============= ${item.parent}")
+            println("=============== ${item.path}")
+
+
+            println("=============== ${item}")
+
+            ReadWriteExcelFile.renameExcelFile(item, "bangDiem2018___.xls")
+
             Thread().run {
                 item.path?.let {
-                    println("====================== $it")
-                    val students: ArrayList<Student> = viewModel.importStudentApache(it)
-                    SharedPrefs.getInstance(activity!!.applicationContext).put(PREF_STUDENT, students)
-                    activity?.finish()
+
+//                    val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it)
+//                    SharedPrefs.getInstance(activity!!.applicationContext).put(PREF_STUDENT, students)
+//                    activity?.finish()
                 }
             }
         }
