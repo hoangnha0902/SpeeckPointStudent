@@ -9,7 +9,7 @@ import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.FileExcelActivity
 import com.nhahv.speechrecognitionpoint.R
-import com.nhahv.speechrecognitionpoint.data.model.Student
+import com.nhahv.speechrecognitionpoint.data.models.Student
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 import com.nhahv.speechrecognitionpoint.util.SpeechPoint

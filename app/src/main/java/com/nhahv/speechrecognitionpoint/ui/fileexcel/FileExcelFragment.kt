@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.R
-import com.nhahv.speechrecognitionpoint.data.FileExcel
+import com.nhahv.speechrecognitionpoint.data.models.FileExcel
 import com.nhahv.speechrecognitionpoint.util.FileExcelManager
 import com.nhahv.speechrecognitionpoint.util.ReadWriteExcelFile
 import kotlinx.android.synthetic.main.file_excel_fragment.*

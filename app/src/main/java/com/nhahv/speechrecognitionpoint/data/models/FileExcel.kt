@@ -1,4 +1,4 @@
-package com.nhahv.speechrecognitionpoint.data
+package com.nhahv.speechrecognitionpoint.data.models
 
 import java.text.SimpleDateFormat
 import java.util.*

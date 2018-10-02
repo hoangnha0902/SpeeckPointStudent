@@ -1,7 +1,7 @@
 package com.nhahv.speechrecognitionpoint.util
 
-import com.nhahv.speechrecognitionpoint.data.FileExcel
-import com.nhahv.speechrecognitionpoint.data.model.Student
+import com.nhahv.speechrecognitionpoint.data.models.FileExcel
+import com.nhahv.speechrecognitionpoint.data.models.Student
 import org.apache.poi.ss.usermodel.DataFormatter
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File

@@ -1,4 +1,4 @@
-package com.nhahv.speechrecognitionpoint.data.model
+package com.nhahv.speechrecognitionpoint.data.models
 
 class Student(var stt: String = "0", var numberStudent: String = "", var name: String = "",
               var m1: String = "", var m2: String = "",

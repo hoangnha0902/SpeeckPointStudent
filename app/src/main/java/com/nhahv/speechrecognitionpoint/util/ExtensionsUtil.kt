@@ -1,7 +1,11 @@
 package com.nhahv.speechrecognitionpoint.util
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.widget.Toast
 import android.widget.Toast.makeText
 import com.google.gson.Gson
@@ -35,6 +39,35 @@ inline fun <reified T> SharedPreferences.get(key: String, defaultValue: T): T {
             getString(key, defaultValue as String) as T
         }
     }
+}
+
+fun Activity.toast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Fragment.toast(message: String) {
+    Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+}
+
+inline fun <reified T> Activity.start() {
+    startActivity(Intent(this, T::class.java))
+}
+
+inline fun <reified T> Activity.start(bundle: Bundle) {
+    startActivity(Intent(this, T::class.java).apply {
+        putExtras(bundle)
+    })
+}
+
+inline fun <reified T> Fragment.start(bundle: Bundle) {
+    startActivity(Intent(activity, T::class.java).apply {
+        putExtras(bundle)
+    })
+}
+
+
+inline fun <reified T> Fragment.start() {
+    startActivity(Intent(activity, T::class.java))
 }
 
 inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)

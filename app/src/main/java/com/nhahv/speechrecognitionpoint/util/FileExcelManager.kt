@@ -2,7 +2,7 @@ package com.nhahv.speechrecognitionpoint.util
 
 import android.os.Environment
 import android.util.Log
-import com.nhahv.speechrecognitionpoint.data.FileExcel
+import com.nhahv.speechrecognitionpoint.data.models.FileExcel
 
 
 import java.io.File
