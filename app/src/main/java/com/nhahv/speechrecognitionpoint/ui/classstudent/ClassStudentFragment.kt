@@ -13,8 +13,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
-import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.SubjectsActivity
 import com.nhahv.speechrecognitionpoint.data.models.AClass
 import com.nhahv.speechrecognitionpoint.ui.classcreate.ClassCreateFragment
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
@@ -54,7 +54,7 @@ class ClassStudentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         aClassAdapter = AClassAdapter(activity!!.applicationContext, aClasses, object : BaseRecyclerViewAdapter.OnItemListener<AClass> {
             override fun onClick(item: AClass, position: Int) {
-                start<MainActivity>(Bundle().apply { putString("className", item.name) })
+                start<SubjectsActivity>(Bundle().apply { putString("className", item.name) })
             }
         })
         classList.adapter = aClassAdapter
