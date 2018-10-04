@@ -8,12 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
+import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.Subject
 import com.nhahv.speechrecognitionpoint.ui.classstudent.ClassStudentFragment
 import com.nhahv.speechrecognitionpoint.ui.subjectCreate.SubjectCreateFragment
+import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
+import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
+import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.fromJson
+import com.nhahv.speechrecognitionpoint.util.start
 import kotlinx.android.synthetic.main.item_subject.view.*
 import kotlinx.android.synthetic.main.subjects_fragment.*
 
@@ -32,7 +37,11 @@ class SubjectsFragment : Fragment() {
     private var className: String? = null
     private val adapter = SubjectAdapter(subjects, object : BaseRecyclerViewAdapter.OnItemListener<Subject> {
         override fun onClick(item: Subject, position: Int) {
-
+            val bundle = Bundle()
+            bundle.putString(CLASS_NAME, className)
+            bundle.putString(SUBJECT_NAME, item.subjectName)
+            bundle.putSerializable(SEMESTER_PARAM, item.semester)
+            start<MainActivity>(bundle)
         }
     })
 
@@ -74,7 +83,6 @@ class SubjectsFragment : Fragment() {
                 })
             }
         }
-
     }
 
     private fun refreshData() {
@@ -84,7 +92,7 @@ class SubjectsFragment : Fragment() {
     }
 
     private fun getSubjects(): ArrayList<Subject> {
-        val value = SharedPrefs.getInstance(activity!!.applicationContext).get(SharedPrefs.PREF_SUBJECT.format(className), "")
+        val value = SharedPrefs.getInstance(requireContext()).get(SharedPrefs.PREF_SUBJECT.format(className), "")
         if (value.isEmpty()) {
             return ArrayList()
         }

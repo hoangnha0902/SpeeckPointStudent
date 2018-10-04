@@ -9,39 +9,56 @@ import android.view.ViewGroup
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.FileExcel
+import com.nhahv.speechrecognitionpoint.data.models.SemesterType
+import com.nhahv.speechrecognitionpoint.data.models.Student
+import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
+import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
+import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
 import com.nhahv.speechrecognitionpoint.util.FileExcelManager
 import com.nhahv.speechrecognitionpoint.util.ReadWriteExcelFile
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
 
 class FileExcelFragment : Fragment() {
 
     companion object {
-        fun newInstance() = FileExcelFragment()
+        fun newInstance(extras: Bundle?) = FileExcelFragment().apply { arguments = extras }
     }
 
     private lateinit var viewModel: FileExcelViewModel
+    var className: String? = null
+    var subjectName: String? = null
+    var semester: SemesterType? = SemesterType.SEMESTER_I
+
     private val excelFiles: ArrayList<FileExcel> = ArrayList()
     private val excelFileAdapter = ExcelFilesAdapter(excelFiles, object : BaseRecyclerViewAdapter.OnItemListener<FileExcel> {
         override fun onClick(item: FileExcel, position: Int) {
             println("============= ${item.parent}")
             println("=============== ${item.path}")
-
-
             println("=============== ${item}")
-
-            ReadWriteExcelFile.renameExcelFile(item, "bangDiem2018___.xls")
-
             Thread().run {
-                item.path?.let {
+                //                ReadWriteExcelFile.copyFile(item, PATH_APP, "TEST_DIEM.xls")
 
-//                    val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it)
-//                    SharedPrefs.getInstance(activity!!.applicationContext).put(PREF_STUDENT, students)
-//                    activity?.finish()
+                item.path?.let {
+                    val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it)
+                    SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(className, subjectName, semester?.getSemesterName()), students)
+                    requireActivity().finish()
+
                 }
             }
         }
     })
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            className = it.getString(CLASS_NAME)
+            subjectName = it.getString(SUBJECT_NAME)
+            semester = it.getSerializable(SEMESTER_PARAM) as SemesterType
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {

@@ -12,7 +12,7 @@ class FileExcelActivity : AppCompatActivity() {
         setContentView(R.layout.file_excel_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, FileExcelFragment.newInstance())
+                    .replace(R.id.container, FileExcelFragment.newInstance(intent.extras))
                     .commitNow()
         }
     }

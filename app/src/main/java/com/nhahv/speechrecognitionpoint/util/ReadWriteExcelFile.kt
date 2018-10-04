@@ -80,8 +80,9 @@ object ReadWriteExcelFile {
         }
     }
 
-    fun writeStudentExcel(path: String, students: ArrayList<Student>): Boolean {
+    fun writeStudentExcel(excelFile: FileExcel, path: String, name: String, students: ArrayList<Student>): Boolean {
         try {
+            val fileWrite = copyFile(excelFile, path, name)
             val workbook = WorkbookFactory.create(File(path))
             val sheet = workbook.getSheetAt(0)
             for (i in rowStart..sheet.lastRowNum) {
@@ -189,7 +190,7 @@ object ReadWriteExcelFile {
                 }
 
             }
-            val fileOut = FileOutputStream(path)
+            val fileOut = FileOutputStream(fileWrite)
             workbook.write(fileOut)
             fileOut.close()
             workbook.close()
@@ -200,11 +201,11 @@ object ReadWriteExcelFile {
         }
     }
 
-    fun renameExcelFile(excelFile: FileExcel, name: String) {
+    fun copyFile(excelFile: FileExcel, path: String, name: String): File {
         var fileFrom = File(excelFile.parent, excelFile.nameFile + ".xls")
-        var fileTo = File(excelFile.parent, name)
-        var isRenameFile = fileFrom.renameTo(fileTo)
-        fileFrom.copyTo(fileTo, true)
-        println("=================== $isRenameFile")
+        var fileTo = File(path, name)
+//        var isRenameFile = fileFrom.renameTo(fileTo)
+        return fileFrom.copyTo(fileTo, true)
+//        println("=================== $isRenameFile")
     }
 }

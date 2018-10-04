@@ -1,27 +1,39 @@
 package com.nhahv.speechrecognitionpoint.ui.main
 
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.FileExcelActivity
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.data.models.SemesterType
 import com.nhahv.speechrecognitionpoint.data.models.Student
+import com.nhahv.speechrecognitionpoint.data.models.TypeOfTypePoint
+import com.nhahv.speechrecognitionpoint.data.models.TypePoint
+import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
+import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
+import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 import com.nhahv.speechrecognitionpoint.util.SpeechPoint
 import com.nhahv.speechrecognitionpoint.util.fromJson
+import com.nhahv.speechrecognitionpoint.util.start
 import kotlinx.android.synthetic.main.item_students2.view.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MainFragment()
+        fun newInstance(bundle: Bundle?) = MainFragment().apply { arguments = bundle }
     }
+
+    var className: String? = null
+    var subjectName: String? = null
+    var semester: SemesterType? = SemesterType.SEMESTER_I
 
     private lateinit var viewModel: MainViewModel
     private lateinit var speechPoint: SpeechPoint
@@ -33,9 +45,21 @@ class MainFragment : Fragment() {
     })
 
 
+    val typePointList = ArrayList<TypePoint>()
+    var typePoint: TypePoint = TypePoint.MOUTH
+    val typeOfPointList = ArrayList<TypeOfTypePoint>()
+    var typeOfPoint: TypeOfTypePoint = TypeOfTypePoint.TYPE_1
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        arguments?.let {
+            className = it.getString(CLASS_NAME)
+            subjectName = it.getString(SUBJECT_NAME)
+            semester = it.getSerializable(SEMESTER_PARAM) as SemesterType
+        }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +74,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        speechPoint = SpeechPoint(activity!!)
+        speechPoint = SpeechPoint(requireContext())
         initViews()
     }
 
@@ -62,10 +86,14 @@ class MainFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_import -> {
-                requireActivity().startActivity(Intent(activity, FileExcelActivity::class.java))
+                start<FileExcelActivity>(Bundle().apply {
+                    putString(CLASS_NAME, className)
+                    putString(SUBJECT_NAME, subjectName)
+                    putSerializable(SEMESTER_PARAM, semester)
+                })
             }
             R.id.menu_export -> {
-
+                
             }
         }
         return super.onOptionsItemSelected(item)
@@ -83,6 +111,8 @@ class MainFragment : Fragment() {
         students.addAll(getStudentList())
         studentAdapter.notifyDataSetChanged()
 
+        initSpTypePoint()
+        initSpTypeOfPoint()
         startMic.setOnClickListener {
             speechPoint.startSpeech()
         }
@@ -92,8 +122,56 @@ class MainFragment : Fragment() {
         }
     }
 
+    fun initSpTypePoint() {
+        typePointList.add(TypePoint.MOUTH)
+        typePointList.add(TypePoint.P15)
+        typePointList.add(TypePoint.WRITE)
+        typePointList.add(TypePoint.SEMESTER)
+        val adapterTypePoint = ArrayAdapter<TypePoint>(requireContext(), android.R.layout.simple_list_item_1, typePointList)
+        spTypePoint.adapter = adapterTypePoint
+        spTypePoint.setSelection(0)
+        spTypePoint.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                typePoint = typePointList[p2]
+                if (typePoint == TypePoint.SEMESTER) {
+                    typeOfPointLayout.visibility = View.INVISIBLE
+                } else {
+                    typeOfPointLayout.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    fun initSpTypeOfPoint() {
+        typeOfPointList.add(TypeOfTypePoint.TYPE_1)
+        typeOfPointList.add(TypeOfTypePoint.TYPE_2)
+        typeOfPointList.add(TypeOfTypePoint.TYPE_3)
+        typeOfPointList.add(TypeOfTypePoint.TYPE_4)
+        typeOfPointList.add(TypeOfTypePoint.TYPE_5)
+        val adapter = ArrayAdapter<TypeOfTypePoint>(requireContext(), android.R.layout.simple_list_item_1, typeOfPointList)
+        spTypeOfPoint.adapter = adapter
+        spTypeOfPoint.setSelection(0)
+        spTypeOfPoint.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                typeOfPoint = typeOfPointList[p2]
+            }
+        }
+        if (typePoint == TypePoint.SEMESTER) {
+            typeOfPointLayout.visibility = View.INVISIBLE
+        } else {
+            typeOfPointLayout.visibility = View.VISIBLE
+        }
+    }
+
     private fun getStudentList(): ArrayList<Student> {
-        val value = SharedPrefs.getInstance(activity!!.applicationContext).get(PREF_STUDENT, "")
+        val value = SharedPrefs.getInstance(requireContext()).get(PREF_STUDENT.format(className, subjectName, semester?.getSemesterName()), "")
         if (value.isEmpty()) {
             return ArrayList()
         }
@@ -102,7 +180,7 @@ class MainFragment : Fragment() {
 
 
     class StudentsAdapter(
-            val students: ArrayList<Student> = ArrayList(),
+            private val students: ArrayList<Student> = ArrayList(),
             listener: BaseRecyclerViewAdapter.OnItemListener<Student>
 
     ) : BaseRecyclerViewAdapter<Student>(students, R.layout.item_students2, listener) {

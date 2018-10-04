@@ -59,7 +59,7 @@ class ClassCreateFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         isCancelable = false
 
-        val adapter: ArrayAdapter<String> = ArrayAdapter(activity!!, android.R.layout.simple_list_item_1, yearClasses)
+        val adapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, yearClasses)
         spClassYear.adapter = adapter
         spClassYear.setSelection(4)
         cancel.setOnClickListener { dismiss() }
@@ -70,7 +70,7 @@ class ClassCreateFragment : DialogFragment() {
             val aclasses = getClasses()
             val aClass = AClass(subjectName.text.toString(), classNumber.text.toString().toInt(), classYear)
             aclasses.add(aClass)
-            SharedPrefs.getInstance(activity!!.applicationContext).put(PREF_CLASS, aclasses)
+            SharedPrefs.getInstance(requireContext()).put(PREF_CLASS, aclasses)
             toast("Tạo lớp học thành công!")
             dismiss()
         }
@@ -93,7 +93,7 @@ class ClassCreateFragment : DialogFragment() {
     }
 
     private fun getClasses(): ArrayList<AClass> {
-        val value = SharedPrefs.getInstance(activity!!.applicationContext).get(PREF_CLASS, "")
+        val value = SharedPrefs.getInstance(requireContext()).get(PREF_CLASS, "")
         if (value.isEmpty()) {
             return ArrayList()
         }

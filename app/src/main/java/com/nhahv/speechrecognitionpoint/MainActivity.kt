@@ -3,30 +3,45 @@ package com.nhahv.speechrecognitionpoint
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.nhahv.speechrecognitionpoint.data.models.SemesterType
 import com.nhahv.speechrecognitionpoint.ui.main.MainFragment
+import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
+import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
+import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
 import com.nhahv.speechrecognitionpoint.util.FileExcelManager
 import com.nhahv.speechrecognitionpoint.util.PermissionUtil
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
     private val CODE_EXTERNAL_STORAGE = 100
+    private var className: String? = null
+    private var subjectName: String? = null
+    private var semester: SemesterType? = SemesterType.SEMESTER_I
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         val bundle = intent.extras
         bundle?.let {
-            title = "Lớp học " + it.getString("className")
+            className = it.getString(CLASS_NAME)
+            subjectName   = it.getString(SUBJECT_NAME)
+            semester = it.getSerializable(SEMESTER_PARAM) as SemesterType?
+            title = "Môn $subjectName lớp học " + it.getString(CLASS_NAME)
         }
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
+                    .replace(R.id.container, MainFragment.newInstance(bundle))
                     .commitNow()
         }
+
+
+        val path = Environment.getExternalStorageDirectory()
+        println("==================== $path")
 
         PermissionUtil.requestPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, CODE_EXTERNAL_STORAGE) { FileExcelManager.getExcelFile() }

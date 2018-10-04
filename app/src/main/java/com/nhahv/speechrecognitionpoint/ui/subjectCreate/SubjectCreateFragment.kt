@@ -1,6 +1,7 @@
 package com.nhahv.speechrecognitionpoint.ui.subjectCreate
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ class SubjectCreateFragment : DialogFragment() {
     private lateinit var viewModel: SubjectCreateViewModel
     private lateinit var semester: SemesterType
     private val semesterList = ArrayList<SemesterType>()
+    private var listener: ClassStudentFragment.OnDismissListener? = null
     var className: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +56,7 @@ class SubjectCreateFragment : DialogFragment() {
 
         isCancelable = false
 
-        val adapter: ArrayAdapter<SemesterType> = ArrayAdapter(activity!!, android.R.layout.simple_list_item_1, semesterList)
+        val adapter: ArrayAdapter<SemesterType> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, semesterList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spClassSemester.adapter = adapter
         spClassSemester.setSelection(0)
@@ -79,23 +81,30 @@ class SubjectCreateFragment : DialogFragment() {
             val subjects = getSubjects()
             val subject = Subject(subjectName.text.toString(), semester)
             subjects.add(subject)
-            SharedPrefs.getInstance(activity!!.applicationContext).put(PREF_SUBJECT.format(className), subjects)
+            SharedPrefs.getInstance(requireContext()).put(PREF_SUBJECT.format(className), subjects)
             toast("Tạo môn học thành công!")
             dismiss()
         }
     }
 
     private fun getSubjects(): ArrayList<Subject> {
-        val value = SharedPrefs.getInstance(activity!!.applicationContext).get(PREF_SUBJECT.format(className), "")
+        val value = SharedPrefs.getInstance(requireContext()).get(PREF_SUBJECT.format(className), "")
         if (value.isEmpty()) {
             return ArrayList()
         }
         return Gson().fromJson<ArrayList<Subject>>(value)
     }
 
-    fun setOnDismissListener(onDismissListener: ClassStudentFragment.OnDismissListener) {
 
+    fun setOnDismissListener(onDismissListener: ClassStudentFragment.OnDismissListener) {
+        listener = onDismissListener
     }
 
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        listener?.let {
+            it.onRefreshWhenDismiss()
+        }
+    }
 
 }

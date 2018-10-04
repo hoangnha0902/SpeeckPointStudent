@@ -52,7 +52,7 @@ class ClassStudentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        aClassAdapter = AClassAdapter(activity!!.applicationContext, aClasses, object : BaseRecyclerViewAdapter.OnItemListener<AClass> {
+        aClassAdapter = AClassAdapter(requireContext(), aClasses, object : BaseRecyclerViewAdapter.OnItemListener<AClass> {
             override fun onClick(item: AClass, position: Int) {
                 start<SubjectsActivity>(Bundle().apply { putString("className", item.name) })
             }
@@ -88,7 +88,7 @@ class ClassStudentFragment : Fragment() {
     }
 
     private fun getClasses(): ArrayList<AClass> {
-        val value = SharedPrefs.getInstance(activity!!.applicationContext).get(SharedPrefs.PREF_CLASS, "")
+        val value = SharedPrefs.getInstance(requireContext()).get(SharedPrefs.PREF_CLASS, "")
         if (value.isEmpty()) {
             return ArrayList()
         }

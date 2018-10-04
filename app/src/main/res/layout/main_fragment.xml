@@ -8,7 +8,7 @@
     tools:context=".ui.main.MainFragment">
 
     <LinearLayout
-        android:id="@+id/typePoint"
+        android:id="@+id/typePointLayout"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
@@ -16,7 +16,7 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/spinner_bg"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/typeOfPoint"
+        app:layout_constraintEnd_toStartOf="@+id/typeOfPointLayout"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/typeOfPoint"
+        android:id="@+id/typeOfPointLayout"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
@@ -40,7 +40,7 @@
         android:background="@drawable/spinner_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/typePoint"
+        app:layout_constraintStart_toEndOf="@+id/typePointLayout"
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.AppCompatSpinner
@@ -63,7 +63,7 @@
         app:layout_constraintBottom_toTopOf="@+id/startMic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/typePoint">
+        app:layout_constraintTop_toBottomOf="@id/typePointLayout">
 
     </android.support.v7.widget.RecyclerView>
 
