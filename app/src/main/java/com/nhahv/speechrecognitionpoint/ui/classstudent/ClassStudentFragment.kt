@@ -63,13 +63,13 @@ class ClassStudentFragment : Fragment() {
 
             fragmentManager?.let {
                 val fm = it.beginTransaction()
-                val prev = it.findFragmentByTag("dialog")
+                val prev = it.findFragmentByTag("classCreate")
                 if (prev != null) {
                     fm.remove(prev)
                 }
                 fm.addToBackStack(null)
                 val dialog = ClassCreateFragment.newInstance()
-                dialog.show(fm, "dialog")
+                dialog.show(fm, "classCreate")
                 dialog.setOnDismissListener(object : OnDismissListener {
                     override fun onRefreshWhenDismiss() {
                         refreshData()
@@ -117,7 +117,7 @@ class ClassStudentFragment : Fragment() {
             super.onBindViewHolder(holder, position)
             val aClass = items[position]
             holder.itemView.apply {
-                className.text = aClass.name
+                subjectName.text = aClass.name
                 yearClass.text = aClass.year
                 numberOfClass.setText(Html.fromHtml("Sĩ số: <font color='#f4511e'>${aClass.number}</font> "), TextView.BufferType.SPANNABLE)
 

@@ -8,7 +8,7 @@
     android:gravity="center"
     android:minWidth="350dp"
     android:minHeight="200dp"
-    tools:context=".ui.classcreate.ClassCreateFragment">
+    tools:context=".ui.subjectCreate.SubjectCreateFragment">
 
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Tên lớp: "
+        android:text="Môn học: "
         app:layout_constraintBottom_toBottomOf="@id/subjectName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/subjectName" />
@@ -43,30 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Sĩ số: "
-        app:layout_constraintBottom_toBottomOf="@+id/classNumber"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/classNumber" />
-
-    <EditText
-        android:id="@+id/classNumber"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/spinner_bg"
-        android:ems="10"
-        android:inputType="numberSigned"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/subjectName"
-        app:layout_constraintStart_toStartOf="@+id/subjectName"
-        app:layout_constraintTop_toBottomOf="@+id/subjectName" />
-
-    <TextView
-        android:id="@+id/textClassYear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="Năm học: "
+        android:text="Học Kỳ: "
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/linearLayout" />
@@ -80,12 +57,12 @@
         android:orientation="vertical"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/classNumber"
-        app:layout_constraintStart_toStartOf="@+id/classNumber"
-        app:layout_constraintTop_toBottomOf="@+id/classNumber">
+        app:layout_constraintEnd_toEndOf="@+id/subjectName"
+        app:layout_constraintStart_toStartOf="@+id/subjectName"
+        app:layout_constraintTop_toBottomOf="@+id/subjectName">
 
         <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/spClassYear"
+            android:id="@+id/spClassSemester"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
@@ -100,14 +77,14 @@
         android:background="@drawable/spinner_bg"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/createClass"
+        app:layout_constraintEnd_toStartOf="@+id/createSubject"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@+id/linearLayout"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
-        android:id="@+id/createClass"
+        android:id="@+id/createSubject"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
@@ -125,7 +102,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Tạo lớp học "
+        android:text="Tạo môn học"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"

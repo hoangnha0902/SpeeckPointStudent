@@ -64,16 +64,15 @@ class ClassCreateFragment : DialogFragment() {
         spClassYear.setSelection(4)
         cancel.setOnClickListener { dismiss() }
         createClass.setOnClickListener {
-            if (className.text == null || className.text.toString().isEmpty()) {
+            if (subjectName.text == null || subjectName.text.toString().isEmpty()) {
                 toast("Tên lớp không thể để trống.")
             }
             val aclasses = getClasses()
-            val aClass = AClass(className.text.toString(), classNumber.text.toString().toInt(), classYear)
+            val aClass = AClass(subjectName.text.toString(), classNumber.text.toString().toInt(), classYear)
             aclasses.add(aClass)
             SharedPrefs.getInstance(activity!!.applicationContext).put(PREF_CLASS, aclasses)
             toast("Tạo lớp học thành công!")
             dismiss()
-
         }
         spClassYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {

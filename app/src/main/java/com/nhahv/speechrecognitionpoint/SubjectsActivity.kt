@@ -8,14 +8,15 @@ class SubjectsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        intent.extras?.let {
-            title = "Danh sách môn học lớp " + it.getString("className")
-
-        }
         setContentView(R.layout.subjects_activity)
+        var className: String? = null
+        intent.extras?.let {
+            className = it.getString("className")
+            title = "Danh sách môn học lớp $className"
+        }
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, SubjectsFragment.newInstance())
+                    .replace(R.id.container, SubjectsFragment.newInstance(className))
                     .commitNow()
         }
     }
