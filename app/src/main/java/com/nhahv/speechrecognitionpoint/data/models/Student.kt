@@ -83,15 +83,15 @@ class Student(var stt: String = "0", var numberStudent: String = "", var name: S
 
     }
 
-    fun round(value: Double, places: Int): Double {
-        var value = value
+    private fun round(value: Double, places: Int): Double {
+        var valueDouble = value
         if (places < 0) {
             return 0.0
         }
 
         val factor = Math.pow(10.0, places.toDouble()).toLong()
-        value *= factor
-        val tmp = Math.round(value)
+        valueDouble *= factor
+        val tmp = Math.round(valueDouble)
         return tmp.toDouble() / factor
     }
 }

@@ -3,7 +3,6 @@ package com.nhahv.speechrecognitionpoint
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
@@ -40,8 +39,6 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         }
 
 
-        val path = Environment.getExternalStorageDirectory()
-        println("==================== $path")
 
         PermissionUtil.requestPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, CODE_EXTERNAL_STORAGE) { FileExcelManager.getExcelFile() }

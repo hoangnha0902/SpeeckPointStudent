@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
+import com.nhahv.speechrecognitionpoint.ExportExcelActivity
 import com.nhahv.speechrecognitionpoint.FileExcelActivity
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.SemesterType
@@ -93,7 +94,8 @@ class MainFragment : Fragment() {
                 })
             }
             R.id.menu_export -> {
-                
+//                ReadWriteExcelFile.writeStudentExcel()
+                start<ExportExcelActivity>()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -146,7 +148,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    fun initSpTypeOfPoint() {
+    private fun initSpTypeOfPoint() {
         typeOfPointList.add(TypeOfTypePoint.TYPE_1)
         typeOfPointList.add(TypeOfTypePoint.TYPE_2)
         typeOfPointList.add(TypeOfTypePoint.TYPE_3)

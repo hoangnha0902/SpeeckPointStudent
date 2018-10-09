@@ -76,9 +76,7 @@ class ClassStudentFragment : Fragment() {
                     }
                 })
             }
-
         }
-
     }
 
     private fun refreshData() {
@@ -98,7 +96,7 @@ class ClassStudentFragment : Fragment() {
 
     class AClassAdapter(context: Context,
                         items: ArrayList<AClass>,
-                        private val listener: BaseRecyclerViewAdapter.OnItemListener<AClass>)
+                        listener: BaseRecyclerViewAdapter.OnItemListener<AClass>)
         : BaseRecyclerViewAdapter<AClass>(items, R.layout.item_class, listener) {
 
         override fun onCreateViewHolder(parent: ViewGroup, p1: Int): BaseRecyclerViewAdapter.BaseViewHolder<AClass> {
@@ -110,7 +108,7 @@ class ClassStudentFragment : Fragment() {
             lp.topMargin = 16
             lp.bottomMargin = 16
             view.layoutParams = lp
-            return BaseViewHolder(view, items, listener)
+            return BaseViewHolder(view, items, listener!!)
         }
 
         override fun onBindViewHolder(holder: BaseViewHolder<AClass>, position: Int) {

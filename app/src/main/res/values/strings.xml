@@ -2,4 +2,6 @@
     <string name="app_name">SpeechRecognitionPoint</string>
     <string name="text_sdcard">Thẻ nhớ ngoài</string>
     <string name="text_internal">Bộ nhớ trong</string>
+    <string name="text_number_item">%1$s item</string>
+
 </resources>

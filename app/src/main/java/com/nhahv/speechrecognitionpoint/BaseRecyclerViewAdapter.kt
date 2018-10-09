@@ -8,10 +8,18 @@ import android.view.ViewGroup
 
 open class BaseRecyclerViewAdapter<T>(
         val items: ArrayList<T>,
-        @LayoutRes private val layoutRes: Int,
-        private val listener: OnItemListener<T>
+        @LayoutRes private val layoutRes: Int
 ) : RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder<T>>() {
 
+
+    constructor(
+            items: ArrayList<T>,
+            @LayoutRes layoutRes: Int,
+            onListener: OnItemListener<T>) : this(items, layoutRes) {
+        listener = onListener
+    }
+
+    var listener: OnItemListener<T>? = null
     private var inflater: LayoutInflater? = null
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): BaseViewHolder<T> {
@@ -19,7 +27,7 @@ open class BaseRecyclerViewAdapter<T>(
             inflater = LayoutInflater.from(p0.context)
         }
         val view = inflater?.inflate(layoutRes, p0, false)
-        return BaseViewHolder(view!!, items, listener)
+        return BaseViewHolder(view!!, items, listener!!)
     }
 
     override fun getItemCount(): Int = items.size

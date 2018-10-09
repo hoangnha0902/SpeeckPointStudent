@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/subjectName" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/lineExport"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="10dp"

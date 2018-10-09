@@ -78,4 +78,6 @@
     <color name="transparent">#00000000</color>
     <color name="white">#ffffffff</color>
     <color name="whiteYellow">#fff1f1b5</color>
+    <color name="grey_700">#757575</color>
+
 </resources>
