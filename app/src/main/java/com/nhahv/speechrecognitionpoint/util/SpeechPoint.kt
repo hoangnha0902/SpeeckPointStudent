@@ -89,6 +89,8 @@ class SpeechPoint(context: Context) : RecognitionListener {
         results?.let {
             val matches = it.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
             Log.d(TAG, "onPartialResults: $matches")
+
+//            mainFragment?.onTextRecognition(matches)
         }
     }
 

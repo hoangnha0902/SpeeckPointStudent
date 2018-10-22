@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.util.Constant.IS_LOGIN
 import com.nhahv.speechrecognitionpoint.util.Constant.PASSWORD
 import com.nhahv.speechrecognitionpoint.util.Constant.USER_NAME
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
@@ -30,15 +31,21 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val isLogin = SharedPrefs.getInstance(requireContext()).get(IS_LOGIN, false)
+        if (isLogin) {
+            login.findNavController().navigate(R.id.classStudentFragment)
+        }
         val labelName = SharedPrefs.getInstance(requireContext()).get(USER_NAME, "")
+        val labelPassword = SharedPrefs.getInstance(requireContext()).get(PASSWORD, "")
+
         if (!TextUtils.isEmpty(labelName)) {
             loginWithoutUser.visibility = View.GONE
+            userName.setText(labelName)
         }
         btnRegister.setOnClickListener {
             btnRegister.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -52,11 +59,11 @@ class LoginFragment : Fragment() {
                 toast("Nhập mật khẩu")
                 return@setOnClickListener
             }
-            val labelPassword = SharedPrefs.getInstance(requireContext()).get(PASSWORD, "")
             if (userName.text.toString() != labelName || password.text.toString() != labelPassword) {
                 toast("Tên tài khoản hoặc mật khẩu không đúng")
                 return@setOnClickListener
             }
+            SharedPrefs.getInstance(requireContext()).put(IS_LOGIN, true)
             login.findNavController().navigate(R.id.action_loginFragment_to_classStudentFragment, null, NavOptions.Builder().setClearTask(true).build())
         }
         showPassword.setOnCheckedChangeListener { _, isChecked ->

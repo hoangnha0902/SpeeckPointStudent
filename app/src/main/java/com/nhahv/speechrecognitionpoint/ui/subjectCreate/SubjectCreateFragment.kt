@@ -16,6 +16,7 @@ import com.nhahv.speechrecognitionpoint.data.models.Subject
 import com.nhahv.speechrecognitionpoint.ui.classstudent.ClassStudentFragment
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_SUBJECT
+import com.nhahv.speechrecognitionpoint.util.convertCompare
 import com.nhahv.speechrecognitionpoint.util.fromJson
 import com.nhahv.speechrecognitionpoint.util.toast
 import kotlinx.android.synthetic.main.subject_create_fragment.*
@@ -77,8 +78,15 @@ class SubjectCreateFragment : DialogFragment() {
         createSubject.setOnClickListener {
             if (subjectName.text == null || subjectName.text.toString().isEmpty()) {
                 toast("Tên môn không thể để trống.")
+                return@setOnClickListener
             }
             val subjects = getSubjects()
+            for (subject in subjects){
+                if (convertCompare(subject.subjectName) == convertCompare(subjectName.text.toString()) && subject.semester == semester){
+                    toast("Môn học đã được tạo")
+                    return@setOnClickListener
+                }
+            }
             val subject = Subject(subjectName.text.toString(), semester)
             subjects.add(subject)
             SharedPrefs.getInstance(requireContext()).put(PREF_SUBJECT.format(className), subjects)

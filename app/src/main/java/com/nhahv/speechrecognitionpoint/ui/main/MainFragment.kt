@@ -7,7 +7,6 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.R
@@ -15,11 +14,14 @@ import com.nhahv.speechrecognitionpoint.data.models.SemesterType
 import com.nhahv.speechrecognitionpoint.data.models.Student
 import com.nhahv.speechrecognitionpoint.data.models.TypeOfTypePoint
 import com.nhahv.speechrecognitionpoint.data.models.TypePoint
-import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
 import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
+import com.nhahv.speechrecognitionpoint.util.SpeechPoint
+import com.nhahv.speechrecognitionpoint.util.fromJson
+import com.nhahv.speechrecognitionpoint.util.setUpToolbar
 import kotlinx.android.synthetic.main.item_students2.view.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
@@ -182,6 +184,10 @@ class MainFragment : Fragment() {
             return ArrayList()
         }
         return Gson().fromJson<ArrayList<Student>>(value)
+    }
+
+    fun onTextRecognition(matches: java.util.ArrayList<String>?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 
