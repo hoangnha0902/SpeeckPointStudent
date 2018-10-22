@@ -1,14 +1,11 @@
 package com.nhahv.speechrecognitionpoint.ui.fileexcel
 
-import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
@@ -16,10 +13,8 @@ import com.nhahv.speechrecognitionpoint.data.models.FileExcel
 import com.nhahv.speechrecognitionpoint.data.models.SemesterType
 import com.nhahv.speechrecognitionpoint.data.models.Student
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
-import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
 import com.nhahv.speechrecognitionpoint.util.FileExcelManager
-import com.nhahv.speechrecognitionpoint.util.PermissionUtil
 import com.nhahv.speechrecognitionpoint.util.ReadWriteExcelFile
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
@@ -27,12 +22,6 @@ import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
 
 class FileExcelFragment : Fragment() {
-    val CODE_EXTERNAL_STORAGE = 100
-
-    companion object {
-        fun newInstance() = FileExcelFragment().apply {}
-    }
-
     private lateinit var viewModel: FileExcelViewModel
     var className: String? = null
     var subjectName: String? = null
@@ -66,7 +55,7 @@ class FileExcelFragment : Fragment() {
             subjectName = it.getString(SUBJECT_NAME)
             semester = SemesterType.SEMESTER_I
         }
-        (requireActivity() as MainActivity).readExcel()
+        (requireActivity() as MainActivity).readExcel { FileExcelManager.getExcelFile() }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

@@ -9,31 +9,26 @@ import android.widget.ArrayAdapter
 import androidx.navigation.Navigation
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
+import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.SemesterType
 import com.nhahv.speechrecognitionpoint.data.models.Student
 import com.nhahv.speechrecognitionpoint.data.models.TypeOfTypePoint
 import com.nhahv.speechrecognitionpoint.data.models.TypePoint
+import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
 import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
-import com.nhahv.speechrecognitionpoint.util.SpeechPoint
-import com.nhahv.speechrecognitionpoint.util.fromJson
-import com.nhahv.speechrecognitionpoint.util.setUpToolbar
 import kotlinx.android.synthetic.main.item_students2.view.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
-
-    companion object {
-        fun newInstance(bundle: Bundle?) = MainFragment().apply { arguments = bundle }
-    }
-
     var className: String? = null
     var subjectName: String? = null
     var semester: SemesterType? = SemesterType.SEMESTER_I
+    var indexChange: Int = -1
+    var isPointing: Boolean = false
 
     private lateinit var viewModel: MainViewModel
     private lateinit var speechPoint: SpeechPoint
@@ -77,6 +72,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar(toolbar, title)
         speechPoint = SpeechPoint(requireContext())
+        speechPoint.setMainFragment(this)
 
         initViews()
     }
@@ -122,15 +118,25 @@ class MainFragment : Fragment() {
         initSpTypePoint()
         initSpTypeOfPoint()
         startMic.setOnClickListener {
-            speechPoint.startSpeech()
+            if (!speechPoint.speechStarted) {
+                (requireActivity() as MainActivity).startSpeech { startSpeech() }
+                startMic.setImageResource(R.drawable.ic_stop)
+            } else {
+                speechPoint.destroy()
+                startMic.setImageResource(R.mipmap.ic_mic_white_24dp)
+            }
         }
 
-        stopMic.setOnClickListener {
-            speechPoint.destroy()
+        swap.setOnClickListener {
+
         }
     }
 
-    fun initSpTypePoint() {
+    fun startSpeech() {
+        speechPoint.startSpeech()
+    }
+
+    private fun initSpTypePoint() {
         typePointList.add(TypePoint.MOUTH)
         typePointList.add(TypePoint.P15)
         typePointList.add(TypePoint.WRITE)
@@ -186,8 +192,139 @@ class MainFragment : Fragment() {
         return Gson().fromJson<ArrayList<Student>>(value)
     }
 
-    fun onTextRecognition(matches: java.util.ArrayList<String>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun onTextRecognition(matches: String) {
+        println("=================== $matches")
+        textSpeech.text = matches
+        if (checkNameIsExist(matches)) {
+
+        } else if (isPointing) {
+            matches.replace(",", ".")
+            try {
+                writePointToStudent(matches.toDouble())
+            } catch (ex: NumberFormatException) {
+                toast("Nhập lai điểm")
+            }
+        }
+
+    }
+
+    private fun checkNameIsExist(name: String): Boolean {
+        for ((index, student) in students.withIndex()) {
+            if (name.trim() == student.name) {
+                println("=============== $index")
+                indexChange = index
+                isPointing = true
+                return true
+            }
+        }
+        return false
+    }
+
+    fun writePointToStudent(point: Double) {
+        if (indexChange == -1) return
+        val student = students[indexChange]
+        isPointing = false
+        indexChange = -1
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_1) {
+            student.m1 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_2) {
+            student.m2 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_3) {
+            student.m3 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_4) {
+            student.m4 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_5) {
+            student.m5 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_1) {
+            student.p1 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_2) {
+            student.p2 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_3) {
+            student.p3 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_4) {
+            student.p4 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_5) {
+            student.p5 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_1) {
+            student.v1 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_2) {
+            student.v2 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_3) {
+            student.v3 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_4) {
+            student.v4 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_5) {
+            student.v5 = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+        if (typePoint == TypePoint.SEMESTER) {
+            student.hk = point.toString()
+            studentAdapter.notifyDataSetChanged()
+            return
+        }
+    }
+
+    override fun onStop() {
+        println("=========== onStop")
+        speechPoint.destroy()
+        SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(className, subjectName, semester?.getSemesterName()), students)
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        println("=========== onDestroy")
+
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        println("=========== onDetach")
+
     }
 
 

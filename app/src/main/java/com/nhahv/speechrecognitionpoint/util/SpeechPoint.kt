@@ -13,9 +13,9 @@ class SpeechPoint(context: Context) : RecognitionListener {
     private val TAG = SpeechPoint::class.java.simpleName
     private var speechIntent: Intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
     private var speech: SpeechRecognizer
-    private var speechStarted: Boolean = false
-    private val language : String = "vi"
-    private var mainFragment :MainFragment ? = null
+     var speechStarted: Boolean = false
+    private val language: String = "vi"
+    private var mainFragment: MainFragment? = null
 
     init {
         speechIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
@@ -27,7 +27,8 @@ class SpeechPoint(context: Context) : RecognitionListener {
         speech = SpeechRecognizer.createSpeechRecognizer(context)
         speech.setRecognitionListener(this)
     }
-    fun setMainFragment(fragment: MainFragment){
+
+    fun setMainFragment(fragment: MainFragment) {
         mainFragment = fragment
     }
 
@@ -40,15 +41,15 @@ class SpeechPoint(context: Context) : RecognitionListener {
     }
 
     override fun onReadyForSpeech(params: Bundle?) {
-        Log.d(TAG, "onReadyForSpeech")
+//        Log.d(TAG, "onReadyForSpeech")
     }
 
     override fun onRmsChanged(rmsdB: Float) {
-        Log.d(TAG, "onRmsChanged :$rmsdB")
+//        Log.d(TAG, "onRmsChanged :$rmsdB")
     }
 
     override fun onBufferReceived(buffer: ByteArray?) {
-        Log.d(TAG, "onBufferReceived: $buffer")
+//        Log.d(TAG, "onBufferReceived: $buffer")
     }
 
     override fun onPartialResults(bundle: Bundle?) {
@@ -60,24 +61,23 @@ class SpeechPoint(context: Context) : RecognitionListener {
     }
 
     override fun onEvent(eventType: Int, params: Bundle?) {
-        Log.d(TAG, "onEvent")
+//        Log.d(TAG, "onEvent")
 
     }
 
     override fun onBeginningOfSpeech() {
-        Log.d(TAG, "onBeginningOfSpeech")
+//        Log.d(TAG, "onBeginningOfSpeech")
         speechStarted = true
     }
 
     override fun onEndOfSpeech() {
-        Log.d(TAG, "onEndOfSpeech")
+//        Log.d(TAG, "onEndOfSpeech")
         speechStarted = false
         startSpeech()
 
     }
 
     override fun onError(error: Int) {
-        Log.d(TAG, "onError")
         if (!speechStarted) {
             startSpeech()
         }
@@ -85,12 +85,12 @@ class SpeechPoint(context: Context) : RecognitionListener {
     }
 
     override fun onResults(results: Bundle?) {
-        Log.d(TAG, "onResults")
         results?.let {
             val matches = it.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-            Log.d(TAG, "onPartialResults: $matches")
+            if (matches != null && !matches.isEmpty()) {
+                mainFragment?.onTextRecognition(matches[0])
+            }
 
-//            mainFragment?.onTextRecognition(matches)
         }
     }
 

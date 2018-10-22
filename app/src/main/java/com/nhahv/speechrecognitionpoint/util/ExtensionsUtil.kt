@@ -85,3 +85,6 @@ fun Fragment.convertCompare(text: String): String {
 }
 
 
+fun Fragment.sharePrefs(): SharedPreferences {
+    return SharedPrefs.getInstance(requireContext()).sharedPref
+}
