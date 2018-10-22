@@ -3,13 +3,15 @@ package com.nhahv.speechrecognitionpoint.ui.subjects
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation.findNavController
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
-import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.data.models.AClass
 import com.nhahv.speechrecognitionpoint.data.models.Subject
 import com.nhahv.speechrecognitionpoint.ui.classstudent.ClassStudentFragment
 import com.nhahv.speechrecognitionpoint.ui.subjectCreate.SubjectCreateFragment
@@ -18,20 +20,11 @@ import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.fromJson
-import com.nhahv.speechrecognitionpoint.util.start
+import com.nhahv.speechrecognitionpoint.util.setUpToolbar
 import kotlinx.android.synthetic.main.item_subject.view.*
 import kotlinx.android.synthetic.main.subjects_fragment.*
 
 class SubjectsFragment : Fragment() {
-
-    companion object {
-        fun newInstance(className: String?) = SubjectsFragment().apply {
-            val bundle = Bundle()
-            bundle.putString("className", className)
-            arguments = bundle
-        }
-    }
-
     private lateinit var viewModel: SubjectsViewModel
     private val subjects = ArrayList<Subject>()
     private var className: String? = null
@@ -41,13 +34,15 @@ class SubjectsFragment : Fragment() {
             bundle.putString(CLASS_NAME, className)
             bundle.putString(SUBJECT_NAME, item.subjectName)
             bundle.putSerializable(SEMESTER_PARAM, item.semester)
-            start<MainActivity>(bundle)
+            findNavController(requireActivity(), R.id.navLoginHost).navigate(R.id.action_subjectsFragment_to_mainFragment, bundle)
         }
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        className = arguments?.getString("className")
+        val aClass = arguments?.getParcelable<AClass>("classes")
+        className = aClass?.name
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +57,8 @@ class SubjectsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setUpToolbar(toolbar, "Danh sách môn học lớp $className")
+        subjects.clear()
         subjects.addAll(getSubjects())
         subjectList.adapter = adapter
         addSubject.setOnClickListener {
@@ -75,7 +71,7 @@ class SubjectsFragment : Fragment() {
                 fm.addToBackStack(null)
                 val dialog = SubjectCreateFragment.newInstance()
                 dialog.show(fm, "subjectCreate")
-                dialog.className = arguments?.getString("className")
+                dialog.className = className
                 dialog.setOnDismissListener(object : ClassStudentFragment.OnDismissListener {
                     override fun onRefreshWhenDismiss() {
                         refreshData()

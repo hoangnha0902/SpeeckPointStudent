@@ -6,23 +6,20 @@ import android.support.v4.app.Fragment
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
-import com.nhahv.speechrecognitionpoint.ExportExcelActivity
-import com.nhahv.speechrecognitionpoint.FileExcelActivity
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.SemesterType
 import com.nhahv.speechrecognitionpoint.data.models.Student
 import com.nhahv.speechrecognitionpoint.data.models.TypeOfTypePoint
 import com.nhahv.speechrecognitionpoint.data.models.TypePoint
+import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
 import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
-import com.nhahv.speechrecognitionpoint.util.SpeechPoint
-import com.nhahv.speechrecognitionpoint.util.fromJson
-import com.nhahv.speechrecognitionpoint.util.start
 import kotlinx.android.synthetic.main.item_students2.view.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
@@ -50,6 +47,7 @@ class MainFragment : Fragment() {
     var typePoint: TypePoint = TypePoint.MOUTH
     val typeOfPointList = ArrayList<TypeOfTypePoint>()
     var typeOfPoint: TypeOfTypePoint = TypeOfTypePoint.TYPE_1
+    lateinit var title: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,8 +57,8 @@ class MainFragment : Fragment() {
             className = it.getString(CLASS_NAME)
             subjectName = it.getString(SUBJECT_NAME)
             semester = it.getSerializable(SEMESTER_PARAM) as SemesterType
+            title = "Môn $subjectName lớp học " + it.getString(CLASS_NAME)
         }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -75,7 +73,9 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpToolbar(toolbar, title)
         speechPoint = SpeechPoint(requireContext())
+
         initViews()
     }
 
@@ -86,16 +86,19 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menu_import -> {
-                start<FileExcelActivity>(Bundle().apply {
+            R.id.fileExcelFragment -> {
+                Navigation.findNavController(requireActivity(), R.id.navLoginHost).navigate(R.id.action_mainFragment_to_fileExcelFragment, Bundle().apply {
                     putString(CLASS_NAME, className)
                     putString(SUBJECT_NAME, subjectName)
                     putSerializable(SEMESTER_PARAM, semester)
                 })
             }
-            R.id.menu_export -> {
-//                ReadWriteExcelFile.writeStudentExcel()
-                start<ExportExcelActivity>()
+            R.id.exportExcelFragment -> {
+                Navigation.findNavController(requireActivity(), R.id.navLoginHost).navigate(R.id.action_mainFragment_to_exportExcelFragment, Bundle().apply {
+                    putString(CLASS_NAME, className)
+                    putString(SUBJECT_NAME, subjectName)
+                    putSerializable(SEMESTER_PARAM, semester)
+                })
             }
         }
         return super.onOptionsItemSelected(item)
@@ -109,6 +112,7 @@ class MainFragment : Fragment() {
     }
 
     private fun initViews() {
+
         studentList.adapter = studentAdapter
         students.addAll(getStudentList())
         studentAdapter.notifyDataSetChanged()

@@ -7,6 +7,7 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
+import com.nhahv.speechrecognitionpoint.ui.main.MainFragment
 
 class SpeechPoint(context: Context) : RecognitionListener {
     private val TAG = SpeechPoint::class.java.simpleName
@@ -14,6 +15,7 @@ class SpeechPoint(context: Context) : RecognitionListener {
     private var speech: SpeechRecognizer
     private var speechStarted: Boolean = false
     private val language : String = "vi"
+    private var mainFragment :MainFragment ? = null
 
     init {
         speechIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
@@ -24,6 +26,9 @@ class SpeechPoint(context: Context) : RecognitionListener {
 
         speech = SpeechRecognizer.createSpeechRecognizer(context)
         speech.setRecognitionListener(this)
+    }
+    fun setMainFragment(fragment: MainFragment){
+        mainFragment = fragment
     }
 
     fun startSpeech() {

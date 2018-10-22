@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import com.nhahv.speechrecognitionpoint.R
+import kotlinx.android.synthetic.main.login_fragment.*
 
 class LoginFragment : Fragment() {
 
@@ -25,6 +27,17 @@ class LoginFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         // TODO: Use the ViewModel
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        btnRegister.setOnClickListener {
+            btnRegister.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+        login.setOnClickListener {
+            login.findNavController().navigate(R.id.action_loginFragment_to_classStudentFragment)
+        }
+
     }
 
 }

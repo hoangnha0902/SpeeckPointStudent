@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.exportexcel.ExportExcelFragment">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Danh sách môn học"
+        app:titleTextColor="@color/white" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/excelExportList"
         android:layout_width="0dp"
@@ -15,7 +29,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -23,7 +37,7 @@
         android:id="@+id/exportExcel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_margin="10dp"
         android:src="@drawable/ic_export_excel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

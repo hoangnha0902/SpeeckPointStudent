@@ -1,5 +1,7 @@
 package com.nhahv.speechrecognitionpoint.data.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -7,7 +9,8 @@ import java.util.*
  * Created by Nhahv on 12/9/2016.
  * <>>
  */
-class FileExcel(var path: String?, var parent: String?, time: Long) {
+@Parcelize
+class FileExcel(var path: String?, var parent: String?, var timeLOng: Long) : Parcelable {
     var time: String? = null
     var nameFile: String? = null
         private set(path) {
@@ -22,6 +25,6 @@ class FileExcel(var path: String?, var parent: String?, time: Long) {
     init {
         nameFile = path
         val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        this.time = format.format(time)
+        this.time = format.format(timeLOng)
     }
 }

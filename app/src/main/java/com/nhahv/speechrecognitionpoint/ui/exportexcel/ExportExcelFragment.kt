@@ -9,9 +9,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
+import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.Folder
+import com.nhahv.speechrecognitionpoint.util.setUpToolbar
 import kotlinx.android.synthetic.main.export_excel_fragment.*
 import kotlinx.android.synthetic.main.item_export_excel.view.*
 import java.io.File
@@ -53,6 +56,7 @@ class ExportExcelFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpToolbar(toolbar, "Chọn đường dẫn Export bảng điểm")
         excelExportList.adapter = adapter
         adapter.listener = object : BaseRecyclerViewAdapter.OnItemListener<Folder> {
             override fun onClick(item: Folder, position: Int) {
@@ -81,7 +85,7 @@ class ExportExcelFragment : Fragment() {
         Log.d(TAG, "mPathFolder = $pathFolder")
         if (pathFolder == FOLDER_STORAGE_INTERNAL) {
             Log.d(TAG, "mPathFolder$pathFolder")
-            requireActivity().finish()
+            Navigation.findNavController(requireActivity(), R.id.navLoginHost).popBackStack()
             return
         }
         val path = File(pathFolder).parent
@@ -104,7 +108,7 @@ class ExportExcelFragment : Fragment() {
         Log.d(TAG, "path = $path")
         val folder = folder(path)
         if (folder == null) {
-            requireActivity().finish()
+            (requireActivity() as MainActivity).back()
             return
         }
         pathFolder = path
@@ -137,6 +141,7 @@ class ExportExcelFragment : Fragment() {
         }
 
         private fun checkFile(path: String?): Boolean {
+            return File(path).isFile
             return File(path).isFile
         }
     }

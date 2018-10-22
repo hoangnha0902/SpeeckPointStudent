@@ -1,10 +1,15 @@
 package com.nhahv.speechrecognitionpoint.data.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Subject(var subjectName: String = "",
                    var semester: SemesterType = SemesterType.SEMESTER_I,
-                   var excel: FileExcel? = null)
+                   var excel: FileExcel? = null) : Parcelable
 
-enum class SemesterType(var type: Int) {
+@Parcelize
+enum class SemesterType(var type: Int) : Parcelable {
     SEMESTER_I(0),
     SEMESTER_II(1);
 

@@ -11,15 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.Navigation
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.R
-import com.nhahv.speechrecognitionpoint.SubjectsActivity
 import com.nhahv.speechrecognitionpoint.data.models.AClass
 import com.nhahv.speechrecognitionpoint.ui.classcreate.ClassCreateFragment
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.fromJson
-import com.nhahv.speechrecognitionpoint.util.start
 import kotlinx.android.synthetic.main.class_student_fragment.*
 import kotlinx.android.synthetic.main.item_class.view.*
 
@@ -54,7 +53,7 @@ class ClassStudentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         aClassAdapter = AClassAdapter(requireContext(), aClasses, object : BaseRecyclerViewAdapter.OnItemListener<AClass> {
             override fun onClick(item: AClass, position: Int) {
-                start<SubjectsActivity>(Bundle().apply { putString("className", item.name) })
+                Navigation.findNavController(requireActivity(), R.id.navLoginHost).navigate(R.id.action_classStudentFragment_to_subjectsFragment, Bundle().apply { putParcelable("classes", item) })
             }
         })
         classList.adapter = aClassAdapter

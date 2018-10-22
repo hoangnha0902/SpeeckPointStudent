@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_import"
+        android:id="@+id/fileExcelFragment"
         android:title="Import" />
     <item
-        android:id="@+id/menu_export"
+        android:id="@+id/exportExcelFragment"
         android:title="Export" />
 </menu>

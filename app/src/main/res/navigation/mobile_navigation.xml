@@ -1,5 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mobile_navigation">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_navigation"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.login.LoginFragment"
+        android:label="login_fragment"
+        tools:layout="@layout/login_fragment">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_classStudentFragment"
+            app:destination="@id/classStudentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.register.RegisterFragment"
+        android:label="register_fragment"
+        tools:layout="@layout/register_fragment" />
+    <fragment
+        android:id="@+id/classStudentFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.classstudent.ClassStudentFragment"
+        android:label="class_student_fragment"
+        tools:layout="@layout/class_student_fragment">
+        <action
+            android:id="@+id/action_classStudentFragment_to_subjectsFragment"
+            app:destination="@id/subjectsFragment" />
+        <action
+            android:id="@+id/action_classStudentFragment_to_classCreateFragment"
+            app:destination="@id/classCreateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/subjectsFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.subjects.SubjectsFragment"
+        android:label="subjects_fragment"
+        tools:layout="@layout/subjects_fragment">
+        <action
+            android:id="@+id/action_subjectsFragment_to_subjectCreateFragment"
+            app:destination="@id/subjectCreateFragment" />
+        <action
+            android:id="@+id/action_subjectsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/classCreateFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.classcreate.ClassCreateFragment"
+        android:label="class_create_fragment"
+        tools:layout="@layout/class_create_fragment" />
+    <fragment
+        android:id="@+id/subjectCreateFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.subjectCreate.SubjectCreateFragment"
+        android:label="subject_create_fragment"
+        tools:layout="@layout/subject_create_fragment">
+        <argument
+            android:name="className"
+            android:defaultValue='""'
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.main.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/main_fragment">
+        <argument
+            android:name="className"
+            app:argType="string" />
+        <argument
+            android:name="subjectName"
+            app:argType="string" />
+        <argument
+            android:name="semester"
+            app:argType="com.nhahv.speechrecognitionpoint.data.models.SemesterType" />
+        <action
+            android:id="@+id/action_mainFragment_to_exportExcelFragment"
+            app:destination="@id/exportExcelFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_fileExcelFragment"
+            app:destination="@id/fileExcelFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fileExcelFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.fileexcel.FileExcelFragment"
+        android:label="FileExcelFragment" />
+    <fragment
+        android:id="@+id/exportExcelFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.exportexcel.ExportExcelFragment"
+        android:label="export_excel_fragment"
+        tools:layout="@layout/export_excel_fragment" />
 
 </navigation>

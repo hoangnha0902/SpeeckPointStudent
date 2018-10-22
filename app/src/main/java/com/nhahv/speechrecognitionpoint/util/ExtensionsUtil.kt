@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.widget.Toast
 import android.widget.Toast.makeText
 import com.google.gson.Gson
@@ -71,5 +73,11 @@ inline fun <reified T> Fragment.start() {
 }
 
 inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
+
+fun Fragment.setUpToolbar(toolbar: Toolbar, title: String) {
+    (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+    (requireActivity() as AppCompatActivity).supportActionBar?.title = title
+
+}
 
 
