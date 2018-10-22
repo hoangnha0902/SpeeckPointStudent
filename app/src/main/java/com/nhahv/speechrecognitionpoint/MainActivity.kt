@@ -53,12 +53,15 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     override fun onSupportNavigateUp() = findNavController(R.id.navLoginHost).navigateUp()
 
     override fun onBackPressed() {
-        if (Navigation.findNavController(this, R.id.navLoginHost).currentDestination?.id == R.id.exportExcelFragment) {
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.navLoginHost)
-            val exportFragment: ExportExcelFragment? = navHostFragment?.childFragmentManager?.fragments?.get(0) as ExportExcelFragment
-            exportFragment?.onBackPress()
-        } else {
-            Navigation.findNavController(this, R.id.navLoginHost).popBackStack()
+        val resId = Navigation.findNavController(this, R.id.navLoginHost).currentDestination?.id
+        when (resId) {
+            R.id.exportExcelFragment -> {
+                val navHostFragment = supportFragmentManager.findFragmentById(R.id.navLoginHost)
+                val exportFragment: ExportExcelFragment? = navHostFragment?.childFragmentManager?.fragments?.get(0) as ExportExcelFragment
+                exportFragment?.onBackPress()
+            }
+            R.id.classStudentFragment -> finish()
+            else -> Navigation.findNavController(this, R.id.navLoginHost).popBackStack()
         }
     }
 

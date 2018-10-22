@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.nhahv.speechrecognitionpoint.data.models.AClass
 import com.nhahv.speechrecognitionpoint.ui.classstudent.ClassStudentFragment
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_CLASS
+import com.nhahv.speechrecognitionpoint.util.convertCompare
 import com.nhahv.speechrecognitionpoint.util.fromJson
 import com.nhahv.speechrecognitionpoint.util.toast
 import kotlinx.android.synthetic.main.class_create_fragment.*
@@ -64,10 +66,17 @@ class ClassCreateFragment : DialogFragment() {
         spClassYear.setSelection(4)
         cancel.setOnClickListener { dismiss() }
         createClass.setOnClickListener {
-            if (subjectName.text == null || subjectName.text.toString().isEmpty()) {
+            if (TextUtils.isEmpty(subjectName.text.toString())) {
                 toast("Tên lớp không thể để trống.")
+                return@setOnClickListener
             }
             val aclasses = getClasses()
+            for (iClass in aclasses) {
+                if (convertCompare(iClass.name) == convertCompare(subjectName.text.toString())) {
+                    toast("Lớp đã được tạo")
+                    return@setOnClickListener
+                }
+            }
             val aClass = AClass(subjectName.text.toString(), classNumber.text.toString().toInt(), classYear)
             aclasses.add(aClass)
             SharedPrefs.getInstance(requireContext()).put(PREF_CLASS, aclasses)

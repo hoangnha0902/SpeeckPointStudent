@@ -21,7 +21,11 @@
         android:id="@+id/registerFragment"
         android:name="com.nhahv.speechrecognitionpoint.ui.register.RegisterFragment"
         android:label="register_fragment"
-        tools:layout="@layout/register_fragment" />
+        tools:layout="@layout/register_fragment" >
+        <action
+            android:id="@+id/action_register_to_class"
+            app:destination="@id/classStudentFragment" />
+    </fragment>
     <fragment
         android:id="@+id/classStudentFragment"
         android:name="com.nhahv.speechrecognitionpoint.ui.classstudent.ClassStudentFragment"

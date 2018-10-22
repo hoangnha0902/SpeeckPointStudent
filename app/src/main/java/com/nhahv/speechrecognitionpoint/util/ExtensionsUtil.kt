@@ -80,4 +80,8 @@ fun Fragment.setUpToolbar(toolbar: Toolbar, title: String) {
 
 }
 
+fun Fragment.convertCompare(text: String): String {
+    return text.trim().replace(" ", "").toUpperCase()
+}
+
 
