@@ -73,11 +73,13 @@
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
     <color name="color_line">#E7E6E6</color>
+    <color name="color_line2">#d9d8d8</color>
     <color name="tooltip_background_dark">#e6616161</color>
     <color name="tooltip_background_light">#e6ffffff</color>
     <color name="transparent">#00000000</color>
     <color name="white">#ffffffff</color>
     <color name="whiteYellow">#fff1f1b5</color>
     <color name="grey_700">#757575</color>
+    <color name="color_point">#2222FF</color>
 
 </resources>
