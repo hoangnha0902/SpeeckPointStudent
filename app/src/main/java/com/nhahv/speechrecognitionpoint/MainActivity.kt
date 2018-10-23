@@ -9,14 +9,16 @@ import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.nhahv.speechrecognitionpoint.ui.exportexcel.ExportExcelFragment
+import com.nhahv.speechrecognitionpoint.ui.fileexcel.FileExcelFragment
 import com.nhahv.speechrecognitionpoint.ui.main.MainFragment
-import com.nhahv.speechrecognitionpoint.util.FileExcelManager
 import com.nhahv.speechrecognitionpoint.util.PermissionUtil
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
+import com.nhahv.speechrecognitionpoint.util.currentFragment
+import com.nhahv.speechrecognitionpoint.util.currentFragmentId
 
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
-    val CODE_EXTERNAL_STORAGE = 100
-    val CODE_EXTERNAL_RECORD_AUDIO = 200
+    private val CODE_EXTERNAL_STORAGE = 100
+    private val CODE_EXTERNAL_RECORD_AUDIO = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
     fun readExcel(function: () -> Unit) {
         PermissionUtil.requestPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, CODE_EXTERNAL_STORAGE) { function }
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, CODE_EXTERNAL_STORAGE) { function() }
     }
 
     fun startSpeech(function: () -> Unit) {
@@ -41,11 +43,10 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     override fun onSupportNavigateUp() = findNavController(R.id.navLoginHost).navigateUp()
 
     override fun onBackPressed() {
-        val resId = Navigation.findNavController(this, R.id.navLoginHost).currentDestination?.id
+        val resId = currentFragmentId()
         when (resId) {
             R.id.exportExcelFragment -> {
-                val navHostFragment = supportFragmentManager.findFragmentById(R.id.navLoginHost)
-                val exportFragment: ExportExcelFragment? = navHostFragment?.childFragmentManager?.fragments?.get(0) as ExportExcelFragment
+                val exportFragment = currentFragment<ExportExcelFragment>()
                 exportFragment?.onBackPress()
             }
             R.id.classStudentFragment -> finish()
@@ -55,21 +56,25 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val resId = currentFragmentId()
         when (requestCode) {
             CODE_EXTERNAL_STORAGE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    FileExcelManager.getExcelFile()
+                    when (resId) {
+                        R.id.fileExcelFragment -> {
+                            val excelFragment = currentFragment<FileExcelFragment>()
+                            excelFragment?.getExcelList()
+                        }
+                    }
                 } else {
                     Toast.makeText(this, "Bạn phải cấp quyền truy cập bộ nhớ!", Toast.LENGTH_SHORT).show()
                 }
             }
             CODE_EXTERNAL_RECORD_AUDIO -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    val resId = Navigation.findNavController(this, R.id.navLoginHost).currentDestination?.id
                     when (resId) {
                         R.id.mainFragment -> {
-                            val navHostFragment = supportFragmentManager.findFragmentById(R.id.navLoginHost)
-                            val exportFragment: MainFragment? = navHostFragment?.childFragmentManager?.fragments?.get(0) as MainFragment
+                            val exportFragment = currentFragment<MainFragment>()
                             exportFragment?.startSpeech()
                         }
                     }
@@ -79,5 +84,4 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
             }
         }
     }
-
 }

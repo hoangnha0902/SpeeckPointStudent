@@ -5,13 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.navigation.Navigation
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.ui.exportexcel.ExportExcelFragment
 
 fun Toast.showToast(context: Context, message: String) {
     makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -87,4 +91,12 @@ fun Fragment.convertCompare(text: String): String {
 
 fun Fragment.sharePrefs(): SharedPreferences {
     return SharedPrefs.getInstance(requireContext()).sharedPref
+}
+
+inline fun <reified T> AppCompatActivity.currentFragment(): T? {
+    return supportFragmentManager.findFragmentById(R.id.navLoginHost)?.childFragmentManager?.fragments?.get(0) as T?
+}
+
+fun AppCompatActivity.currentFragmentId(): Int? {
+    return Navigation.findNavController(this, R.id.navLoginHost).currentDestination?.id
 }

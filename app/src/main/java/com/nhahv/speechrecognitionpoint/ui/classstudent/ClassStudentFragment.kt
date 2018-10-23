@@ -17,6 +17,7 @@ import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.AClass
 import com.nhahv.speechrecognitionpoint.ui.classcreate.ClassCreateFragment
+import com.nhahv.speechrecognitionpoint.util.FileExcelManager
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.fromJson
 import kotlinx.android.synthetic.main.class_student_fragment.*
@@ -59,7 +60,6 @@ class ClassStudentFragment : Fragment() {
         classList.adapter = aClassAdapter
         aClassAdapter.notifyDataSetChanged()
         classCreate.setOnClickListener {
-
             fragmentManager?.let {
                 val fm = it.beginTransaction()
                 val prev = it.findFragmentByTag("classCreate")

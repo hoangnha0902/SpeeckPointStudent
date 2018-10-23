@@ -30,19 +30,13 @@ class FileExcelFragment : Fragment() {
     private val excelFiles: ArrayList<FileExcel> = ArrayList()
     private val excelFileAdapter = ExcelFilesAdapter(excelFiles, object : BaseRecyclerViewAdapter.OnItemListener<FileExcel> {
         override fun onClick(item: FileExcel, position: Int) {
-            println("============= ${item.parent}")
-            println("=============== ${item.path}")
-            println("=============== ${item}")
             Thread().run {
                 //                ReadWriteExcelFile.copyFile(item, PATH_APP, "TEST_DIEM.xls")
 
                 item.path?.let {
                     val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it)
                     SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(className, subjectName, semester?.getSemesterName()), students)
-//                    requireActivity().finish()
                     (requireActivity() as MainActivity).back()
-
-
                 }
             }
         }
@@ -55,7 +49,7 @@ class FileExcelFragment : Fragment() {
             subjectName = it.getString(SUBJECT_NAME)
             semester = SemesterType.SEMESTER_I
         }
-        (requireActivity() as MainActivity).readExcel { FileExcelManager.getExcelFile() }
+        (requireActivity() as MainActivity).readExcel { excelFiles.addAll(FileExcelManager.getExcelFiles()) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -75,8 +69,19 @@ class FileExcelFragment : Fragment() {
 
     private fun initViews() {
         excelFileList.adapter = excelFileAdapter
-        excelFiles.addAll(FileExcelManager.getExcelFiles())
         excelFileAdapter.notifyDataSetChanged()
+        swipeRefresh.setOnRefreshListener {
+            (requireActivity() as MainActivity).readExcel {
+                getExcelList()
+                excelFileAdapter.notifyDataSetChanged()
+                swipeRefresh.isRefreshing = false
+            }
+        }
+    }
+
+    fun getExcelList() {
+        excelFiles.clear()
+        excelFiles.addAll(FileExcelManager.getExcelFiles())
     }
 
     class ExcelFilesAdapter(
