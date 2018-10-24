@@ -27,7 +27,7 @@ open class BaseRecyclerViewAdapter<T>(
             inflater = LayoutInflater.from(p0.context)
         }
         val view = inflater?.inflate(layoutRes, p0, false)
-        return BaseViewHolder(view!!, items, listener!!)
+        return BaseViewHolder(view!!, items, listener)
     }
 
     override fun getItemCount(): Int = items.size
@@ -37,10 +37,10 @@ open class BaseRecyclerViewAdapter<T>(
 
     class BaseViewHolder<T>(view: View,
                             items: ArrayList<T>,
-                            listener: OnItemListener<T>
+                            listener: OnItemListener<T>?
     ) : RecyclerView.ViewHolder(view) {
         init {
-            view.setOnClickListener { listener.onClick(items[adapterPosition], adapterPosition) }
+            view.setOnClickListener { listener?.onClick(items[adapterPosition], adapterPosition) }
         }
     }
 

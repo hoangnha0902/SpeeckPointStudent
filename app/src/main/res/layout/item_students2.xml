@@ -17,31 +17,31 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:id="@+id/studentNumber"
+        android:id="@+id/studentName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="180000005602"
-        app:layout_constraintBottom_toTopOf="@+id/studentName"
-        app:layout_constraintEnd_toEndOf="@+id/studentName"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/studentNumber"
+        app:layout_constraintEnd_toEndOf="@+id/studentNumber"
         app:layout_constraintHorizontal_bias="0.5"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stt" />
 
     <TextView
-        android:id="@+id/studentName"
+        android:id="@+id/studentNumber"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Nguyễn Đức Tuấn Anh"
         app:layout_constraintBottom_toBottomOf="@+id/tbmPoint"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/studentNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/studentName" />
 
     <TextView
         android:id="@+id/hkPoint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Học Kỳ: "
-        android:textColor="@color/red"
+        android:textColor="@color/color_label_point"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/studentName"
         app:layout_constraintTop_toBottomOf="@+id/p45Point" />
@@ -51,7 +51,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Miệng:"
-        android:textColor="@color/red"
+        android:textColor="@color/color_label_point"
         app:layout_constraintStart_toStartOf="@+id/hkPoint"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,7 +60,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="P15:"
-        android:textColor="@color/red"
+        android:textColor="@color/color_label_point"
         app:layout_constraintStart_toStartOf="@+id/hkPoint"
         app:layout_constraintTop_toBottomOf="@+id/mouthPoint" />
 
@@ -69,7 +69,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Viết:"
-        android:textColor="@color/red"
+        android:textColor="@color/color_label_point"
         app:layout_constraintStart_toStartOf="@+id/hkPoint"
         app:layout_constraintTop_toBottomOf="@+id/p15Point" />
 
@@ -78,7 +78,7 @@
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:text="TBM:"
-        android:textColor="@color/red"
+        android:textColor="@color/color_label_point"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/hkPoint"
         app:layout_constraintTop_toBottomOf="@+id/hkPoint" />

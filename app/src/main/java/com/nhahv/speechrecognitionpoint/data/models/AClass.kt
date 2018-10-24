@@ -1,8 +1,6 @@
 package com.nhahv.speechrecognitionpoint.data.models
 
-import android.os.Parcel
 import android.os.Parcelable
-import androidx.versionedparcelable.ParcelField
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

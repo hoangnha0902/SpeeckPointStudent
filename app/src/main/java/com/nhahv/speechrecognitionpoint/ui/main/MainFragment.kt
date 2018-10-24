@@ -14,12 +14,13 @@ import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
-import com.nhahv.speechrecognitionpoint.R.id.pointWrite
 import com.nhahv.speechrecognitionpoint.data.models.SemesterType
 import com.nhahv.speechrecognitionpoint.data.models.Student
 import com.nhahv.speechrecognitionpoint.data.models.TypeOfTypePoint
 import com.nhahv.speechrecognitionpoint.data.models.TypePoint
+import com.nhahv.speechrecognitionpoint.ui.pointInput.PointInputFragment
 import com.nhahv.speechrecognitionpoint.util.*
+import com.nhahv.speechrecognitionpoint.util.CommonUtils.textPoint
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
 import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
@@ -34,7 +35,6 @@ class MainFragment : Fragment() {
     var semester: SemesterType? = SemesterType.SEMESTER_I
     var indexChange: Int = -1
     var isPointing: Boolean = false
-    var isStudentShowDefault = true
 
     private lateinit var viewModel: MainViewModel
     private lateinit var speechPoint: SpeechPoint
@@ -45,11 +45,7 @@ class MainFragment : Fragment() {
         }
     })
 
-    private val studentSwapAdapter = StudentsSwapAdapter(students, object : BaseRecyclerViewAdapter.OnItemListener<Student> {
-        override fun onClick(item: Student, position: Int) {
-
-        }
-    })
+    private val studentSwapAdapter = StudentsSwapAdapter(students)
 
     val typePointList = ArrayList<TypePoint>()
     var typePoint: TypePoint = TypePoint.MOUTH
@@ -61,6 +57,7 @@ class MainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        studentSwapAdapter.setMainFragment(this)
         arguments?.let {
             className = it.getString(CLASS_NAME)
             subjectName = it.getString(SUBJECT_NAME)
@@ -84,7 +81,6 @@ class MainFragment : Fragment() {
         setUpToolbar(toolbar, title)
         speechPoint = SpeechPoint(requireContext())
         speechPoint.setMainFragment(this)
-
         initViews()
     }
 
@@ -138,14 +134,8 @@ class MainFragment : Fragment() {
         }
 
         swap.setOnClickListener {
-            if (isStudentShowDefault) {
-                studentList.visibility = View.GONE
-                studentListSwap.visibility = View.VISIBLE
-            } else {
-                studentList.visibility = View.VISIBLE
-                studentListSwap.visibility = View.GONE
-            }
-            isStudentShowDefault = !isStudentShowDefault
+            studentList.visibility = if (studentList.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            studentListSwap.visibility = if (studentListSwap.visibility == View.VISIBLE) View.GONE else View.VISIBLE
         }
     }
 
@@ -248,6 +238,24 @@ class MainFragment : Fragment() {
         return false
     }
 
+    fun showInputPointDialog(label: String, typePoint: TypePoint, position: Int) {
+        fragmentManager?.let {
+            val fm = it.beginTransaction()
+            val prev = it.findFragmentByTag("inputPoint")
+            if (prev != null) {
+                fm.remove(prev)
+            }
+            fm.addToBackStack(null)
+            val dialog = PointInputFragment.newInstance(label, typePoint, position)
+            dialog.show(fm, "inputPoint")
+            dialog.setOnDismissListener(object : OnDismissListener {
+                override fun onRefreshWhenDismiss(pointValue: Double, typePointValue: TypePoint, position: Int?) {
+                    writePointToStudentWidthInput(pointValue, typePointValue, position)
+                }
+            })
+        }
+    }
+
     private fun writePointToStudent(point: Double) {
         if (indexChange == -1) return
         val student = students[indexChange]
@@ -335,6 +343,42 @@ class MainFragment : Fragment() {
         }
     }
 
+    private fun writePointToStudentWidthInput(point: Double, typePointValue: TypePoint, position: Int?) {
+        if (position == null) return
+        val student = students[position]
+        when (typePointValue) {
+            TypePoint.MOUTH -> {
+                when (typeOfPoint) {
+                    TypeOfTypePoint.TYPE_1 -> student.m1 = point.toString()
+                    TypeOfTypePoint.TYPE_2 -> student.m2 = point.toString()
+                    TypeOfTypePoint.TYPE_3 -> student.m3 = point.toString()
+                    TypeOfTypePoint.TYPE_4 -> student.m4 = point.toString()
+                    TypeOfTypePoint.TYPE_5 -> student.m5 = point.toString()
+                }
+            }
+            TypePoint.P15 -> {
+                when (typeOfPoint) {
+                    TypeOfTypePoint.TYPE_1 -> student.p1 = point.toString()
+                    TypeOfTypePoint.TYPE_2 -> student.p2 = point.toString()
+                    TypeOfTypePoint.TYPE_3 -> student.p3 = point.toString()
+                    TypeOfTypePoint.TYPE_4 -> student.p4 = point.toString()
+                    TypeOfTypePoint.TYPE_5 -> student.p5 = point.toString()
+                }
+            }
+            TypePoint.WRITE -> {
+                when (typeOfPoint) {
+                    TypeOfTypePoint.TYPE_1 -> student.v1 = point.toString()
+                    TypeOfTypePoint.TYPE_2 -> student.v2 = point.toString()
+                    TypeOfTypePoint.TYPE_3 -> student.v3 = point.toString()
+                    TypeOfTypePoint.TYPE_4 -> student.v4 = point.toString()
+                    TypeOfTypePoint.TYPE_5 -> student.v5 = point.toString()
+                }
+            }
+            TypePoint.SEMESTER -> student.hk = point.toString()
+        }
+        notifyAdapter()
+    }
+
     override fun onStop() {
         speechPoint.destroy()
         SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(className, subjectName, semester?.getSemesterName()), students)
@@ -376,10 +420,15 @@ class MainFragment : Fragment() {
     }
 
     class StudentsSwapAdapter(
-            private val students: ArrayList<Student> = ArrayList(),
-            listener: BaseRecyclerViewAdapter.OnItemListener<Student>
+            private val students: ArrayList<Student> = ArrayList()
 
-    ) : BaseRecyclerViewAdapter<Student>(students, R.layout.item_students, listener) {
+    ) : BaseRecyclerViewAdapter<Student>(students, R.layout.item_students) {
+        var fragment: MainFragment? = null
+
+        fun setMainFragment(mainFragment: MainFragment) {
+            fragment = mainFragment
+        }
+
         override fun onBindViewHolder(holder: BaseViewHolder<Student>, position: Int) {
             super.onBindViewHolder(holder, position)
             val student = students[position]
@@ -388,63 +437,63 @@ class MainFragment : Fragment() {
                 nameStudent.text = student.name
                 var textMouth = ""
                 if (!TextUtils.isEmpty(student.m1)) {
-                    textMouth += "<font color='#177FAC'>M1 :  </font><font color='#2222FF'>${student.m1}, </font>"
+                    textMouth += textPoint("M1", student.m1)
                 }
                 if (!TextUtils.isEmpty(student.m2)) {
-                    textMouth += "<font color='#177FAC'>M2 :  </font><font color='#2222FF'>${student.m2}, </font>"
+                    textMouth += textPoint("M2", student.m2)
                 }
                 if (!TextUtils.isEmpty(student.m3)) {
-                    textMouth += "<font color='#177FAC'>M3 :  </font><font color='#2222FF'>${student.m3}, </font>"
+                    textMouth += textPoint("M3", student.m3)
                 }
                 if (!TextUtils.isEmpty(student.m4)) {
-                    textMouth += "<font color='#177FAC'>M4 :  </font><font color='#2222FF'>${student.m4}, </font>"
+                    textMouth += textPoint("M4", student.m4)
                 }
                 if (!TextUtils.isEmpty(student.m5)) {
-                    textMouth += "<font color='#177FAC'>M5 :  </font><font color='#2222FF'>${student.m5} </font>"
+                    textMouth += textPoint("M5", student.m5)
                 }
                 valueMouth.setText(Html.fromHtml(textMouth), TextView.BufferType.SPANNABLE)
 
                 var textP15 = ""
                 if (!TextUtils.isEmpty(student.p1)) {
-                    textP15 += "<font color='#177FAC'>P1 :  </font><font color='#2222FF'>${student.p1}, </font>"
+                    textP15 += textPoint("P1", student.p1)
                 }
                 if (!TextUtils.isEmpty(student.p2)) {
-                    textP15 += "<font color='#177FAC'>P2 :  </font><font color='#2222FF'>${student.p2}, </font>"
+                    textP15 += textPoint("P2", student.p2)
                 }
                 if (!TextUtils.isEmpty(student.p3)) {
-                    textP15 += "<font color='#177FAC'>P3 :  </font><font color='#2222FF'>${student.p3}, </font>"
+                    textP15 += textPoint("P3", student.p3)
                 }
                 if (!TextUtils.isEmpty(student.p4)) {
-                    textP15 += "<font color='#177FAC'>P4 :  </font><font color='#2222FF'>${student.p4}, </font>"
+                    textP15 += textPoint("P4", student.p4)
                 }
                 if (!TextUtils.isEmpty(student.p5)) {
-                    textP15 += "<font color='#177FAC'>P5 :  </font><font color='#2222FF'>${student.p5} </font>"
+                    textP15 += textPoint("P5", student.p5)
                 }
                 valueP15.setText(Html.fromHtml(textP15), TextView.BufferType.SPANNABLE)
 
                 var textWrite = ""
                 if (!TextUtils.isEmpty(student.v1)) {
-                    textWrite += "<font color='#177FAC'>V1 :  </font><font color='#2222FF'>${student.v1}, </font>"
+                    textWrite += textPoint("V1", student.v1)
                 }
                 if (!TextUtils.isEmpty(student.v2)) {
-                    textWrite += "<font color='#177FAC'>V2 :  </font><font color='#2222FF'>${student.v2}, </font>"
+                    textWrite += textPoint("V2", student.v2)
                 }
                 if (!TextUtils.isEmpty(student.v3)) {
-                    textWrite += "<font color='#177FAC'>V3 :  </font><font color='#2222FF'>${student.v3}, </font>"
+                    textWrite += textPoint("V3", student.v3)
                 }
                 if (!TextUtils.isEmpty(student.v4)) {
-                    textWrite += "<font color='#177FAC'>V4 :  </font><font color='#2222FF'>${student.v4}, </font>"
+                    textWrite += textPoint("V4", student.v4)
                 }
                 if (!TextUtils.isEmpty(student.v5)) {
-                    textWrite += "<font color='#177FAC'>V5 :  </font><font color='#2222FF'>${student.v5} </font>"
+                    textWrite += textPoint("V5", student.v5)
                 }
                 valueWrite.setText(Html.fromHtml(textWrite), TextView.BufferType.SPANNABLE)
                 if (!TextUtils.isEmpty(student.hk)) {
-                    val textSemester = "<font color='#177FAC'>HK :  </font><font color='#2222FF'>${student.hk} </font>"
+                    val textSemester = textPoint("HK", student.hk)
                     valueSemester.setText(Html.fromHtml(textSemester), TextView.BufferType.SPANNABLE)
                 }
                 if (!TextUtils.isEmpty(student.tbm)) {
-                    val textTBM = "<font color='#177FAC'>TBM :  </font><font color='#2222FF'>${student.tbm} </font>"
+                    val textTBM = textPoint("TBM", student.tbm)
                     valueTBM.setText(Html.fromHtml(textTBM), TextView.BufferType.SPANNABLE)
                 }
 
@@ -457,7 +506,27 @@ class MainFragment : Fragment() {
                     lineTBM.visibility = if (lineTBM.visibility == View.VISIBLE) View.GONE else View.VISIBLE
                     minusPlus.setImageResource(if (lineTBM.visibility == View.VISIBLE) R.mipmap.circle_plus else R.mipmap.circle_minus)
                 }
+
+                pointMouth.setOnClickListener {
+                    fragment?.showInputPointDialog("Điểm miệng", TypePoint.MOUTH, position)
+                }
+
+                point15P.setOnClickListener {
+                    fragment?.showInputPointDialog("Điểm 15 phút", TypePoint.P15, position)
+                }
+
+                pointWrite.setOnClickListener {
+                    fragment?.showInputPointDialog("Điểm 1 tiết", TypePoint.WRITE, position)
+                }
+
+                pointSemester.setOnClickListener {
+                    fragment?.showInputPointDialog("Học kỳ", TypePoint.SEMESTER, position)
+                }
             }
         }
+    }
+
+    interface OnDismissListener {
+        fun onRefreshWhenDismiss(pointValue: Double, typePointValue: TypePoint, position: Int?)
     }
 }

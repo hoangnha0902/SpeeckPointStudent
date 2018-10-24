@@ -1,5 +1,7 @@
 package com.nhahv.speechrecognitionpoint.data.models
 
+import com.nhahv.speechrecognitionpoint.util.CommonUtils
+
 class Student(var stt: String = "0", var numberStudent: String = "", var name: String = "",
               var m1: String = "", var m2: String = "",
               var m3: String = "", var m4: String = "", var m5: String = "",
@@ -79,19 +81,7 @@ class Student(var stt: String = "0", var numberStudent: String = "", var name: S
             total += hk.toDouble() * 3
             radio += 3
         }
-        return (round(total / radio, 1)).toString()
+        return (CommonUtils.round(total / radio, 1)).toString()
 
-    }
-
-    private fun round(value: Double, places: Int): Double {
-        var valueDouble = value
-        if (places < 0) {
-            return 0.0
-        }
-
-        val factor = Math.pow(10.0, places.toDouble()).toLong()
-        valueDouble *= factor
-        val tmp = Math.round(valueDouble)
-        return tmp.toDouble() / factor
     }
 }
