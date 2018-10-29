@@ -5,10 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.navigation.Navigation
@@ -51,7 +51,7 @@ fun Activity.toast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
-fun Fragment.toast(message: String) {
+fun androidx.fragment.app.Fragment.toast(message: String) {
     Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
 }
 
@@ -65,31 +65,31 @@ inline fun <reified T> Activity.start(bundle: Bundle) {
     })
 }
 
-inline fun <reified T> Fragment.start(bundle: Bundle) {
+inline fun <reified T> androidx.fragment.app.Fragment.start(bundle: Bundle) {
     startActivity(Intent(activity, T::class.java).apply {
         putExtras(bundle)
     })
 }
 
 
-inline fun <reified T> Fragment.start() {
+inline fun <reified T> androidx.fragment.app.Fragment.start() {
     startActivity(Intent(activity, T::class.java))
 }
 
 inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
-fun Fragment.setUpToolbar(toolbar: Toolbar, title: String) {
+fun androidx.fragment.app.Fragment.setUpToolbar(toolbar: Toolbar, title: String) {
     (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
     (requireActivity() as AppCompatActivity).supportActionBar?.title = title
 
 }
 
-fun Fragment.convertCompare(text: String): String {
+fun androidx.fragment.app.Fragment.convertCompare(text: String): String {
     return text.trim().replace(" ", "").toUpperCase()
 }
 
 
-fun Fragment.sharePrefs(): SharedPreferences {
+fun androidx.fragment.app.Fragment.sharePrefs(): SharedPreferences {
     return SharedPrefs.getInstance(requireContext()).sharedPref
 }
 

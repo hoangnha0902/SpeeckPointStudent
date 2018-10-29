@@ -1,9 +1,9 @@
 package com.nhahv.speechrecognitionpoint.ui.subjectCreate
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +22,7 @@ import com.nhahv.speechrecognitionpoint.util.toast
 import kotlinx.android.synthetic.main.subject_create_fragment.*
 
 
-class SubjectCreateFragment : DialogFragment() {
+class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
 
     companion object {
         fun newInstance() = SubjectCreateFragment()

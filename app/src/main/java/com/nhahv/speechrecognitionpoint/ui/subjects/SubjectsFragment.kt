@@ -1,9 +1,9 @@
 package com.nhahv.speechrecognitionpoint.ui.subjects
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +24,7 @@ import com.nhahv.speechrecognitionpoint.util.setUpToolbar
 import kotlinx.android.synthetic.main.item_subject.view.*
 import kotlinx.android.synthetic.main.subjects_fragment.*
 
-class SubjectsFragment : Fragment() {
+class SubjectsFragment : androidx.fragment.app.Fragment() {
     private lateinit var viewModel: SubjectsViewModel
     private val subjects = ArrayList<Subject>()
     private var className: String? = null

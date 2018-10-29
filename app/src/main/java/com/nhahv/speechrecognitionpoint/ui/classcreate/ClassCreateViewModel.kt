@@ -1,6 +1,6 @@
 package com.nhahv.speechrecognitionpoint.ui.classcreate
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 class ClassCreateViewModel : ViewModel() {
     // TODO: Implement the ViewModel

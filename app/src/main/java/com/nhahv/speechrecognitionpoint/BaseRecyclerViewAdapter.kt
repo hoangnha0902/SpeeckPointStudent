@@ -1,7 +1,7 @@
 package com.nhahv.speechrecognitionpoint
 
-import android.support.annotation.LayoutRes
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import android.view.ViewGroup
 open class BaseRecyclerViewAdapter<T>(
         val items: ArrayList<T>,
         @LayoutRes private val layoutRes: Int
-) : RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder<T>>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder<T>>() {
 
 
     constructor(
@@ -38,7 +38,7 @@ open class BaseRecyclerViewAdapter<T>(
     class BaseViewHolder<T>(view: View,
                             items: ArrayList<T>,
                             listener: OnItemListener<T>?
-    ) : RecyclerView.ViewHolder(view) {
+    ) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         init {
             view.setOnClickListener { listener?.onClick(items[adapterPosition], adapterPosition) }
         }

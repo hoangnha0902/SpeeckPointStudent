@@ -1,8 +1,8 @@
 package com.nhahv.speechrecognitionpoint.ui.pointInput
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +12,7 @@ import com.nhahv.speechrecognitionpoint.ui.main.MainFragment
 import com.nhahv.speechrecognitionpoint.util.CommonUtils
 import kotlinx.android.synthetic.main.point_input_fragment.*
 
-class PointInputFragment : DialogFragment() {
+class PointInputFragment : androidx.fragment.app.DialogFragment() {
 
     companion object {
         fun newInstance(label: String, typePoint: TypePoint, position: Int) = PointInputFragment().apply {

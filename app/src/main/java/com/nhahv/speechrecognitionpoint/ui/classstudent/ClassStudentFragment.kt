@@ -1,11 +1,11 @@
 package com.nhahv.speechrecognitionpoint.ui.classstudent
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.GridLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +23,7 @@ import com.nhahv.speechrecognitionpoint.util.fromJson
 import kotlinx.android.synthetic.main.class_student_fragment.*
 import kotlinx.android.synthetic.main.item_class.view.*
 
-class ClassStudentFragment : Fragment() {
+class ClassStudentFragment : androidx.fragment.app.Fragment() {
 
     companion object {
         fun newInstance() = ClassStudentFragment()
@@ -100,7 +100,7 @@ class ClassStudentFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, p1: Int): BaseRecyclerViewAdapter.BaseViewHolder<AClass> {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.item_class, parent, false)
-            val lp: GridLayoutManager.LayoutParams = view.layoutParams as GridLayoutManager.LayoutParams
+            val lp: androidx.recyclerview.widget.GridLayoutManager.LayoutParams = view.layoutParams as androidx.recyclerview.widget.GridLayoutManager.LayoutParams
             lp.width = parent.measuredWidth / 2 - 32
             lp.leftMargin = 16
             lp.rightMargin = 16

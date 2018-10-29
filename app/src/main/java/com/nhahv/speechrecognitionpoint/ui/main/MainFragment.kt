@@ -1,8 +1,8 @@
 package com.nhahv.speechrecognitionpoint.ui.main
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.Html
 import android.text.TextUtils
 import android.view.*
@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.item_students.view.*
 import kotlinx.android.synthetic.main.item_students2.view.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
-class MainFragment : Fragment() {
+class MainFragment : androidx.fragment.app.Fragment() {
     var className: String? = null
     var subjectName: String? = null
     var semester: SemesterType? = SemesterType.SEMESTER_I
@@ -218,7 +218,8 @@ class MainFragment : Fragment() {
         } else if (isPointing) {
             matches.replace(",", ".")
             try {
-                writePointToStudent(matches.toDouble())
+                val point = CommonUtils.round(matches.toDouble(), 2)
+                writePointToStudent(point)
             } catch (ex: NumberFormatException) {
                 toast("Nhập lai điểm")
             }

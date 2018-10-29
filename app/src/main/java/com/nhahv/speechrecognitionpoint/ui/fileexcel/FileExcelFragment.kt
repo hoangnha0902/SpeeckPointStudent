@@ -1,8 +1,8 @@
 package com.nhahv.speechrecognitionpoint.ui.fileexcel
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +21,7 @@ import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
 
-class FileExcelFragment : Fragment() {
+class FileExcelFragment : androidx.fragment.app.Fragment() {
     private lateinit var viewModel: FileExcelViewModel
     var className: String? = null
     var subjectName: String? = null

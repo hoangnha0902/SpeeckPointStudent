@@ -1,8 +1,8 @@
 package com.nhahv.speechrecognitionpoint.ui.login
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.TextUtils
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ import com.nhahv.speechrecognitionpoint.util.toast
 import kotlinx.android.synthetic.main.login_fragment.*
 
 
-class LoginFragment : Fragment() {
+class LoginFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var viewModel: LoginViewModel
 

@@ -1,8 +1,8 @@
 package com.nhahv.speechrecognitionpoint.ui.register
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.TextUtils
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
@@ -17,7 +17,7 @@ import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.toast
 import kotlinx.android.synthetic.main.register_fragment.*
 
-class RegisterFragment : Fragment() {
+class RegisterFragment : androidx.fragment.app.Fragment() {
     private lateinit var viewModel: RegisterViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
