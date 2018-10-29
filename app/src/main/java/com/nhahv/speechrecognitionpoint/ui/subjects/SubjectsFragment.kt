@@ -15,11 +15,14 @@ import com.nhahv.speechrecognitionpoint.data.models.AClass
 import com.nhahv.speechrecognitionpoint.data.models.Subject
 import com.nhahv.speechrecognitionpoint.ui.classstudent.ClassStudentFragment
 import com.nhahv.speechrecognitionpoint.ui.subjectCreate.SubjectCreateFragment
+import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
 import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
+import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.fromJson
+import com.nhahv.speechrecognitionpoint.util.navigate
 import com.nhahv.speechrecognitionpoint.util.setUpToolbar
 import kotlinx.android.synthetic.main.item_subject.view.*
 import kotlinx.android.synthetic.main.subjects_fragment.*
@@ -27,22 +30,19 @@ import kotlinx.android.synthetic.main.subjects_fragment.*
 class SubjectsFragment : androidx.fragment.app.Fragment() {
     private lateinit var viewModel: SubjectsViewModel
     private val subjects = ArrayList<Subject>()
-    private var className: String? = null
+    private var aClass: AClass? = null
     private val adapter = SubjectAdapter(subjects, object : BaseRecyclerViewAdapter.OnItemListener<Subject> {
         override fun onClick(item: Subject, position: Int) {
-            val bundle = Bundle()
-            bundle.putString(CLASS_NAME, className)
-            bundle.putString(SUBJECT_NAME, item.subjectName)
-            bundle.putSerializable(SEMESTER_PARAM, item.semester)
-            findNavController(requireActivity(), R.id.navLoginHost).navigate(R.id.action_subjectsFragment_to_mainFragment, bundle)
+            navigate(R.id.action_subjectsFragment_to_mainFragment, Bundle().apply {
+                putParcelable(CLASSES, aClass)
+                putParcelable(SUBJECTS, item)
+            })
         }
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val aClass = arguments?.getParcelable<AClass>("classes")
-        className = aClass?.name
-
+        aClass = arguments?.getParcelable(CLASSES)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +57,7 @@ class SubjectsFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpToolbar(toolbar, "Danh sách môn học lớp $className")
+        setUpToolbar(toolbar, "Danh sách môn học lớp ${aClass?.name}")
         subjects.clear()
         subjects.addAll(getSubjects())
         subjectList.adapter = adapter
@@ -71,7 +71,7 @@ class SubjectsFragment : androidx.fragment.app.Fragment() {
                 fm.addToBackStack(null)
                 val dialog = SubjectCreateFragment.newInstance()
                 dialog.show(fm, "subjectCreate")
-                dialog.className = className
+                dialog.className = aClass?.name
                 dialog.setOnDismissListener(object : ClassStudentFragment.OnDismissListener {
                     override fun onRefreshWhenDismiss() {
                         refreshData()
@@ -88,7 +88,7 @@ class SubjectsFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun getSubjects(): ArrayList<Subject> {
-        val value = SharedPrefs.getInstance(requireContext()).get(SharedPrefs.PREF_SUBJECT.format(className), "")
+        val value = SharedPrefs.getInstance(requireContext()).get(SharedPrefs.PREF_SUBJECT.format(aClass?.name), "")
         if (value.isEmpty()) {
             return ArrayList()
         }

@@ -31,8 +31,6 @@ class FileExcelFragment : androidx.fragment.app.Fragment() {
     private val excelFileAdapter = ExcelFilesAdapter(excelFiles, object : BaseRecyclerViewAdapter.OnItemListener<FileExcel> {
         override fun onClick(item: FileExcel, position: Int) {
             Thread().run {
-                //                ReadWriteExcelFile.copyFile(item, PATH_APP, "TEST_DIEM.xls")
-
                 item.path?.let {
                     val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it)
                     SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(className, subjectName, semester?.getSemesterName()), students)

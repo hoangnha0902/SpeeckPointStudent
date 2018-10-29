@@ -17,10 +17,13 @@ import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.AClass
 import com.nhahv.speechrecognitionpoint.ui.classcreate.ClassCreateFragment
+import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
 import com.nhahv.speechrecognitionpoint.util.FileExcelManager
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.fromJson
+import com.nhahv.speechrecognitionpoint.util.navigate
 import kotlinx.android.synthetic.main.class_student_fragment.*
+import kotlinx.android.synthetic.main.item_class.*
 import kotlinx.android.synthetic.main.item_class.view.*
 
 class ClassStudentFragment : androidx.fragment.app.Fragment() {
@@ -54,7 +57,7 @@ class ClassStudentFragment : androidx.fragment.app.Fragment() {
         super.onViewCreated(view, savedInstanceState)
         aClassAdapter = AClassAdapter(requireContext(), aClasses, object : BaseRecyclerViewAdapter.OnItemListener<AClass> {
             override fun onClick(item: AClass, position: Int) {
-                Navigation.findNavController(requireActivity(), R.id.navLoginHost).navigate(R.id.action_classStudentFragment_to_subjectsFragment, Bundle().apply { putParcelable("classes", item) })
+                navigate(R.id.action_classStudentFragment_to_subjectsFragment, Bundle().apply { putParcelable(CLASSES, item) })
             }
         })
         classList.adapter = aClassAdapter
@@ -107,7 +110,7 @@ class ClassStudentFragment : androidx.fragment.app.Fragment() {
             lp.topMargin = 16
             lp.bottomMargin = 16
             view.layoutParams = lp
-            return BaseViewHolder(view, items, listener!!)
+            return BaseRecyclerViewAdapter.BaseViewHolder(view, items, listener!!)
         }
 
         override fun onBindViewHolder(holder: BaseViewHolder<AClass>, position: Int) {

@@ -1,25 +1,20 @@
 package com.nhahv.speechrecognitionpoint.util
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.annotation.IdRes
-import androidx.fragment.app.Fragment
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import android.widget.Toast
-import android.widget.Toast.makeText
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nhahv.speechrecognitionpoint.R
-import com.nhahv.speechrecognitionpoint.ui.exportexcel.ExportExcelFragment
-
-fun Toast.showToast(context: Context, message: String) {
-    makeText(context, message, Toast.LENGTH_SHORT).show()
-}
 
 inline fun <reified T> SharedPreferences.put(key: String, value: T) {
     val editor = edit()
@@ -84,7 +79,7 @@ fun androidx.fragment.app.Fragment.setUpToolbar(toolbar: Toolbar, title: String)
 
 }
 
-fun androidx.fragment.app.Fragment.convertCompare(text: String): String {
+fun Fragment.convertCompare(text: String): String {
     return text.trim().replace(" ", "").toUpperCase()
 }
 
@@ -100,3 +95,18 @@ inline fun <reified T> AppCompatActivity.currentFragment(): T? {
 fun AppCompatActivity.currentFragmentId(): Int? {
     return Navigation.findNavController(this, R.id.navLoginHost).currentDestination?.id
 }
+
+fun Fragment.navigateClearStack(view: View, action: Int) {
+    view.findNavController().navigate(action, null, NavOptions.Builder().setClearTask(true).build())
+
+}
+
+fun Fragment.navigate(view: View, action: Int) {
+    view.findNavController().navigate(action)
+}
+
+fun Fragment.navigate(action: Int, bundle: Bundle) {
+    Navigation.findNavController(requireActivity(), R.id.navLoginHost).navigate(action, bundle)
+}
+
+

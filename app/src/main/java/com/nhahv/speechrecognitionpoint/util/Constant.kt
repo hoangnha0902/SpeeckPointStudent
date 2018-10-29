@@ -9,5 +9,7 @@ object Constant {
     const val USER_NAME = "user_name"
     const val PASSWORD = "password"
     const val IS_LOGIN = "is_login"
+    const val CLASSES = "classes"
+    const val SUBJECTS = "subjects"
     val PATH_APP = Environment.getExternalStorageDirectory().absolutePath + "/SpeechPoint"
 }

@@ -14,15 +14,14 @@ import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
-import com.nhahv.speechrecognitionpoint.data.models.SemesterType
-import com.nhahv.speechrecognitionpoint.data.models.Student
-import com.nhahv.speechrecognitionpoint.data.models.TypeOfTypePoint
-import com.nhahv.speechrecognitionpoint.data.models.TypePoint
+import com.nhahv.speechrecognitionpoint.data.models.*
 import com.nhahv.speechrecognitionpoint.ui.pointInput.PointInputFragment
 import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.CommonUtils.textPoint
+import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
 import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
+import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 import kotlinx.android.synthetic.main.item_students.view.*
@@ -30,12 +29,12 @@ import kotlinx.android.synthetic.main.item_students2.view.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : androidx.fragment.app.Fragment() {
-    var className: String? = null
-    var subjectName: String? = null
     var semester: SemesterType? = SemesterType.SEMESTER_I
     var indexChange: Int = -1
     var isPointing: Boolean = false
 
+    var subject: Subject? = null
+    var aClass: AClass? = null
     private lateinit var viewModel: MainViewModel
     private lateinit var speechPoint: SpeechPoint
     private val students = ArrayList<Student>()
@@ -59,10 +58,10 @@ class MainFragment : androidx.fragment.app.Fragment() {
         setHasOptionsMenu(true)
         studentSwapAdapter.setMainFragment(this)
         arguments?.let {
-            className = it.getString(CLASS_NAME)
-            subjectName = it.getString(SUBJECT_NAME)
-            semester = it.getSerializable(SEMESTER_PARAM) as SemesterType
-            title = "Môn $subjectName lớp học " + it.getString(CLASS_NAME)
+            aClass = it.getParcelable(CLASSES)
+            subject = it.getParcelable(SUBJECTS)
+            semester = subject?.semester
+            title = "Môn ${subject?.subjectName} lớp học ${aClass?.name}"
         }
     }
 
@@ -92,18 +91,10 @@ class MainFragment : androidx.fragment.app.Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.fileExcelFragment -> {
-                Navigation.findNavController(requireActivity(), R.id.navLoginHost).navigate(R.id.action_mainFragment_to_fileExcelFragment, Bundle().apply {
-                    putString(CLASS_NAME, className)
-                    putString(SUBJECT_NAME, subjectName)
-                    putSerializable(SEMESTER_PARAM, semester)
-                })
+                navigate(R.id.action_mainFragment_to_fileExcelFragment, arguments!!)
             }
             R.id.exportExcelFragment -> {
-                Navigation.findNavController(requireActivity(), R.id.navLoginHost).navigate(R.id.action_mainFragment_to_exportExcelFragment, Bundle().apply {
-                    putString(CLASS_NAME, className)
-                    putString(SUBJECT_NAME, subjectName)
-                    putSerializable(SEMESTER_PARAM, semester)
-                })
+                navigate(R.id.action_mainFragment_to_exportExcelFragment, arguments!!)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -203,7 +194,7 @@ class MainFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun getStudentList(): ArrayList<Student> {
-        val value = SharedPrefs.getInstance(requireContext()).get(PREF_STUDENT.format(className, subjectName, semester?.getSemesterName()), "")
+        val value = SharedPrefs.getInstance(requireContext()).get(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), "")
         if (value.isEmpty()) {
             return ArrayList()
         }
@@ -382,7 +373,7 @@ class MainFragment : androidx.fragment.app.Fragment() {
 
     override fun onStop() {
         speechPoint.destroy()
-        SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(className, subjectName, semester?.getSemesterName()), students)
+        SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), students)
         super.onStop()
     }
 

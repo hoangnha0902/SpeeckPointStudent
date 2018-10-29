@@ -22,10 +22,6 @@ import java.util.*
 
 class ExportExcelFragment : androidx.fragment.app.Fragment() {
 
-    companion object {
-        fun newInstance() = ExportExcelFragment()
-    }
-
     val FOLDER_STORAGE_INTERNAL = "/storage/emulated"
 
     private lateinit var viewModel: ExportExcelViewModel
@@ -79,6 +75,12 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
             }
         }
         adapter.notifyDataSetChanged()
+
+        exportExcel.setOnClickListener {
+            // export excels
+            //                ReadWriteExcelFile.copyFile(item, PATH_APP, "TEST_DIEM.xls")
+
+        }
     }
 
     fun onBackPress() {
@@ -141,7 +143,6 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
         }
 
         private fun checkFile(path: String?): Boolean {
-            return File(path).isFile
             return File(path).isFile
         }
     }

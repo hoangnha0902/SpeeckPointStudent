@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                 exportFragment?.onBackPress()
             }
             R.id.classStudentFragment -> finish()
+            R.id.loginFragment -> finish()
             else -> Navigation.findNavController(this, R.id.navLoginHost).popBackStack()
         }
     }
