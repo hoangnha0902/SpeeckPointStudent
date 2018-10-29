@@ -10,13 +10,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.data.models.AClass
 import com.nhahv.speechrecognitionpoint.data.models.Folder
-import com.nhahv.speechrecognitionpoint.util.setUpToolbar
+import com.nhahv.speechrecognitionpoint.data.models.Student
+import com.nhahv.speechrecognitionpoint.data.models.Subject
+import com.nhahv.speechrecognitionpoint.util.*
+import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
+import com.nhahv.speechrecognitionpoint.util.Constant.PATH_APP
+import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 import kotlinx.android.synthetic.main.export_excel_fragment.*
 import kotlinx.android.synthetic.main.item_export_excel.view.*
+import kotlinx.android.synthetic.main.item_subject.*
 import java.io.File
 import java.util.*
 
@@ -28,13 +37,20 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
     private val folders = ArrayList<Folder>()
     private val adapter = ExportAdapter(folders)
     private var pathFolder: String? = null
-
+    private var aClass: AClass? = null
+    private var subject: Subject? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val folder = folder(Environment.getExternalStorageDirectory().path)
         if (folder != null) {
             pathFolder = folder.path
             folders.add(folder)
+        }
+
+        arguments?.let {
+            aClass = it.getParcelable(CLASSES)
+            subject = it.getParcelable(SUBJECTS)
         }
     }
 
@@ -46,7 +62,6 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ExportExcelViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,7 +93,25 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
 
         exportExcel.setOnClickListener {
             // export excels
-            //                ReadWriteExcelFile.copyFile(item, PATH_APP, "TEST_DIEM.xls")
+            if (subject == null || subject?.excel == null) {
+                toast("Không đọc được link file bảng điểm gốc")
+                return@setOnClickListener
+            }
+            if (pathFolder == null) {
+                toast("Chọn đường dẫn để export bảng điểm")
+                return@setOnClickListener
+            }
+
+            val excelFile = subject?.excel
+            Thread().run {
+                val isWrite = ReadWriteExcelFile.writeStudentExcel(excelFile!!, pathFolder!!, "${subject?.subjectName}_${aClass?.name}_${subject?.semester?.getSemesterName()}_${aClass?.year}.xls", getStudentList())
+                if (isWrite) {
+                    toast("Export bảng điểm thành công")
+                } else {
+                    toast("Export bảng điểm thất bại")
+                }
+            }
+
 
         }
     }
@@ -168,5 +201,13 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
             }
         }
         return Folder(name, pathFile, pathChild, parent, isFolder)
+    }
+
+    private fun getStudentList(): ArrayList<Student> {
+        val value = sharePrefs().get(PREF_STUDENT.format(aClass?.name, subject?.subjectName, subject?.semester?.getSemesterName()), "")
+        if (value.isEmpty()) {
+            return ArrayList()
+        }
+        return Gson().fromJson<ArrayList<Student>>(value)
     }
 }

@@ -1,30 +1,28 @@
 package com.nhahv.speechrecognitionpoint.ui.fileexcel
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
+import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
-import com.nhahv.speechrecognitionpoint.data.models.FileExcel
-import com.nhahv.speechrecognitionpoint.data.models.SemesterType
-import com.nhahv.speechrecognitionpoint.data.models.Student
-import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
-import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
-import com.nhahv.speechrecognitionpoint.util.FileExcelManager
-import com.nhahv.speechrecognitionpoint.util.ReadWriteExcelFile
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs
+import com.nhahv.speechrecognitionpoint.data.models.*
+import com.nhahv.speechrecognitionpoint.util.*
+import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
+import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_SUBJECT
 import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
 
 class FileExcelFragment : androidx.fragment.app.Fragment() {
     private lateinit var viewModel: FileExcelViewModel
-    var className: String? = null
-    var subjectName: String? = null
+    private var aClass: AClass? = null
+    private var subject: Subject? = null
     var semester: SemesterType? = SemesterType.SEMESTER_I
 
     private val excelFiles: ArrayList<FileExcel> = ArrayList()
@@ -33,7 +31,8 @@ class FileExcelFragment : androidx.fragment.app.Fragment() {
             Thread().run {
                 item.path?.let {
                     val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it)
-                    SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(className, subjectName, semester?.getSemesterName()), students)
+                    updateSubjects(subject, item)
+                    SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), students)
                     (requireActivity() as MainActivity).back()
                 }
             }
@@ -43,9 +42,9 @@ class FileExcelFragment : androidx.fragment.app.Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            className = it.getString(CLASS_NAME)
-            subjectName = it.getString(SUBJECT_NAME)
-            semester = SemesterType.SEMESTER_I
+            aClass = it.getParcelable(CLASSES)
+            subject = it.getParcelable(SUBJECTS)
+            semester = subject?.semester
         }
         (requireActivity() as MainActivity).readExcel { excelFiles.addAll(FileExcelManager.getExcelFiles()) }
     }
@@ -93,6 +92,29 @@ class FileExcelFragment : androidx.fragment.app.Fragment() {
             val excelFile = items[position]
             view.nameFile.text = excelFile.nameFile
             view.fileTime.text = excelFile.time
+        }
+    }
+
+    private fun updateSubjects(subject: Subject?, excelFile: FileExcel) {
+        if (subject == null) {
+            toast("Cập nhật lớp học thất bại")
+            return
+        }
+        val value = sharePrefs().get(PREF_SUBJECT.format(aClass?.name), "")
+        if (TextUtils.isEmpty(value)) {
+            toast("Cập nhật lớp học thất bại")
+            return
+        }
+        val subjects = Gson().fromJson<ArrayList<Subject>>(value)
+        var isChanged = false
+        for (item in subjects) {
+            if (convertCompare(item.subjectName) == convertCompare(subject.subjectName)) {
+                item.excel = excelFile
+                isChanged = true
+            }
+        }
+        if (isChanged) {
+            sharePrefs().put(PREF_SUBJECT.format(aClass?.name), subjects)
         }
     }
 }

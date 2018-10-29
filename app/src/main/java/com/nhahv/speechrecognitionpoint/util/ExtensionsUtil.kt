@@ -50,27 +50,6 @@ fun androidx.fragment.app.Fragment.toast(message: String) {
     Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
 }
 
-inline fun <reified T> Activity.start() {
-    startActivity(Intent(this, T::class.java))
-}
-
-inline fun <reified T> Activity.start(bundle: Bundle) {
-    startActivity(Intent(this, T::class.java).apply {
-        putExtras(bundle)
-    })
-}
-
-inline fun <reified T> androidx.fragment.app.Fragment.start(bundle: Bundle) {
-    startActivity(Intent(activity, T::class.java).apply {
-        putExtras(bundle)
-    })
-}
-
-
-inline fun <reified T> androidx.fragment.app.Fragment.start() {
-    startActivity(Intent(activity, T::class.java))
-}
-
 inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
 fun androidx.fragment.app.Fragment.setUpToolbar(toolbar: Toolbar, title: String) {
@@ -84,7 +63,7 @@ fun Fragment.convertCompare(text: String): String {
 }
 
 
-fun androidx.fragment.app.Fragment.sharePrefs(): SharedPreferences {
+fun Fragment.sharePrefs(): SharedPreferences {
     return SharedPrefs.getInstance(requireContext()).sharedPref
 }
 

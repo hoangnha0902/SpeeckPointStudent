@@ -82,110 +82,113 @@ object ReadWriteExcelFile {
 
     fun writeStudentExcel(excelFile: FileExcel, path: String, name: String, students: ArrayList<Student>): Boolean {
         try {
-            val fileWrite = copyFile(excelFile, path, name)
-            val workbook = WorkbookFactory.create(File(path))
+            val fileWrite = File(path, name)
+            if (fileWrite.exists()) {
+                fileWrite.delete()
+            }
+            val workbook = WorkbookFactory.create(File(excelFile.parent, excelFile.nameFile + ".xls"))
             val sheet = workbook.getSheetAt(0)
             for (i in rowStart..sheet.lastRowNum) {
                 val student = students[i - rowStart]
                 val row = sheet.getRow(i)
-                if (student.stt.toDouble() == row.getCell(0).numericCellValue) {
+                if (student.stt == row.getCell(0).stringCellValue) {
                     if (row.getCell(MOUTH_POINT_1) == null) {
-                        row.createCell(MOUTH_POINT_1).setCellValue(student.m1.toDouble())
+                        row.createCell(MOUTH_POINT_1).setCellValue(student.m1)
                     } else {
-                        row.getCell(MOUTH_POINT_1).setCellValue(student.m1.toDouble())
+                        row.getCell(MOUTH_POINT_1).setCellValue(student.m1)
                     }
 
                     if (row.getCell(MOUTH_POINT_2) == null) {
-                        row.createCell(MOUTH_POINT_2).setCellValue(student.m2.toDouble())
+                        row.createCell(MOUTH_POINT_2).setCellValue(student.m2)
                     } else {
-                        row.getCell(MOUTH_POINT_2).setCellValue(student.m2.toDouble())
+                        row.getCell(MOUTH_POINT_2).setCellValue(student.m2)
                     }
 
                     if (row.getCell(MOUTH_POINT_3) == null) {
-                        row.createCell(MOUTH_POINT_3).setCellValue(student.m3.toDouble())
+                        row.createCell(MOUTH_POINT_3).setCellValue(student.m3)
                     } else {
-                        row.getCell(MOUTH_POINT_3).setCellValue(student.m3.toDouble())
+                        row.getCell(MOUTH_POINT_3).setCellValue(student.m3)
                     }
                     if (row.getCell(MOUTH_POINT_4) == null) {
-                        row.createCell(MOUTH_POINT_4).setCellValue(student.m4.toDouble())
+                        row.createCell(MOUTH_POINT_4).setCellValue(student.m4)
                     } else {
-                        row.getCell(MOUTH_POINT_4).setCellValue(student.m4.toDouble())
+                        row.getCell(MOUTH_POINT_4).setCellValue(student.m4)
                     }
                     if (row.getCell(MOUTH_POINT_5) == null) {
-                        row.createCell(MOUTH_POINT_5).setCellValue(student.m5.toDouble())
+                        row.createCell(MOUTH_POINT_5).setCellValue(student.m5)
                     } else {
-                        row.getCell(MOUTH_POINT_5).setCellValue(student.m5.toDouble())
+                        row.getCell(MOUTH_POINT_5).setCellValue(student.m5)
                     }
 
                     if (row.getCell(P15_1) == null) {
-                        row.createCell(P15_1).setCellValue(student.p1.toDouble())
+                        row.createCell(P15_1).setCellValue(student.p1)
                     } else {
-                        row.getCell(P15_1).setCellValue(student.p1.toDouble())
+                        row.getCell(P15_1).setCellValue(student.p1)
                     }
                     if (row.getCell(P15_2) == null) {
-                        row.createCell(P15_2).setCellValue(student.p2.toDouble())
+                        row.createCell(P15_2).setCellValue(student.p2)
                     } else {
-                        row.getCell(P15_2).setCellValue(student.p2.toDouble())
+                        row.getCell(P15_2).setCellValue(student.p2)
                     }
 
                     if (row.getCell(P15_3) == null) {
-                        row.createCell(P15_3).setCellValue(student.p3.toDouble())
+                        row.createCell(P15_3).setCellValue(student.p3)
                     } else {
-                        row.getCell(P15_3).setCellValue(student.p3.toDouble())
+                        row.getCell(P15_3).setCellValue(student.p3)
                     }
 
                     if (row.getCell(P15_4) == null) {
-                        row.createCell(P15_4).setCellValue(student.p4.toDouble())
+                        row.createCell(P15_4).setCellValue(student.p4)
                     } else {
-                        row.getCell(P15_4).setCellValue(student.p4.toDouble())
+                        row.getCell(P15_4).setCellValue(student.p4)
                     }
 
                     if (row.getCell(P15_5) == null) {
-                        row.createCell(P15_5).setCellValue(student.p5.toDouble())
+                        row.createCell(P15_5).setCellValue(student.p5)
                     } else {
-                        row.getCell(P15_5).setCellValue(student.p5.toDouble())
+                        row.getCell(P15_5).setCellValue(student.p5)
                     }
 
                     if (row.getCell(WRITE_POINT_1) == null) {
-                        row.createCell(WRITE_POINT_1).setCellValue(student.v1.toDouble())
+                        row.createCell(WRITE_POINT_1).setCellValue(student.v1)
                     } else {
-                        row.getCell(WRITE_POINT_1).setCellValue(student.v1.toDouble())
+                        row.getCell(WRITE_POINT_1).setCellValue(student.v1)
                     }
 
                     if (row.getCell(WRITE_POINT_2) == null) {
-                        row.createCell(WRITE_POINT_2).setCellValue(student.v2.toDouble())
+                        row.createCell(WRITE_POINT_2).setCellValue(student.v2)
                     } else {
-                        row.getCell(WRITE_POINT_2).setCellValue(student.v2.toDouble())
+                        row.getCell(WRITE_POINT_2).setCellValue(student.v2)
                     }
 
                     if (row.getCell(WRITE_POINT_3) == null) {
-                        row.createCell(WRITE_POINT_3).setCellValue(student.v3.toDouble())
+                        row.createCell(WRITE_POINT_3).setCellValue(student.v3)
                     } else {
-                        row.getCell(WRITE_POINT_3).setCellValue(student.v3.toDouble())
+                        row.getCell(WRITE_POINT_3).setCellValue(student.v3)
                     }
 
                     if (row.getCell(WRITE_POINT_4) == null) {
-                        row.createCell(WRITE_POINT_4).setCellValue(student.v4.toDouble())
+                        row.createCell(WRITE_POINT_4).setCellValue(student.v4)
                     } else {
-                        row.getCell(WRITE_POINT_4).setCellValue(student.v4.toDouble())
+                        row.getCell(WRITE_POINT_4).setCellValue(student.v4)
                     }
 
                     if (row.getCell(WRITE_POINT_5) == null) {
-                        row.createCell(WRITE_POINT_5).setCellValue(student.v5.toDouble())
+                        row.createCell(WRITE_POINT_5).setCellValue(student.v5)
                     } else {
-                        row.getCell(WRITE_POINT_5).setCellValue(student.v5.toDouble())
+                        row.getCell(WRITE_POINT_5).setCellValue(student.v5)
                     }
 
                     if (row.getCell(SEMESTER_POINT) == null) {
-                        row.createCell(SEMESTER_POINT).setCellValue(student.hk.toDouble())
+                        row.createCell(SEMESTER_POINT).setCellValue(student.hk)
                     } else {
-                        row.getCell(SEMESTER_POINT).setCellValue(student.hk.toDouble())
+                        row.getCell(SEMESTER_POINT).setCellValue(student.hk)
                     }
 
                     if (row.getCell(TBM_POINT) == null) {
-                        row.createCell(TBM_POINT).setCellValue(student.tbm.toDouble())
+                        row.createCell(TBM_POINT).setCellValue(student.tbm)
                     } else {
-                        row.getCell(TBM_POINT).setCellValue(student.tbm.toDouble())
+                        row.getCell(TBM_POINT).setCellValue(student.tbm)
                     }
                 }
 
@@ -199,13 +202,5 @@ object ReadWriteExcelFile {
             ex.printStackTrace()
             return false
         }
-    }
-
-    fun copyFile(excelFile: FileExcel, path: String, name: String): File {
-        var fileFrom = File(excelFile.parent, excelFile.nameFile + ".xls")
-        var fileTo = File(path, name)
-//        var isRenameFile = fileFrom.renameTo(fileTo)
-        return fileFrom.copyTo(fileTo, true)
-//        println("=================== $isRenameFile")
     }
 }
