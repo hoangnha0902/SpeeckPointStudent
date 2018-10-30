@@ -96,6 +96,5 @@ inline fun <reified T> Fragment.putPref(key: String, value: T) {
     sharePrefs().put(key, value)
 }
 
-
-inline fun <reified T : ViewModel?> Fragment.obtainViewModel(fragment: Fragment) =
-        ViewModelProviders.of(this, ViewModelFactory.getInstance(fragment)).get(T::class.java)
+fun <T : ViewModel> Fragment.obtainViewModel(viewModelClass: Class<T>, key: String?) =
+        ViewModelProviders.of(this, ViewModelFactory.getInstance(requireContext(), key)).get(viewModelClass)

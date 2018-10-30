@@ -25,7 +25,7 @@ class PointInputFragment : androidx.fragment.app.DialogFragment() {
     }
 
     var point: String = ""
-    private var listener: MainFragment.OnDismissListener? = null
+    private var listener: ((Double, TypePoint, Int?) -> Unit)? = null
     var typePointValue: TypePoint = TypePoint.MOUTH
     var position: Int? = 0
     private lateinit var viewModel: PointInputViewModel
@@ -59,7 +59,7 @@ class PointInputFragment : androidx.fragment.app.DialogFragment() {
         }
 
         done.setOnClickListener {
-            listener?.let { it.onRefreshWhenDismiss(point.toDouble(), typePointValue, position) }
+            listener?.invoke(point.toDouble(), typePointValue, position)
             dismiss()
         }
 
@@ -127,7 +127,7 @@ class PointInputFragment : androidx.fragment.app.DialogFragment() {
         return temp
     }
 
-    fun setOnDismissListener(onListener: MainFragment.OnDismissListener) {
+    fun setOnDismissListener(onListener: ((Double, TypePoint, Int?) -> Unit)?) {
         listener = onListener
     }
 }

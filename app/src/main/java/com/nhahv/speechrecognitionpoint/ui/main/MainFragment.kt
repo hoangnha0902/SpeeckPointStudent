@@ -1,16 +1,16 @@
 package com.nhahv.speechrecognitionpoint.ui.main
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.text.Html
 import android.text.TextUtils
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.navigation.Navigation
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
+import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
@@ -19,16 +19,13 @@ import com.nhahv.speechrecognitionpoint.ui.pointInput.PointInputFragment
 import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.CommonUtils.textPoint
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
-import com.nhahv.speechrecognitionpoint.util.Constant.CLASS_NAME
-import com.nhahv.speechrecognitionpoint.util.Constant.SEMESTER_PARAM
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
-import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECT_NAME
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 import kotlinx.android.synthetic.main.item_students.view.*
 import kotlinx.android.synthetic.main.item_students2.view.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
-class MainFragment : androidx.fragment.app.Fragment() {
+class MainFragment : Fragment() {
     var semester: SemesterType? = SemesterType.SEMESTER_I
     var indexChange: Int = -1
     var isPointing: Boolean = false
@@ -38,11 +35,9 @@ class MainFragment : androidx.fragment.app.Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var speechPoint: SpeechPoint
     private val students = ArrayList<Student>()
-    private val studentAdapter = StudentsAdapter(students, object : BaseRecyclerViewAdapter.OnItemListener<Student> {
-        override fun onClick(item: Student, position: Int) {
-
-        }
-    })
+    private val studentAdapter by lazy {
+        StudentsAdapter(students) { view, student, i -> }
+    }
 
     private val studentSwapAdapter = StudentsSwapAdapter(students)
 
@@ -146,6 +141,7 @@ class MainFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun initSpTypePoint() {
+        typePointList.clear()
         typePointList.add(TypePoint.MOUTH)
         typePointList.add(TypePoint.P15)
         typePointList.add(TypePoint.WRITE)
@@ -170,6 +166,7 @@ class MainFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun initSpTypeOfPoint() {
+        typeOfPointList.clear()
         typeOfPointList.add(TypeOfTypePoint.TYPE_1)
         typeOfPointList.add(TypeOfTypePoint.TYPE_2)
         typeOfPointList.add(TypeOfTypePoint.TYPE_3)
@@ -240,11 +237,9 @@ class MainFragment : androidx.fragment.app.Fragment() {
             fm.addToBackStack(null)
             val dialog = PointInputFragment.newInstance(label, typePoint, position)
             dialog.show(fm, "inputPoint")
-            dialog.setOnDismissListener(object : OnDismissListener {
-                override fun onRefreshWhenDismiss(pointValue: Double, typePointValue: TypePoint, position: Int?) {
-                    writePointToStudentWidthInput(pointValue, typePointValue, position)
-                }
-            })
+            dialog.setOnDismissListener { pointValue, typePointValue, position ->
+                writePointToStudentWidthInput(pointValue, typePointValue, position)
+            }
         }
     }
 
@@ -396,10 +391,10 @@ class MainFragment : androidx.fragment.app.Fragment() {
 
     class StudentsAdapter(
             private val students: ArrayList<Student> = ArrayList(),
-            listener: BaseRecyclerViewAdapter.OnItemListener<Student>
+            listener: ((View, Student, Int) -> Unit)?
 
-    ) : BaseRecyclerViewAdapter<Student>(students, R.layout.item_students2, listener) {
-        override fun onBindViewHolder(holder: BaseViewHolder<Student>, position: Int) {
+    ) : BaseRecyclerAdapter<Student>(students, R.layout.item_students2, listener) {
+        override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
             super.onBindViewHolder(holder, position)
             val student = students[position]
 
@@ -438,6 +433,9 @@ class MainFragment : androidx.fragment.app.Fragment() {
             fragment = mainFragment
         }
 
+        override fun getItemViewType(position: Int): Int {
+            return position
+        }
         override fun onBindViewHolder(holder: BaseViewHolder<Student>, position: Int) {
             super.onBindViewHolder(holder, position)
             val student = students[position]
@@ -506,6 +504,18 @@ class MainFragment : androidx.fragment.app.Fragment() {
                     valueTBM.setText(Html.fromHtml(textTBM), TextView.BufferType.SPANNABLE)
                 }
 
+/*
+
+                pointMouth.visibility = View.VISIBLE
+                point15P.visibility = View.VISIBLE
+                pointWrite.visibility = View.VISIBLE
+                pointSemester.visibility = View.VISIBLE
+                pointTBM.visibility = View.VISIBLE
+                lineTBM.visibility = View.VISIBLE
+                minusPlus.setImageResource(R.mipmap.circle_minus)
+*/
+
+
                 llInfo.setOnClickListener {
                     pointMouth.visibility = if (pointMouth.visibility == View.VISIBLE) View.GONE else View.VISIBLE
                     point15P.visibility = if (point15P.visibility == View.VISIBLE) View.GONE else View.VISIBLE
@@ -533,9 +543,5 @@ class MainFragment : androidx.fragment.app.Fragment() {
                 }
             }
         }
-    }
-
-    interface OnDismissListener {
-        fun onRefreshWhenDismiss(pointValue: Double, typePointValue: TypePoint, position: Int?)
     }
 }

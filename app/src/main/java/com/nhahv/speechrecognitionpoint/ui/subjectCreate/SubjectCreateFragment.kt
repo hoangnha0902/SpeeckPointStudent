@@ -102,7 +102,8 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
     }
 
 
-    fun setOnDismissListener(function: () -> Unit) {
+    fun setOnDismissListener(text: String?, function: () -> Unit) {
+        className = text
         listener = function
     }
 

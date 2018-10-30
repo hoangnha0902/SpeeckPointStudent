@@ -1,6 +1,5 @@
 package com.nhahv.speechrecognitionpoint.ui.classcreate
 
-import androidx.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.TextUtils
@@ -9,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.AClass
-import com.nhahv.speechrecognitionpoint.ui.classstudent.ClassStudentFragment
 import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_CLASS
 import kotlinx.android.synthetic.main.class_create_fragment.*
@@ -25,7 +24,7 @@ class ClassCreateFragment : androidx.fragment.app.DialogFragment() {
 
     private val yearAdapter: ArrayAdapter<String> by lazy { ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1) }
     private lateinit var viewModel: ClassCreateViewModel
-    private var listener: ClassStudentFragment.OnDismissListener? = null
+    private var listener: (() -> Unit)? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -69,11 +68,11 @@ class ClassCreateFragment : androidx.fragment.app.DialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
-        listener?.onRefreshWhenDismiss()
+        listener?.invoke()
     }
 
-    fun setOnDismissListener(onDismissListener: ClassStudentFragment.OnDismissListener) {
-        listener = onDismissListener
+    fun setOnDismissListener(onListener: () -> Unit) {
+        listener = onListener
     }
 
     private fun getClassList(): ArrayList<AClass> {

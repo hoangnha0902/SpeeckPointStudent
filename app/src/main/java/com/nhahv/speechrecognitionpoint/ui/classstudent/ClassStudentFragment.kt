@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
@@ -18,17 +20,10 @@ import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
 import kotlinx.android.synthetic.main.class_student_fragment.*
 import kotlinx.android.synthetic.main.item_class.view.*
 
-class ClassStudentFragment : androidx.fragment.app.Fragment() {
+class ClassStudentFragment : Fragment() {
 
     private lateinit var viewModel: ClassStudentViewModel
-    private val aClasses: ArrayList<AClass> = ArrayList()
     private lateinit var aClassAdapter: AClassAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        aClasses.clear()
-        aClasses.addAll(getClasses())
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -37,12 +32,15 @@ class ClassStudentFragment : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ClassStudentViewModel::class.java)
+        viewModel = obtainViewModel(ClassStudentViewModel::class.java, "")
+        viewModel.aClasses.observe(this, Observer { aclasses ->
+            aClassAdapter.refresh(aclasses)
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        aClassAdapter = AClassAdapter(aClasses) { _, aClass, _ ->
+        aClassAdapter = AClassAdapter { _, aClass, _ ->
             navigate(R.id.action_classStudentFragment_to_subjectsFragment, Bundle().apply { putParcelable(CLASSES, aClass) })
         }
         classList.adapter = aClassAdapter
@@ -55,34 +53,15 @@ class ClassStudentFragment : androidx.fragment.app.Fragment() {
                 }
                 fm.addToBackStack(null)
                 val dialog = ClassCreateFragment.newInstance()
+                dialog.setOnDismissListener { viewModel.getClasses() }
                 dialog.show(fm, "classCreate")
-                dialog.setOnDismissListener(object : OnDismissListener {
-                    override fun onRefreshWhenDismiss() {
-                        refreshData()
-                    }
-                })
             }
         }
     }
 
-    private fun refreshData() {
-        aClasses.clear()
-        aClasses.addAll(getClasses())
-        aClassAdapter.notifyDataSetChanged()
-    }
-
-    private fun getClasses(): ArrayList<AClass> {
-        val value = sharePrefs().get(SharedPrefs.PREF_CLASS, "")
-        if (value.isEmpty()) {
-            return ArrayList()
-        }
-        return Gson().fromJson<ArrayList<AClass>>(value)
-    }
-
     class AClassAdapter(
-            items: ArrayList<AClass>,
             listener: ((View, AClass, Int) -> Unit)?
-    ) : BaseRecyclerAdapter<AClass>(items, R.layout.item_class, listener) {
+    ) : BaseRecyclerAdapter<AClass>(R.layout.item_class, listener) {
 
         override fun onCreateViewHolder(p0: ViewGroup, p1: Int): BaseViewHolder {
             val view = LayoutInflater.from(p0.context).inflate(R.layout.item_class, p0, false)
@@ -119,9 +98,5 @@ class ClassStudentFragment : androidx.fragment.app.Fragment() {
                 }
             }
         }
-    }
-
-    interface OnDismissListener {
-        fun onRefreshWhenDismiss()
     }
 }

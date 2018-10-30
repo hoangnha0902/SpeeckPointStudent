@@ -1,12 +1,14 @@
-package com.nhahv.speechrecognitionpoint.ui.fileexcel
+package com.nhahv.speechrecognitionpoint.ui.excel
 
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
+import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
@@ -19,29 +21,27 @@ import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_SUBJECT
 import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
 
-class FileExcelFragment : androidx.fragment.app.Fragment() {
-    private lateinit var viewModel: FileExcelViewModel
+class ExcelFragment : Fragment() {
+    private lateinit var viewModel: ExcelViewModel
     private var aClass: AClass? = null
     private var subject: Subject? = null
     var semester: SemesterType? = SemesterType.SEMESTER_I
 
     private val excelFiles: ArrayList<FileExcel> = ArrayList()
-    private val excelFileAdapter = ExcelFilesAdapter(excelFiles, object : BaseRecyclerViewAdapter.OnItemListener<FileExcel> {
-        override fun onClick(item: FileExcel, position: Int) {
-            Thread().run {
-                item.path?.let {
-                    val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it)
-                    if (students.isEmpty()){
-                        toast("Không import được bảng điểm kiểm tra lại file bảng điểm")
-                        return@let
-                    }
-                    updateSubjects(subject, item)
-                    SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), students)
-                    (requireActivity() as MainActivity).back()
+    private val excelFileAdapter = ExcelFilesAdapter(excelFiles) { _, excelFile, _ ->
+        Thread().run {
+            excelFile.path?.let {
+                val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it)
+                if (students.isEmpty()) {
+                    toast("Không import được bảng điểm kiểm tra lại file bảng điểm")
+                    return@let
                 }
+                updateSubjects(subject, excelFile)
+                SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), students)
+                (requireActivity() as MainActivity).back()
             }
         }
-    })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +60,7 @@ class FileExcelFragment : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(FileExcelViewModel::class.java)
+        viewModel = obtainViewModel(ExcelViewModel::class.java, "")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,10 +88,9 @@ class FileExcelFragment : androidx.fragment.app.Fragment() {
 
     class ExcelFilesAdapter(
             items: ArrayList<FileExcel>,
-            listener: BaseRecyclerViewAdapter.OnItemListener<FileExcel>)
-        : BaseRecyclerViewAdapter<FileExcel>(items, R.layout.item_excel_files, listener) {
-
-        override fun onBindViewHolder(holder: BaseViewHolder<FileExcel>, position: Int) {
+            listener: ((View, FileExcel, Int) -> Unit)?)
+        : BaseRecyclerAdapter<FileExcel>(items, R.layout.item_excel_files, listener) {
+        override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
             super.onBindViewHolder(holder, position)
             val view = holder.itemView
             val excelFile = items[position]

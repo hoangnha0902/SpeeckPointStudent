@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.nhahv.speechrecognitionpoint.ui.exportexcel.ExportExcelFragment
-import com.nhahv.speechrecognitionpoint.ui.fileexcel.FileExcelFragment
+import com.nhahv.speechrecognitionpoint.ui.excel.ExcelFragment
 import com.nhahv.speechrecognitionpoint.ui.main.MainFragment
 import com.nhahv.speechrecognitionpoint.util.PermissionUtil
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     when (resId) {
                         R.id.fileExcelFragment -> {
-                            val excelFragment = currentFragment<FileExcelFragment>()
+                            val excelFragment = currentFragment<ExcelFragment>()
                             excelFragment?.getExcelList()
                         }
                     }

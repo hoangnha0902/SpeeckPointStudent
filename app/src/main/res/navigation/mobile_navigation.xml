@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/fileExcelFragment"
-        android:name="com.nhahv.speechrecognitionpoint.ui.fileexcel.FileExcelFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.excel.ExcelFragment"
         android:label="FileExcelFragment">
         <argument
             android:name="subjects"
