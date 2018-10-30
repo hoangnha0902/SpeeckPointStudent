@@ -3,7 +3,6 @@ package com.nhahv.speechrecognitionpoint.ui.subjectCreate
 import androidx.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.SemesterType
 import com.nhahv.speechrecognitionpoint.data.models.Subject
-import com.nhahv.speechrecognitionpoint.ui.classstudent.ClassStudentFragment
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_SUBJECT
 import com.nhahv.speechrecognitionpoint.util.convertCompare
@@ -31,7 +29,7 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
     private lateinit var viewModel: SubjectCreateViewModel
     private lateinit var semester: SemesterType
     private val semesterList = ArrayList<SemesterType>()
-    private var listener: ClassStudentFragment.OnDismissListener? = null
+    private var listener: (() -> Unit)? = null
     var className: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,8 +79,8 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
                 return@setOnClickListener
             }
             val subjects = getSubjects()
-            for (subject in subjects){
-                if (convertCompare(subject.subjectName) == convertCompare(subjectName.text.toString()) && subject.semester == semester){
+            for (subject in subjects) {
+                if (convertCompare(subject.subjectName) == convertCompare(subjectName.text.toString()) && subject.semester == semester) {
                     toast("Môn học đã được tạo")
                     return@setOnClickListener
                 }
@@ -104,15 +102,12 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
     }
 
 
-    fun setOnDismissListener(onDismissListener: ClassStudentFragment.OnDismissListener) {
-        listener = onDismissListener
+    fun setOnDismissListener(function: () -> Unit) {
+        listener = function
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
-        listener?.let {
-            it.onRefreshWhenDismiss()
-        }
+        listener?.invoke()
     }
-
 }

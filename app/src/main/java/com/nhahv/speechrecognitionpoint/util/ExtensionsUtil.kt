@@ -1,6 +1,7 @@
 package com.nhahv.speechrecognitionpoint.util
 
 import android.app.Activity
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -8,12 +9,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.ViewModelFactory
 import org.apache.poi.ss.formula.functions.T
 
 inline fun <reified T> SharedPreferences.put(key: String, value: T) {
@@ -91,3 +95,7 @@ fun Fragment.navigate(action: Int, bundle: Bundle) {
 inline fun <reified T> Fragment.putPref(key: String, value: T) {
     sharePrefs().put(key, value)
 }
+
+
+inline fun <reified T : ViewModel?> Fragment.obtainViewModel(fragment: Fragment) =
+        ViewModelProviders.of(this, ViewModelFactory.getInstance(fragment)).get(T::class.java)
