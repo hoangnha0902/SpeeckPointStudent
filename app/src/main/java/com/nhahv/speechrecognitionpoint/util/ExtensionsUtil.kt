@@ -1,7 +1,6 @@
 package com.nhahv.speechrecognitionpoint.util
 
 import android.app.Activity
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -15,6 +14,7 @@ import androidx.navigation.findNavController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nhahv.speechrecognitionpoint.R
+import org.apache.poi.ss.formula.functions.T
 
 inline fun <reified T> SharedPreferences.put(key: String, value: T) {
     val editor = edit()
@@ -88,4 +88,6 @@ fun Fragment.navigate(action: Int, bundle: Bundle) {
     Navigation.findNavController(requireActivity(), R.id.navLoginHost).navigate(action, bundle)
 }
 
-
+inline fun <reified T> Fragment.putPref(key: String, value: T) {
+    sharePrefs().put(key, value)
+}

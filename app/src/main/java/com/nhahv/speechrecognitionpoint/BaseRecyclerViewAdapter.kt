@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.RecyclerView
 
 open class BaseRecyclerViewAdapter<T>(
         val items: ArrayList<T>,
@@ -36,7 +37,7 @@ open class BaseRecyclerViewAdapter<T>(
     class BaseViewHolder<T>(view: View,
                             items: ArrayList<T>,
                             listener: OnItemListener<T>?
-    ) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    ) : RecyclerView.ViewHolder(view) {
         init {
             view.setOnClickListener { listener?.onClick(items[adapterPosition], adapterPosition) }
         }
