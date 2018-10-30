@@ -1,16 +1,14 @@
 package com.nhahv.speechrecognitionpoint
 
-import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 
 open class BaseRecyclerViewAdapter<T>(
         val items: ArrayList<T>,
         @LayoutRes private val layoutRes: Int
 ) : androidx.recyclerview.widget.RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder<T>>() {
-
 
     constructor(
             items: ArrayList<T>,

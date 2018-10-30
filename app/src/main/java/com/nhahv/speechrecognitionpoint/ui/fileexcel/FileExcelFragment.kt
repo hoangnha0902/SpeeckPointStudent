@@ -31,6 +31,10 @@ class FileExcelFragment : androidx.fragment.app.Fragment() {
             Thread().run {
                 item.path?.let {
                     val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it)
+                    if (students.isEmpty()){
+                        toast("Không import được bảng điểm kiểm tra lại file bảng điểm")
+                        return@let
+                    }
                     updateSubjects(subject, item)
                     SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), students)
                     (requireActivity() as MainActivity).back()
@@ -79,6 +83,7 @@ class FileExcelFragment : androidx.fragment.app.Fragment() {
     fun getExcelList() {
         excelFiles.clear()
         excelFiles.addAll(FileExcelManager.getExcelFiles())
+        excelFileAdapter.notifyDataSetChanged()
     }
 
     class ExcelFilesAdapter(

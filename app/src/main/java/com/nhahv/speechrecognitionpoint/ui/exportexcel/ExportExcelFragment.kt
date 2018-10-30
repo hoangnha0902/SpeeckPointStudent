@@ -104,12 +104,14 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
 
             val excelFile = subject?.excel
             Thread().run {
+                (requireActivity() as MainActivity).showProgress()
                 val isWrite = ReadWriteExcelFile.writeStudentExcel(excelFile!!, pathFolder!!, "${subject?.subjectName}_${aClass?.name}_${subject?.semester?.getSemesterName()}_${aClass?.year}.xls", getStudentList())
                 if (isWrite) {
                     toast("Export bảng điểm thành công")
                 } else {
                     toast("Export bảng điểm thất bại")
                 }
+                (requireActivity() as MainActivity).hideProgress()
             }
 
 

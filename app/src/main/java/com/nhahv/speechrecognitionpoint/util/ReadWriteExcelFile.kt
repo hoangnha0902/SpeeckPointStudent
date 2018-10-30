@@ -2,6 +2,7 @@ package com.nhahv.speechrecognitionpoint.util
 
 import com.nhahv.speechrecognitionpoint.data.models.FileExcel
 import com.nhahv.speechrecognitionpoint.data.models.Student
+import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.DataFormatter
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File
@@ -35,6 +36,13 @@ object ReadWriteExcelFile {
             val sheet = workbook.getSheetAt(0)
             val dataFormatter = DataFormatter()
             val students = ArrayList<Student>()
+            val cell = sheet.getRow(5).getCell(0)
+            if (cell.cellType != CellType.STRING){
+                return ArrayList()
+            }
+            if (cell.stringCellValue.trim().toUpperCase() != "STT"){
+                return ArrayList()
+            }
             for (row in sheet) {
                 if (row.rowNum >= rowStart) {
                     val student = Student()
@@ -191,7 +199,6 @@ object ReadWriteExcelFile {
                         row.getCell(TBM_POINT).setCellValue(student.tbm)
                     }
                 }
-
             }
             val fileOut = FileOutputStream(fileWrite)
             workbook.write(fileOut)

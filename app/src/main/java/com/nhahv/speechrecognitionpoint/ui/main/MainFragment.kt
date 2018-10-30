@@ -255,81 +255,97 @@ class MainFragment : androidx.fragment.app.Fragment() {
         indexChange = -1
         if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_1) {
             student.m1 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_2) {
             student.m2 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_3) {
             student.m3 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_4) {
             student.m4 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_5) {
             student.m5 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_1) {
             student.p1 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_2) {
             student.p2 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_3) {
             student.p3 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_4) {
             student.p4 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_5) {
             student.p5 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_1) {
             student.v1 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_2) {
             student.v2 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_3) {
             student.v3 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_4) {
             student.v4 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_5) {
             student.v5 = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
         if (typePoint == TypePoint.SEMESTER) {
             student.hk = point.toString()
+            student.getTBM()
             notifyAdapter()
             return
         }
@@ -368,6 +384,7 @@ class MainFragment : androidx.fragment.app.Fragment() {
             }
             TypePoint.SEMESTER -> student.hk = point.toString()
         }
+        student.getTBM()
         notifyAdapter()
     }
 

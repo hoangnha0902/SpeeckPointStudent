@@ -1,6 +1,7 @@
 package com.nhahv.speechrecognitionpoint
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
@@ -19,6 +20,7 @@ import com.nhahv.speechrecognitionpoint.util.currentFragmentId
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
     private val CODE_EXTERNAL_STORAGE = 100
     private val CODE_EXTERNAL_RECORD_AUDIO = 200
+    private var progress: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,4 +87,22 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
             }
         }
     }
+
+    fun showProgress() {
+        if (progress == null) {
+            progress = ProgressDialog(this)
+            progress?.setMessage("Đang xử lý")
+            progress?.setCancelable(false)
+        }
+        if (progress != null && progress?.isShowing == false) {
+            progress?.show()
+        }
+    }
+
+    fun hideProgress() {
+        if (progress != null && progress?.isShowing == true) {
+            progress?.dismiss()
+        }
+    }
+
 }
