@@ -1,6 +1,5 @@
 package com.nhahv.speechrecognitionpoint.data.models
 
-import android.text.TextUtils
 import com.nhahv.speechrecognitionpoint.util.CommonUtils
 
 class Student(var stt: String = "0", var numberStudent: String = "", var name: String = "",
@@ -14,11 +13,6 @@ class Student(var stt: String = "0", var numberStudent: String = "", var name: S
 
     fun getTBM(): String {
         if (hk.isEmpty()) {
-            return ""
-        }
-        if (TextUtils.isEmpty(m1) || TextUtils.isEmpty(m2) || TextUtils.isEmpty(m3) || TextUtils.isEmpty(m4) || TextUtils.isEmpty(m5)
-                || TextUtils.isEmpty(v1) || TextUtils.isEmpty(v2) || TextUtils.isEmpty(v3) || TextUtils.isEmpty(v4) || TextUtils.isEmpty(v5)
-                || TextUtils.isEmpty(p1) || TextUtils.isEmpty(p2) || TextUtils.isEmpty(p3) || TextUtils.isEmpty(p4) || TextUtils.isEmpty(p5)) {
             return ""
         }
         var radio = 0
