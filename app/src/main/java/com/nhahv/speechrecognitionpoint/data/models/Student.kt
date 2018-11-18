@@ -11,6 +11,25 @@ class Student(var stt: String = "0", var numberStudent: String = "", var name: S
               var v3: String = "", var v4: String = "", var v5: String = "",
               var hk: String = "", var tbm: String = "") {
 
+    fun reset(){
+        m1 = ""
+        m2 = ""
+        m3 = ""
+        m4 = ""
+        m5 = ""
+        p1 = ""
+        p2 = ""
+        p3 = ""
+        p4 = ""
+        p5 = ""
+        v1 = ""
+        v2 = ""
+        v3 = ""
+        v4 = ""
+        v5 = ""
+        hk = ""
+        tbm = ""
+    }
     fun getTBM(): String {
         if (hk.isEmpty()) {
             return ""

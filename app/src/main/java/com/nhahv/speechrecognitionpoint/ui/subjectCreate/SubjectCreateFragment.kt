@@ -29,8 +29,10 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
     private lateinit var viewModel: SubjectCreateViewModel
     private lateinit var semester: SemesterType
     private val semesterList = ArrayList<SemesterType>()
-    private var listener: (() -> Unit)? = null
+    private var listener: ((String, SemesterType) -> Unit)? = null
     var className: String? = null
+    var subjectNameTemp: String? = null
+    var semesterTypeTemp = SemesterType.SEMESTER_I
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +49,6 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(SubjectCreateViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,10 +86,8 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
                     return@setOnClickListener
                 }
             }
-            val subject = Subject(subjectName.text.toString(), semester)
-            subjects.add(subject)
-            SharedPrefs.getInstance(requireContext()).put(PREF_SUBJECT.format(className), subjects)
-            toast("Tạo môn học thành công!")
+            subjectNameTemp = subjectName.text.toString()
+            semesterTypeTemp = semester
             dismiss()
         }
     }
@@ -102,13 +101,13 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
     }
 
 
-    fun setOnDismissListener(text: String?, function: () -> Unit) {
+    fun setOnDismissListener(text: String?, function: (String, SemesterType) -> Unit) {
         className = text
         listener = function
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
-        listener?.invoke()
+        listener?.invoke(subjectNameTemp!!, semesterTypeTemp)
     }
 }

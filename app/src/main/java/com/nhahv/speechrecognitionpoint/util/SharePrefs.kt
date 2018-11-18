@@ -19,6 +19,10 @@ class SharedPrefs private constructor(context: Context) {
         return sharedPref.get(key, value)
     }
 
+    fun remove(key: String) {
+        sharedPref.edit().remove(key).apply()
+    }
+
     companion object : SingletonHolder<SharedPrefs, Context>(::SharedPrefs) {
         val PREF_STUDENT = "pref_student_%s_%s_%s"
         val PREF_CLASS = "pref_class"

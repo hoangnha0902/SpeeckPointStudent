@@ -16,11 +16,21 @@ class SubjectsViewModel(val context: Context, private val key: String?) : ViewMo
         getSubjects()
     }
 
+
     fun getSubjects() {
         subjects.value = ArrayList()
         val value = SharedPrefs.getInstance(context).get(PREF_SUBJECT.format(key), "")
         if (!value.isEmpty()) {
             subjects.value = Gson().fromJson<ArrayList<Subject>>(value)
         }
+    }
+
+    fun getSubjectList(): ArrayList<Subject> {
+        val subjects = ArrayList<Subject>()
+        val value = SharedPrefs.getInstance(context).get(PREF_SUBJECT.format(key), "")
+        if (!value.isEmpty()) {
+            subjects.addAll(Gson().fromJson<ArrayList<Subject>>(value))
+        }
+        return subjects
     }
 }

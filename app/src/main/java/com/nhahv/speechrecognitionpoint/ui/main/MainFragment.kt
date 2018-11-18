@@ -114,7 +114,8 @@ class MainFragment : Fragment() {
                 (requireActivity() as MainActivity).startSpeech { startSpeech() }
                 startMic.setImageResource(R.drawable.ic_stop)
             } else {
-                speechPoint.destroy()
+                speechPoint.cancel()
+                textSpeech.text = ""
                 startMic.setImageResource(R.mipmap.ic_mic_white_24dp)
             }
         }
@@ -384,7 +385,7 @@ class MainFragment : Fragment() {
     }
 
     override fun onStop() {
-        speechPoint.destroy()
+        speechPoint.cancel()
         SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), students)
         super.onStop()
     }

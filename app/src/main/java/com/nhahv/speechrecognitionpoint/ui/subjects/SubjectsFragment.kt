@@ -1,23 +1,28 @@
 package com.nhahv.speechrecognitionpoint.ui.subjects
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.AClass
+import com.nhahv.speechrecognitionpoint.data.models.SemesterType
+import com.nhahv.speechrecognitionpoint.data.models.Student
 import com.nhahv.speechrecognitionpoint.data.models.Subject
 import com.nhahv.speechrecognitionpoint.ui.subjectCreate.SubjectCreateFragment
+import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
-import com.nhahv.speechrecognitionpoint.util.navigate
-import com.nhahv.speechrecognitionpoint.util.obtainViewModel
-import com.nhahv.speechrecognitionpoint.util.setUpToolbar
+import kotlinx.android.synthetic.main.item_subject.*
 import kotlinx.android.synthetic.main.item_subject.view.*
+import kotlinx.android.synthetic.main.subject_create_fragment.*
 import kotlinx.android.synthetic.main.subjects_fragment.*
+
 
 class SubjectsFragment : Fragment() {
     private lateinit var viewModel: SubjectsViewModel
@@ -58,9 +63,78 @@ class SubjectsFragment : Fragment() {
                 fm.addToBackStack(null)
                 val dialog = SubjectCreateFragment.newInstance()
                 dialog.show(fm, "subjectCreate")
-                dialog.setOnDismissListener(aClass?.name) { viewModel.getSubjects() }
+                dialog.setOnDismissListener(aClass?.name) { subjectName, semesterType ->
+                    // todo import show dialog import student from another subject
+                    showImportStudentFromAnotherSubject(subjectName, semesterType)
+                }
             }
         }
+    }
+
+    private fun showImportStudentFromAnotherSubject(subjectName: String, semesterType: SemesterType) {
+        if (adapter.itemCount <= 0) {
+            addSubjectEmpty(subjectName, semesterType)
+            return
+        }
+        val nameSubject = ArrayList<String>()
+        val subjectsTemp = ArrayList<Subject>()
+        adapter.items.forEach { subject: Subject ->
+            if (hasStudentInSubject(subject.subjectName, subject.semester)) {
+                nameSubject.add("${subject.subjectName} - ${subject.semester.getSemester()}")
+                subjectsTemp.add(subject)
+            }
+        }
+        if (nameSubject.size <= 0) {
+            addSubjectEmpty(subjectName, semesterType)
+            return
+        }
+        var itemCheck = 0
+        AlertDialog.Builder(requireContext())
+                .setTitle("Import học sinh từ môn học")
+                .setSingleChoiceItems(nameSubject.toTypedArray(), itemCheck) { _, which ->
+                    itemCheck = which
+                }
+                .setPositiveButton("OK") { dialog, _ ->
+                    val studentTemp = studentOfSubject(subjectsTemp[itemCheck].subjectName, subjectsTemp[itemCheck].semester)
+
+                    val subjects = viewModel.getSubjectList()
+                    val subject = Subject(subjectName, semesterType, subjectsTemp[itemCheck].excel)
+                    subjects.add(subject)
+                    sharePrefs().put(SharedPrefs.PREF_SUBJECT.format(aClass?.name), subjects)
+                    sharePrefs().put(SharedPrefs.PREF_STUDENT.format(aClass?.name, subjectName, semesterType.getSemesterName()), studentTemp)
+                    viewModel.getSubjects()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel", null)
+                .create().show()
+
+    }
+
+    private fun addSubjectEmpty(subjectName: String, semesterType: SemesterType) {
+        val subjects = viewModel.getSubjectList()
+        val subject = Subject(subjectName, semesterType)
+        subjects.add(subject)
+        sharePrefs().put(SharedPrefs.PREF_SUBJECT.format(aClass?.name), subjects)
+        viewModel.getSubjects()
+    }
+
+    private fun hasStudentInSubject(name: String, semester: SemesterType): Boolean {
+        val value = SharedPrefs.getInstance(requireContext()).get(SharedPrefs.PREF_STUDENT.format(aClass?.name, name, semester.getSemesterName()), "")
+        if (value.isEmpty()) {
+            return false
+        }
+        val temp = Gson().fromJson<ArrayList<Student>>(value)
+        return !temp.isEmpty() && temp.size > 0
+    }
+
+    private fun studentOfSubject(name: String, semester: SemesterType): ArrayList<Student> {
+        val value = SharedPrefs.getInstance(requireContext()).get(SharedPrefs.PREF_STUDENT.format(aClass?.name, name, semester.getSemesterName()), "")
+        if (value.isEmpty()) {
+            return ArrayList()
+        }
+        val students = Gson().fromJson<ArrayList<Student>>(value)
+        students.forEach { it -> it.reset() }
+        return students
     }
 
     class SubjectAdapter(

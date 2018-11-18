@@ -13,7 +13,7 @@ class SpeechPoint(context: Context) : RecognitionListener {
     private val TAG = SpeechPoint::class.java.simpleName
     private var speechIntent: Intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
     private var speech: SpeechRecognizer
-     var speechStarted: Boolean = false
+    var speechStarted: Boolean = false
     private val language: String = "vi"
     private var mainFragment: MainFragment? = null
 
@@ -36,12 +36,17 @@ class SpeechPoint(context: Context) : RecognitionListener {
         speech.startListening(speechIntent)
     }
 
-    fun destroy() {
+    fun cancel() {
+        speechStarted = false
+        speech.cancel()
+    }
+
+    fun onDestroy() {
+        speechStarted = false
         speech.destroy()
     }
 
     override fun onReadyForSpeech(params: Bundle?) {
-//        Log.d(TAG, "onReadyForSpeech")
     }
 
     override fun onRmsChanged(rmsdB: Float) {
@@ -66,12 +71,12 @@ class SpeechPoint(context: Context) : RecognitionListener {
     }
 
     override fun onBeginningOfSpeech() {
-//        Log.d(TAG, "onBeginningOfSpeech")
+        Log.d(TAG, "onBeginningOfSpeech")
         speechStarted = true
     }
 
     override fun onEndOfSpeech() {
-//        Log.d(TAG, "onEndOfSpeech")
+        Log.d(TAG, "onEndOfSpeech")
         speechStarted = false
         startSpeech()
 

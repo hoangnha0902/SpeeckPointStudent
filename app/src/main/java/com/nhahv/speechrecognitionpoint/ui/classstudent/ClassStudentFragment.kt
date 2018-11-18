@@ -92,6 +92,7 @@ class ClassStudentFragment : Fragment() {
                                 notifyItemRemoved(position)
                                 notifyItemRangeChanged(position, items.size)
                                 SharedPrefs.getInstance(context).put(SharedPrefs.PREF_CLASS, items)
+                                SharedPrefs.getInstance(context).remove(Constant.subjectNameOfClass(aClass.name))
                             }
                             .setNegativeButton("Không") { dialog, _ -> dialog?.cancel() }
                             .show()

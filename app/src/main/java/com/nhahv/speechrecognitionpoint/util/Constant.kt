@@ -1,6 +1,7 @@
 package com.nhahv.speechrecognitionpoint.util
 
 import android.os.Environment
+import androidx.fragment.app.Fragment
 
 object Constant {
     const val CLASS_NAME = "className"
@@ -12,4 +13,9 @@ object Constant {
     const val CLASSES = "classes"
     const val SUBJECTS = "subjects"
     val PATH_APP = Environment.getExternalStorageDirectory().absolutePath + "/SpeechPoint"
+
+
+    fun subjectNameOfClass(className: String): String {
+        return SharedPrefs.PREF_SUBJECT.format(className)
+    }
 }
