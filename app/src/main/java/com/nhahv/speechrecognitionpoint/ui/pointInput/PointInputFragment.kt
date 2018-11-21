@@ -6,6 +6,7 @@ import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.TypePoint
 import com.nhahv.speechrecognitionpoint.ui.main.MainFragment
@@ -32,6 +33,7 @@ class PointInputFragment : androidx.fragment.app.DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         return inflater.inflate(R.layout.point_input_fragment, container, false)
     }
 

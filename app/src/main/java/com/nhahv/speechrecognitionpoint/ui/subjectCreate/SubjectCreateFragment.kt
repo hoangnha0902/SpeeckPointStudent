@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.google.gson.Gson
@@ -43,6 +44,7 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         return inflater.inflate(R.layout.subject_create_fragment, container, false)
     }
 
@@ -108,6 +110,8 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
-        listener?.invoke(subjectNameTemp!!, semesterTypeTemp)
+        if(subjectNameTemp != null){
+            listener?.invoke(subjectNameTemp!!, semesterTypeTemp)
+        }
     }
 }

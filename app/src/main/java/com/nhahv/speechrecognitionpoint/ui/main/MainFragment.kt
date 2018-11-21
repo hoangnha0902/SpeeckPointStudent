@@ -1,12 +1,12 @@
 package com.nhahv.speechrecognitionpoint.ui.main
 
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
@@ -124,6 +124,21 @@ class MainFragment : Fragment() {
             studentList.visibility = if (studentList.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             studentListSwap.visibility = if (studentListSwap.visibility == View.VISIBLE) View.GONE else View.VISIBLE
         }
+
+        textSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                studentSwapAdapter.filter.filter(s.toString())
+                studentAdapter.filter.filter(s.toString())
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
     }
 
     private fun notifyUI() {
@@ -394,10 +409,16 @@ class MainFragment : Fragment() {
             private val students: ArrayList<Student> = ArrayList(),
             listener: ((View, Student, Int) -> Unit)?
 
-    ) : BaseRecyclerAdapter<Student>(students, R.layout.item_students2, listener) {
+    ) : BaseRecyclerAdapter<Student>(students, R.layout.item_students2, listener), Filterable {
+        val studentOriginal = students
+        var studentFilter = students
+
+        override fun getItemCount(): Int {
+            return studentFilter.size
+        }
         override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
             super.onBindViewHolder(holder, position)
-            val student = students[position]
+            val student = studentFilter[position]
 
             holder.itemView.apply {
                 stt.text = "Stt: ${student.stt}"
@@ -422,13 +443,44 @@ class MainFragment : Fragment() {
                 tbm.text = student.tbm
             }
         }
+
+        override fun getFilter() = object : Filter() {
+            override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
+                val charString = charSequence.toString()
+                studentFilter = if (charString.isEmpty()) {
+                    studentOriginal
+                } else {
+                    val filteredList = ArrayList<Student>()
+                    for (row in studentOriginal) {
+                        if (row.name.toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row)
+                        }
+                    }
+
+                    filteredList
+                }
+
+                val filterResults = Filter.FilterResults()
+                filterResults.values = studentFilter
+                return filterResults
+            }
+
+            override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
+                studentFilter = filterResults.values as ArrayList<Student>
+                notifyDataSetChanged()
+            }
+        }
     }
 
     class StudentsSwapAdapter(
             private val students: ArrayList<Student> = ArrayList()
 
-    ) : BaseRecyclerViewAdapter<Student>(students, R.layout.item_students) {
+    ) : BaseRecyclerViewAdapter<Student>(students, R.layout.item_students), Filterable {
+        var studentOriginal = students
+        var studentFilter = students
         var fragment: MainFragment? = null
+
+        override fun getItemCount() = studentFilter.size
 
         fun setMainFragment(mainFragment: MainFragment) {
             fragment = mainFragment
@@ -437,9 +489,10 @@ class MainFragment : Fragment() {
         override fun getItemViewType(position: Int): Int {
             return position
         }
+
         override fun onBindViewHolder(holder: BaseViewHolder<Student>, position: Int) {
             super.onBindViewHolder(holder, position)
-            val student = students[position]
+            val student = studentFilter[position]
 
             holder.itemView.apply {
                 nameStudent.text = student.name
@@ -542,6 +595,33 @@ class MainFragment : Fragment() {
                 pointSemester.setOnClickListener {
                     fragment?.showInputPointDialog("Học kỳ", TypePoint.SEMESTER, position)
                 }
+            }
+        }
+
+        override fun getFilter() = object : Filter() {
+            override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
+                val charString = charSequence.toString()
+                studentFilter = if (charString.isEmpty()) {
+                    studentOriginal
+                } else {
+                    val filteredList = ArrayList<Student>()
+                    for (row in studentOriginal) {
+                        if (row.name.toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row)
+                        }
+                    }
+
+                    filteredList
+                }
+
+                val filterResults = Filter.FilterResults()
+                filterResults.values = studentFilter
+                return filterResults
+            }
+
+            override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
+                studentFilter = filterResults.values as ArrayList<Student>
+                notifyDataSetChanged()
             }
         }
     }

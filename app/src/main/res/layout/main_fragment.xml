@@ -22,6 +22,33 @@
         app:title="Danh sách môn học"
         app:titleTextColor="@color/white" />
 
+
+    <EditText
+        android:id="@+id/textSearch"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/spinner_bg"
+        android:paddingLeft="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <ImageView
+        android:id="@+id/imageSearch"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_tilda_icons_2web_magnifier"
+        app:layout_constraintBottom_toBottomOf="@id/textSearch"
+        app:layout_constraintStart_toStartOf="@id/textSearch"
+        app:layout_constraintTop_toTopOf="@id/textSearch" />
+
+
     <LinearLayout
         android:id="@+id/typePointLayout"
         android:layout_width="0dp"
@@ -35,7 +62,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/textSearch">
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spTypePoint"
@@ -56,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/typePointLayout"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/textSearch">
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spTypeOfPoint"
