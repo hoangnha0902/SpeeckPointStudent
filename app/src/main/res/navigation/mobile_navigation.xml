@@ -85,6 +85,9 @@
         <argument
             android:name="subjects"
             app:argType="com.nhahv.speechrecognitionpoint.data.models.Subject" />
+        <action
+            android:id="@+id/action_mainFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/fileExcelFragment"

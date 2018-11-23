@@ -85,6 +85,10 @@ fun Fragment.navigateClearStack(view: View, action: Int) {
 
 }
 
+fun Fragment.navigateClearStack(action: Int) {
+    Navigation.findNavController(requireActivity(), R.id.navLoginHost).navigate(action, null, NavOptions.Builder().setClearTask(true).build())
+}
+
 fun Fragment.navigate(view: View, action: Int) {
     view.findNavController().navigate(action)
 }

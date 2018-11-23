@@ -91,6 +91,10 @@ class MainFragment : Fragment() {
             R.id.exportExcelFragment -> {
                 navigate(R.id.action_mainFragment_to_exportExcelFragment, arguments!!)
             }
+            R.id.logout -> {
+                // todo logout
+                navigateClearStack(R.id.action_mainFragment_to_loginFragment)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -416,6 +420,7 @@ class MainFragment : Fragment() {
         override fun getItemCount(): Int {
             return studentFilter.size
         }
+
         override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
             super.onBindViewHolder(holder, position)
             val student = studentFilter[position]
