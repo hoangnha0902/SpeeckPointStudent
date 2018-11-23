@@ -96,12 +96,7 @@ class MainFragment : Fragment() {
                 navigateClearStack(R.id.action_mainFragment_to_loginFragment)
             }
             R.id.deletePointAllStudent -> deletePointAllStudent()
-            R.id.restorePointAllStudent -> {
-                students.forEachIndexed { index, student ->
-                    restorePointStudent(student, index)
-                    notifyAdapter()
-                }
-            }
+
         }
         return super.onOptionsItemSelected(item)
     }

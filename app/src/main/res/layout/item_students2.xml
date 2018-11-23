@@ -7,8 +7,9 @@
     app:clickToClose="true">
 
     <LinearLayout
+        android:orientation="horizontal"
         android:id="@+id/swipeContain"
-        android:layout_width="120dp"
+        android:layout_width="70dp"
         android:layout_height="match_parent"
         android:background="@color/dark_gray"
         android:gravity="center"
@@ -16,18 +17,17 @@
 
         <ImageView
             android:id="@+id/deletePoint"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@color/dark_gray"
-            android:padding="16dp"
+            android:padding="20dp"
             android:src="@drawable/trash" />
 
         <ImageView
             android:id="@+id/restorePoint"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="#50D323"
             android:padding="16dp"
             android:src="@drawable/ic_restore" />
