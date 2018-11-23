@@ -6,18 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
-import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.*
 import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
+import com.nhahv.speechrecognitionpoint.util.Constant.NAME_STUDENT_OF_SUBJECT
+import com.nhahv.speechrecognitionpoint.util.Constant.NAME_SUBJECT_LIST
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_SUBJECT
 import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
 
@@ -37,7 +35,7 @@ class ExcelFragment : Fragment() {
                     return@let
                 }
                 updateSubjects(subject, excelFile)
-                SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), students)
+                sharePrefs().put(NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, subject?.subjectName, semester), students)
                 (requireActivity() as MainActivity).back()
             }
         }
@@ -104,7 +102,7 @@ class ExcelFragment : Fragment() {
             toast("Cập nhật lớp học thất bại")
             return
         }
-        val value = sharePrefs().get(PREF_SUBJECT.format(aClass?.name), "")
+        val value = sharePrefs().get(NAME_SUBJECT_LIST(requireContext(), aClass?.name), "")
         if (TextUtils.isEmpty(value)) {
             toast("Cập nhật lớp học thất bại")
             return
@@ -118,7 +116,7 @@ class ExcelFragment : Fragment() {
             }
         }
         if (isChanged) {
-            sharePrefs().put(PREF_SUBJECT.format(aClass?.name), subjects)
+            sharePrefs().put(NAME_SUBJECT_LIST(requireContext(), aClass?.name), subjects)
         }
     }
 }

@@ -14,7 +14,6 @@ import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.AClass
 import com.nhahv.speechrecognitionpoint.util.*
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_CLASS
 import kotlinx.android.synthetic.main.class_create_fragment.*
 
 class ClassCreateFragment : androidx.fragment.app.DialogFragment() {
@@ -54,7 +53,7 @@ class ClassCreateFragment : androidx.fragment.app.DialogFragment() {
             }
             val aClass = AClass(subjectName.text.toString(), classNumber.text.toString().toInt(), spClassYear.selectedItem.toString())
             aClasses.add(aClass)
-            putPref(PREF_CLASS, aClasses)
+            putPref(Constant.NAME_CLASS_LIST(requireContext()), aClasses)
             toast("Tạo lớp học thành công!")
             dismiss()
         }
@@ -78,7 +77,7 @@ class ClassCreateFragment : androidx.fragment.app.DialogFragment() {
     }
 
     private fun getClassList(): ArrayList<AClass> {
-        val value = sharePrefs().get(PREF_CLASS, "")
+        val value = sharePrefs().get(Constant.NAME_CLASS_LIST(requireContext()), "")
         if (value.isEmpty()) {
             return ArrayList()
         }

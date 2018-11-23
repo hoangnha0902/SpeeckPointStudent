@@ -24,8 +24,9 @@ class SharedPrefs private constructor(context: Context) {
     }
 
     companion object : SingletonHolder<SharedPrefs, Context>(::SharedPrefs) {
-        val PREF_STUDENT = "pref_student_%s_%s_%s"
-        val PREF_CLASS = "pref_class"
-        val PREF_SUBJECT = "pref_subject_%s"
+        val PREF_STUDENT = "pref_student_%s_%s_%s_%s"
+        val PREF_CLASS = "pref_class_%s"
+        val PREF_SUBJECT = "pref_subject_%s_%s"
+        const val PREF_ACCOUNTS = "accounts"
     }
 }

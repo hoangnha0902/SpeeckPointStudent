@@ -19,7 +19,6 @@ import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
 import com.nhahv.speechrecognitionpoint.util.Constant.IS_LOGIN
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
@@ -221,7 +220,7 @@ class MainFragment : Fragment() {
     }
 
     private fun getStudentList(): ArrayList<Student> {
-        val value = SharedPrefs.getInstance(requireContext()).get(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), "")
+        val value = sharePrefs().get(Constant.NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, subject?.subjectName, semester), "")
         if (value.isEmpty()) {
             return ArrayList()
         }
@@ -586,7 +585,7 @@ class MainFragment : Fragment() {
 
     override fun onStop() {
         speechPoint.cancel()
-        SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), students)
+        sharePrefs().put(Constant.NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, subject?.subjectName, semester), students)
         super.onStop()
     }
 }

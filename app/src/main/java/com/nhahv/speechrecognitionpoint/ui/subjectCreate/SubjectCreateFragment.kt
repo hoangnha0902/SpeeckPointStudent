@@ -1,6 +1,5 @@
 package com.nhahv.speechrecognitionpoint.ui.subjectCreate
 
-import androidx.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,15 +8,12 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.SemesterType
 import com.nhahv.speechrecognitionpoint.data.models.Subject
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_SUBJECT
-import com.nhahv.speechrecognitionpoint.util.convertCompare
-import com.nhahv.speechrecognitionpoint.util.fromJson
-import com.nhahv.speechrecognitionpoint.util.toast
+import com.nhahv.speechrecognitionpoint.util.*
 import kotlinx.android.synthetic.main.subject_create_fragment.*
 
 
@@ -95,7 +91,7 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
     }
 
     private fun getSubjects(): ArrayList<Subject> {
-        val value = SharedPrefs.getInstance(requireContext()).get(PREF_SUBJECT.format(className), "")
+        val value = sharePrefs().get(Constant.NAME_SUBJECT_LIST(requireContext(), className), "")
         if (value.isEmpty()) {
             return ArrayList()
         }
@@ -110,7 +106,7 @@ class SubjectCreateFragment : androidx.fragment.app.DialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
-        if(subjectNameTemp != null){
+        if (subjectNameTemp != null) {
             listener?.invoke(subjectNameTemp!!, semesterTypeTemp)
         }
     }

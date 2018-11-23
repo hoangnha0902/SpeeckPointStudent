@@ -1,14 +1,13 @@
 package com.nhahv.speechrecognitionpoint.ui.exportexcel
 
-import androidx.lifecycle.ViewModelProviders
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.os.Environment
-import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
@@ -20,12 +19,9 @@ import com.nhahv.speechrecognitionpoint.data.models.Student
 import com.nhahv.speechrecognitionpoint.data.models.Subject
 import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
-import com.nhahv.speechrecognitionpoint.util.Constant.PATH_APP
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
 import kotlinx.android.synthetic.main.export_excel_fragment.*
 import kotlinx.android.synthetic.main.item_export_excel.view.*
-import kotlinx.android.synthetic.main.item_subject.*
 import java.io.File
 import java.util.*
 
@@ -206,7 +202,7 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun getStudentList(): ArrayList<Student> {
-        val value = sharePrefs().get(PREF_STUDENT.format(aClass?.name, subject?.subjectName, subject?.semester?.getSemesterName()), "")
+        val value = sharePrefs().get(Constant.NAME_STUDENT_OF_SUBJECT(requireContext(),aClass?.name, subject?.subjectName, subject?.semester), "")
         if (value.isEmpty()) {
             return ArrayList()
         }

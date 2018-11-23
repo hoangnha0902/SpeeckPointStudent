@@ -18,9 +18,7 @@ import com.nhahv.speechrecognitionpoint.ui.subjectCreate.SubjectCreateFragment
 import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
-import kotlinx.android.synthetic.main.item_subject.*
 import kotlinx.android.synthetic.main.item_subject.view.*
-import kotlinx.android.synthetic.main.subject_create_fragment.*
 import kotlinx.android.synthetic.main.subjects_fragment.*
 
 
@@ -100,8 +98,8 @@ class SubjectsFragment : Fragment() {
                     val subjects = viewModel.getSubjectList()
                     val subject = Subject(subjectName, semesterType, subjectsTemp[itemCheck].excel)
                     subjects.add(subject)
-                    sharePrefs().put(SharedPrefs.PREF_SUBJECT.format(aClass?.name), subjects)
-                    sharePrefs().put(SharedPrefs.PREF_STUDENT.format(aClass?.name, subjectName, semesterType.getSemesterName()), studentTemp)
+                    sharePrefs().put(Constant.NAME_SUBJECT_LIST(requireContext(), aClass?.name), subjects)
+                    sharePrefs().put(Constant.NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, subjectName, semesterType), studentTemp)
                     viewModel.getSubjects()
                     dialog.dismiss()
                 }
@@ -114,12 +112,12 @@ class SubjectsFragment : Fragment() {
         val subjects = viewModel.getSubjectList()
         val subject = Subject(subjectName, semesterType)
         subjects.add(subject)
-        sharePrefs().put(SharedPrefs.PREF_SUBJECT.format(aClass?.name), subjects)
+        sharePrefs().put(Constant.NAME_SUBJECT_LIST(requireContext(), aClass?.name), subjects)
         viewModel.getSubjects()
     }
 
     private fun hasStudentInSubject(name: String, semester: SemesterType): Boolean {
-        val value = SharedPrefs.getInstance(requireContext()).get(SharedPrefs.PREF_STUDENT.format(aClass?.name, name, semester.getSemesterName()), "")
+        val value = sharePrefs().get(Constant.NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, name, semester), "")
         if (value.isEmpty()) {
             return false
         }
@@ -128,7 +126,7 @@ class SubjectsFragment : Fragment() {
     }
 
     private fun studentOfSubject(name: String, semester: SemesterType): ArrayList<Student> {
-        val value = SharedPrefs.getInstance(requireContext()).get(SharedPrefs.PREF_STUDENT.format(aClass?.name, name, semester.getSemesterName()), "")
+        val value = sharePrefs().get(Constant.NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, name, semester), "")
         if (value.isEmpty()) {
             return ArrayList()
         }

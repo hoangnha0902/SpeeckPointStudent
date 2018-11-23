@@ -17,7 +17,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.ViewModelFactory
-import com.nhahv.speechrecognitionpoint.data.models.SemesterType
 
 inline fun <reified T> SharedPreferences.put(key: String, value: T) {
     val editor = edit()
@@ -101,13 +100,3 @@ inline fun <reified T> Fragment.putPref(key: String, value: T) {
 
 fun <T : ViewModel> Fragment.obtainViewModel(viewModelClass: Class<T>, key: String?) =
         ViewModelProviders.of(this, ViewModelFactory.getInstance(requireContext(), key)).get(viewModelClass)
-
-
-fun Fragment.studentNameOfClass(className: String, subjectName: String, semester: SemesterType): String {
-    return SharedPrefs.PREF_STUDENT.format(className, subjectName, semester.getSemesterName())
-}
-
-
-fun Fragment.subjectNameOfClass(className: String): String {
-    return SharedPrefs.PREF_SUBJECT.format(className)
-}

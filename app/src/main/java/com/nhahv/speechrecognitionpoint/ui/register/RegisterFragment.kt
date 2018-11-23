@@ -1,20 +1,21 @@
 package com.nhahv.speechrecognitionpoint.ui.register
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.text.TextUtils
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.data.models.Account
+import com.nhahv.speechrecognitionpoint.util.*
 import com.nhahv.speechrecognitionpoint.util.Constant.PASSWORD
 import com.nhahv.speechrecognitionpoint.util.Constant.USER_NAME
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs
-import com.nhahv.speechrecognitionpoint.util.toast
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_ACCOUNTS
 import kotlinx.android.synthetic.main.register_fragment.*
 
 class RegisterFragment : androidx.fragment.app.Fragment() {
@@ -38,6 +39,7 @@ class RegisterFragment : androidx.fragment.app.Fragment() {
 
     private fun initViews() {
         register.setOnClickListener {
+
             if (TextUtils.isEmpty(userName.text.toString())) {
                 toast("Nhập tên tài khoản")
                 return@setOnClickListener
@@ -46,8 +48,18 @@ class RegisterFragment : androidx.fragment.app.Fragment() {
                 toast("Nhập đúng mật khẩu")
                 return@setOnClickListener
             }
-            SharedPrefs.getInstance(requireContext()).put(USER_NAME, userName.text.toString())
-            SharedPrefs.getInstance(requireContext()).put(PASSWORD, password.text.toString())
+            val accounts = getAccounts()
+            for (item in accounts) {
+                if (userName.text.toString() == item.userName) {
+                    toast("Tài khoản đã toàn tại")
+                    return@setOnClickListener
+                }
+            }
+            accounts.add(Account(userName.text.toString(), password.text.toString()))
+            sharePrefs().put(PREF_ACCOUNTS, Gson().toJson(accounts))
+            sharePrefs().put(USER_NAME, userName.text.toString())
+            sharePrefs().put(PASSWORD, password.text.toString())
+            sharePrefs().get(Constant.IS_LOGIN, true)
             register.findNavController().navigate(R.id.action_register_to_class, null, NavOptions.Builder().setClearTask(true).build())
 
         }
@@ -62,4 +74,11 @@ class RegisterFragment : androidx.fragment.app.Fragment() {
         }
     }
 
+    private fun getAccounts(): ArrayList<Account> {
+        val value = sharePrefs().get(PREF_ACCOUNTS, "")
+        if (value.isEmpty()) {
+            return ArrayList()
+        }
+        return Gson().fromJson<ArrayList<Account>>(value)
+    }
 }

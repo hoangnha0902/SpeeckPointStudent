@@ -1,5 +1,6 @@
 package com.nhahv.speechrecognitionpoint.ui.classstudent
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -8,8 +9,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
 import com.nhahv.speechrecognitionpoint.R
@@ -33,16 +32,14 @@ class ClassStudentFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = obtainViewModel(ClassStudentViewModel::class.java, "")
-        viewModel.aClasses.observe(this, Observer { aclasses ->
-            aClassAdapter.refresh(aclasses)
-        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        aClassAdapter = AClassAdapter { _, aClass, _ ->
+        aClassAdapter = AClassAdapter(requireContext()) { _, aClass, _ ->
             navigate(R.id.action_classStudentFragment_to_subjectsFragment, Bundle().apply { putParcelable(CLASSES, aClass) })
         }
+        aClassAdapter.refresh(getClasses())
         classList.adapter = aClassAdapter
         classCreate.setOnClickListener {
             fragmentManager?.let {
@@ -53,13 +50,23 @@ class ClassStudentFragment : Fragment() {
                 }
                 fm.addToBackStack(null)
                 val dialog = ClassCreateFragment.newInstance()
-                dialog.setOnDismissListener { viewModel.getClasses() }
+                dialog.setOnDismissListener { aClassAdapter.refresh(getClasses()) }
                 dialog.show(fm, "classCreate")
             }
         }
     }
 
+    private fun getClasses(): ArrayList<AClass> {
+        val value = sharePrefs().get(Constant.NAME_CLASS_LIST(requireContext()), "")
+        if (value.isEmpty()) {
+            return ArrayList()
+        }
+        return Gson().fromJson<ArrayList<AClass>>(value)
+
+    }
+
     class AClassAdapter(
+            val context: Context,
             listener: ((View, AClass, Int) -> Unit)?
     ) : BaseRecyclerAdapter<AClass>(R.layout.item_class, listener) {
 
@@ -91,8 +98,8 @@ class ClassStudentFragment : Fragment() {
                                 items.removeAt(position)
                                 notifyItemRemoved(position)
                                 notifyItemRangeChanged(position, items.size)
-                                SharedPrefs.getInstance(context).put(SharedPrefs.PREF_CLASS, items)
-                                SharedPrefs.getInstance(context).remove(Constant.subjectNameOfClass(aClass.name))
+                                SharedPrefs.getInstance(context).put(Constant.NAME_CLASS_LIST(context), items)
+                                SharedPrefs.getInstance(context).remove(Constant.NAME_SUBJECT_LIST(context, aClass.name))
                             }
                             .setNegativeButton("Không") { dialog, _ -> dialog?.cancel() }
                             .show()
