@@ -1,5 +1,6 @@
 package com.nhahv.speechrecognitionpoint.ui.main
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -94,7 +95,19 @@ class MainFragment : Fragment() {
                 SharedPrefs.getInstance(requireContext()).put(IS_LOGIN, false)
                 navigateClearStack(R.id.action_mainFragment_to_loginFragment)
             }
-            R.id.deletePointAllStudent -> deletePointAllStudent()
+            R.id.deletePointAllStudent -> {
+                AlertDialog.Builder(requireContext())
+                        .setTitle("Xóa điểm của tất cả học sinh")
+                        .setMessage("Xóa ${typeOfPoint.toString()}  của điểm ${typePoint.toString()} của tất cả học sinh")
+                        .setPositiveButton("OK") { dialog, which ->
+                            deletePointAllStudent()
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton("Cancel") { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .show()
+            }
 
         }
         return super.onOptionsItemSelected(item)
@@ -112,8 +125,18 @@ class MainFragment : Fragment() {
             notifyAdapter()
         }
         studentAdapter.setOnDeleteListener { swipeLayout, student, i ->
-            deletePointOfStudent(student)
-            notifyAdapter()
+            AlertDialog.Builder(requireContext())
+                    .setTitle("Xóa điểm của học sinh ${student.name}")
+                    .setMessage("Xóa ${typeOfPoint.toString()}  của điểm ${typePoint.toString()}")
+                    .setPositiveButton("OK") { dialog, which ->
+                        deletePointOfStudent(student)
+                        notifyAdapter()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Cancel") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    .show()
         }
 
         studentListSwap.adapter = studentSwapAdapter
