@@ -1,7 +1,6 @@
 package com.nhahv.speechrecognitionpoint.util
 
 import android.app.Activity
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -19,7 +18,6 @@ import com.google.gson.reflect.TypeToken
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.ViewModelFactory
 import com.nhahv.speechrecognitionpoint.data.models.SemesterType
-import org.apache.poi.ss.formula.functions.T
 
 inline fun <reified T> SharedPreferences.put(key: String, value: T) {
     val editor = edit()
@@ -113,4 +111,3 @@ fun Fragment.studentNameOfClass(className: String, subjectName: String, semester
 fun Fragment.subjectNameOfClass(className: String): String {
     return SharedPrefs.PREF_SUBJECT.format(className)
 }
-

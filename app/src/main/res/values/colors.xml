@@ -85,4 +85,6 @@
     <color name="color_back_input_point">#efeeff</color>
     <color name="color_label_point">#177FAC</color>
 
+    <color name="dark_gray">#4C535B</color>
+    <color name="dark_gray_press">#ff7e8a97</color>
 </resources>

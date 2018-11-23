@@ -2,27 +2,24 @@ package com.nhahv.speechrecognitionpoint.ui.main
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.Html
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
-import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
-import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.StudentsAdapter
+import com.nhahv.speechrecognitionpoint.StudentsSwapAdapter
 import com.nhahv.speechrecognitionpoint.data.models.*
 import com.nhahv.speechrecognitionpoint.ui.pointInput.PointInputFragment
 import com.nhahv.speechrecognitionpoint.util.*
-import com.nhahv.speechrecognitionpoint.util.CommonUtils.textPoint
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
+import com.nhahv.speechrecognitionpoint.util.Constant.IS_LOGIN
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
 import com.nhahv.speechrecognitionpoint.util.SharedPrefs.Companion.PREF_STUDENT
-import kotlinx.android.synthetic.main.item_students.view.*
-import kotlinx.android.synthetic.main.item_students2.view.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
@@ -35,9 +32,9 @@ class MainFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var speechPoint: SpeechPoint
     private val students = ArrayList<Student>()
-    private val studentAdapter by lazy {
-        StudentsAdapter(students) { view, student, i -> }
-    }
+
+    private val studentRestore = ArrayList<Student>()
+
 
     private val studentSwapAdapter = StudentsSwapAdapter(students)
 
@@ -46,7 +43,9 @@ class MainFragment : Fragment() {
     val typeOfPointList = ArrayList<TypeOfTypePoint>()
     var typeOfPoint: TypeOfTypePoint = TypeOfTypePoint.TYPE_1
     lateinit var title: String
-
+    private val studentAdapter by lazy {
+        StudentsAdapter(students, typePoint, typeOfPoint) { view, student, i -> }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +57,7 @@ class MainFragment : Fragment() {
             semester = subject?.semester
             title = "Môn ${subject?.subjectName} lớp học ${aClass?.name}"
         }
+        studentRestore.addAll(getStudentList())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -92,8 +92,15 @@ class MainFragment : Fragment() {
                 navigate(R.id.action_mainFragment_to_exportExcelFragment, arguments!!)
             }
             R.id.logout -> {
-                // todo logout
+                SharedPrefs.getInstance(requireContext()).put(IS_LOGIN, false)
                 navigateClearStack(R.id.action_mainFragment_to_loginFragment)
+            }
+            R.id.deletePointAllStudent -> deletePointAllStudent()
+            R.id.restorePointAllStudent -> {
+                students.forEachIndexed { index, student ->
+                    restorePointStudent(student, index)
+                    notifyAdapter()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
@@ -105,8 +112,16 @@ class MainFragment : Fragment() {
     }
 
     private fun initViews() {
-
         studentList.adapter = studentAdapter
+        studentAdapter.setOnRestoreListener { swipeLayout, student, i ->
+            restorePointStudent(student, i)
+            notifyAdapter()
+        }
+        studentAdapter.setOnDeleteListener { swipeLayout, student, i ->
+            deletePointOfStudent(student)
+            notifyAdapter()
+        }
+
         studentListSwap.adapter = studentSwapAdapter
         notifyUI()
 
@@ -219,7 +234,6 @@ class MainFragment : Fragment() {
     }
 
     fun onTextRecognition(matches: String) {
-        println("=================== $matches")
         textSpeech.text = matches
         if (checkNameIsExist(matches)) {
 
@@ -403,231 +417,181 @@ class MainFragment : Fragment() {
         notifyAdapter()
     }
 
+    private fun restorePointStudent(student: Student, position: Int) {
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_1) {
+            student.m1 = studentRestore[position].m1
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_2) {
+            student.m2 = studentRestore[position].m2
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_3) {
+            student.m3 = studentRestore[position].m3
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_4) {
+            student.m4 = studentRestore[position].m4
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_5) {
+            student.m5 = studentRestore[position].m5
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_1) {
+            student.p1 = studentRestore[position].p1
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_2) {
+            student.p2 = studentRestore[position].p2
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_3) {
+            student.p3 = studentRestore[position].p3
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_4) {
+            student.p4 = studentRestore[position].p4
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_5) {
+            student.p5 = studentRestore[position].p5
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_1) {
+            student.v1 = studentRestore[position].v1
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_2) {
+            student.v2 = studentRestore[position].v2
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_3) {
+            student.v3 = studentRestore[position].v3
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_4) {
+            student.v4 = studentRestore[position].v4
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_5) {
+            student.v5 = studentRestore[position].v5
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.SEMESTER) {
+            student.hk = studentRestore[position].hk
+            student.getTBM()
+            return
+        }
+    }
+
+
+    private fun deletePointAllStudent() {
+        students.forEach { it -> deletePointOfStudent(it) }
+        notifyAdapter()
+    }
+
+    private fun deletePointOfStudent(student: Student) {
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_1) {
+            student.m1 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_2) {
+            student.m2 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_3) {
+            student.m3 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_4) {
+            student.m4 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.MOUTH && typeOfPoint == TypeOfTypePoint.TYPE_5) {
+            student.m5 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_1) {
+            student.p1 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_2) {
+            student.p2 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_3) {
+            student.p3 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_4) {
+            student.p4 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.P15 && typeOfPoint == TypeOfTypePoint.TYPE_5) {
+            student.p5 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_1) {
+            student.v1 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_2) {
+            student.v2 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_3) {
+            student.v3 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_4) {
+            student.v4 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.WRITE && typeOfPoint == TypeOfTypePoint.TYPE_5) {
+            student.v5 = ""
+            student.getTBM()
+            return
+        }
+        if (typePoint == TypePoint.SEMESTER) {
+            student.hk = ""
+            student.getTBM()
+            return
+        }
+    }
+
     override fun onStop() {
         speechPoint.cancel()
         SharedPrefs.getInstance(requireContext()).put(PREF_STUDENT.format(aClass?.name, subject?.subjectName, semester?.getSemesterName()), students)
         super.onStop()
-    }
-
-    class StudentsAdapter(
-            private val students: ArrayList<Student> = ArrayList(),
-            listener: ((View, Student, Int) -> Unit)?
-
-    ) : BaseRecyclerAdapter<Student>(students, R.layout.item_students2, listener), Filterable {
-        val studentOriginal = students
-        var studentFilter = students
-
-        override fun getItemCount(): Int {
-            return studentFilter.size
-        }
-
-        override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-            super.onBindViewHolder(holder, position)
-            val student = studentFilter[position]
-
-            holder.itemView.apply {
-                stt.text = "Stt: ${student.stt}"
-                studentNumber.text = "Mã HS: ${student.numberStudent}"
-                studentName.text = student.name
-                m1.text = student.m1
-                m2.text = student.m2
-                m3.text = student.m3
-                m4.text = student.m4
-                m5.text = student.m5
-                p1.text = student.p1
-                p2.text = student.p2
-                p3.text = student.p3
-                p4.text = student.p4
-                p5.text = student.p5
-                v1.text = student.v1
-                v2.text = student.v2
-                v3.text = student.v3
-                v4.text = student.v4
-                v5.text = student.v5
-                hk.text = student.hk
-                tbm.text = student.tbm
-            }
-        }
-
-        override fun getFilter() = object : Filter() {
-            override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
-                val charString = charSequence.toString()
-                studentFilter = if (charString.isEmpty()) {
-                    studentOriginal
-                } else {
-                    val filteredList = ArrayList<Student>()
-                    for (row in studentOriginal) {
-                        if (row.name.toLowerCase().contains(charString.toLowerCase())) {
-                            filteredList.add(row)
-                        }
-                    }
-
-                    filteredList
-                }
-
-                val filterResults = Filter.FilterResults()
-                filterResults.values = studentFilter
-                return filterResults
-            }
-
-            override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
-                studentFilter = filterResults.values as ArrayList<Student>
-                notifyDataSetChanged()
-            }
-        }
-    }
-
-    class StudentsSwapAdapter(
-            private val students: ArrayList<Student> = ArrayList()
-
-    ) : BaseRecyclerViewAdapter<Student>(students, R.layout.item_students), Filterable {
-        var studentOriginal = students
-        var studentFilter = students
-        var fragment: MainFragment? = null
-
-        override fun getItemCount() = studentFilter.size
-
-        fun setMainFragment(mainFragment: MainFragment) {
-            fragment = mainFragment
-        }
-
-        override fun getItemViewType(position: Int): Int {
-            return position
-        }
-
-        override fun onBindViewHolder(holder: BaseViewHolder<Student>, position: Int) {
-            super.onBindViewHolder(holder, position)
-            val student = studentFilter[position]
-
-            holder.itemView.apply {
-                nameStudent.text = student.name
-                var textMouth = ""
-                if (!TextUtils.isEmpty(student.m1)) {
-                    textMouth += textPoint("M1", student.m1)
-                }
-                if (!TextUtils.isEmpty(student.m2)) {
-                    textMouth += textPoint("M2", student.m2)
-                }
-                if (!TextUtils.isEmpty(student.m3)) {
-                    textMouth += textPoint("M3", student.m3)
-                }
-                if (!TextUtils.isEmpty(student.m4)) {
-                    textMouth += textPoint("M4", student.m4)
-                }
-                if (!TextUtils.isEmpty(student.m5)) {
-                    textMouth += textPoint("M5", student.m5)
-                }
-                valueMouth.setText(Html.fromHtml(textMouth), TextView.BufferType.SPANNABLE)
-
-                var textP15 = ""
-                if (!TextUtils.isEmpty(student.p1)) {
-                    textP15 += textPoint("P1", student.p1)
-                }
-                if (!TextUtils.isEmpty(student.p2)) {
-                    textP15 += textPoint("P2", student.p2)
-                }
-                if (!TextUtils.isEmpty(student.p3)) {
-                    textP15 += textPoint("P3", student.p3)
-                }
-                if (!TextUtils.isEmpty(student.p4)) {
-                    textP15 += textPoint("P4", student.p4)
-                }
-                if (!TextUtils.isEmpty(student.p5)) {
-                    textP15 += textPoint("P5", student.p5)
-                }
-                valueP15.setText(Html.fromHtml(textP15), TextView.BufferType.SPANNABLE)
-
-                var textWrite = ""
-                if (!TextUtils.isEmpty(student.v1)) {
-                    textWrite += textPoint("V1", student.v1)
-                }
-                if (!TextUtils.isEmpty(student.v2)) {
-                    textWrite += textPoint("V2", student.v2)
-                }
-                if (!TextUtils.isEmpty(student.v3)) {
-                    textWrite += textPoint("V3", student.v3)
-                }
-                if (!TextUtils.isEmpty(student.v4)) {
-                    textWrite += textPoint("V4", student.v4)
-                }
-                if (!TextUtils.isEmpty(student.v5)) {
-                    textWrite += textPoint("V5", student.v5)
-                }
-                valueWrite.setText(Html.fromHtml(textWrite), TextView.BufferType.SPANNABLE)
-                if (!TextUtils.isEmpty(student.hk)) {
-                    val textSemester = textPoint("HK", student.hk)
-                    valueSemester.setText(Html.fromHtml(textSemester), TextView.BufferType.SPANNABLE)
-                }
-                if (!TextUtils.isEmpty(student.tbm)) {
-                    val textTBM = textPoint("TBM", student.tbm)
-                    valueTBM.setText(Html.fromHtml(textTBM), TextView.BufferType.SPANNABLE)
-                }
-
-/*
-
-                pointMouth.visibility = View.VISIBLE
-                point15P.visibility = View.VISIBLE
-                pointWrite.visibility = View.VISIBLE
-                pointSemester.visibility = View.VISIBLE
-                pointTBM.visibility = View.VISIBLE
-                lineTBM.visibility = View.VISIBLE
-                minusPlus.setImageResource(R.mipmap.circle_minus)
-*/
-
-
-                llInfo.setOnClickListener {
-                    pointMouth.visibility = if (pointMouth.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                    point15P.visibility = if (point15P.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                    pointWrite.visibility = if (pointWrite.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                    pointSemester.visibility = if (pointSemester.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                    pointTBM.visibility = if (pointTBM.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                    lineTBM.visibility = if (lineTBM.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-                    minusPlus.setImageResource(if (lineTBM.visibility == View.VISIBLE) R.mipmap.circle_plus else R.mipmap.circle_minus)
-                }
-
-                pointMouth.setOnClickListener {
-                    fragment?.showInputPointDialog("Điểm miệng", TypePoint.MOUTH, position)
-                }
-
-                point15P.setOnClickListener {
-                    fragment?.showInputPointDialog("Điểm 15 phút", TypePoint.P15, position)
-                }
-
-                pointWrite.setOnClickListener {
-                    fragment?.showInputPointDialog("Điểm 1 tiết", TypePoint.WRITE, position)
-                }
-
-                pointSemester.setOnClickListener {
-                    fragment?.showInputPointDialog("Học kỳ", TypePoint.SEMESTER, position)
-                }
-            }
-        }
-
-        override fun getFilter() = object : Filter() {
-            override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
-                val charString = charSequence.toString()
-                studentFilter = if (charString.isEmpty()) {
-                    studentOriginal
-                } else {
-                    val filteredList = ArrayList<Student>()
-                    for (row in studentOriginal) {
-                        if (row.name.toLowerCase().contains(charString.toLowerCase())) {
-                            filteredList.add(row)
-                        }
-                    }
-
-                    filteredList
-                }
-
-                val filterResults = Filter.FilterResults()
-                filterResults.values = studentFilter
-                return filterResults
-            }
-
-            override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
-                studentFilter = filterResults.values as ArrayList<Student>
-                notifyDataSetChanged()
-            }
-        }
     }
 }

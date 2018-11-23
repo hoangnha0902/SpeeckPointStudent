@@ -146,13 +146,33 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:gravity="center"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/textSyntax"
+        app:layout_constraintEnd_toStartOf="@+id/startMic"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/swap"
+        app:layout_constraintTop_toBottomOf="@+id/studentList"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <TextView
+        android:id="@+id/textSyntax"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="2dp"
+        android:gravity="center"
+        android:text="@string/text_syntax"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/startMic"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/swap"
-        app:layout_constraintTop_toBottomOf="@+id/studentList" />
+        app:layout_constraintTop_toBottomOf="@+id/textSpeech" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

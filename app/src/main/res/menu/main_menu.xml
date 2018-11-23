@@ -7,6 +7,12 @@
         android:id="@+id/exportExcelFragment"
         android:title="Export" />
     <item
+        android:id="@+id/deletePointAllStudent"
+        android:title="Xóa điểm của tất cả HS" />
+    <item
+        android:id="@+id/restorePointAllStudent"
+        android:title="Restore điểm của tất cả HS " />
+    <item
         android:id="@+id/logout"
         android:title="Đăng xuất" />
 </menu>
