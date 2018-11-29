@@ -32,7 +32,12 @@ object ReadWriteExcelFile {
     private const val ROW_CLASS = 3
     private const val CELL_CLASS = 0
 
-    fun readStudentExcel(path: String, name: String): ArrayList<Student> {
+
+    enum class ImportStatus {
+        ERROR_FILE, CLASS_NAME, IMPORT_ERROR, SUCCESS
+    }
+
+    fun readStudentExcel(path: String, name: String, listener: ((ImportStatus) -> Unit)): ArrayList<Student> {
         try {
             val workbook = WorkbookFactory.create(File(path))
             val sheet = workbook.getSheetAt(0)
@@ -41,20 +46,24 @@ object ReadWriteExcelFile {
 
             val cellClass = sheet.getRow(ROW_CLASS).getCell(CELL_CLASS)
             if (cellClass.cellType != CellType.STRING) {
+                listener.invoke(ImportStatus.ERROR_FILE)
                 return ArrayList()
             }
 
             val stringTemp = cellClass.stringCellValue.trim().toUpperCase()
             val isContainer = stringTemp.contains(name.trim().toUpperCase())
             if (!isContainer) {
+                listener.invoke(ImportStatus.CLASS_NAME)
                 return ArrayList()
             }
 
             val cell = sheet.getRow(5).getCell(0)
             if (cell.cellType != CellType.STRING) {
+                listener.invoke(ImportStatus.ERROR_FILE)
                 return ArrayList()
             }
             if (cell.stringCellValue.trim().toUpperCase() != "STT") {
+                listener.invoke(ImportStatus.ERROR_FILE)
                 return ArrayList()
             }
             for (row in sheet) {
@@ -95,9 +104,11 @@ object ReadWriteExcelFile {
                 }
             }
             workbook.close()
+            listener.invoke(ImportStatus.SUCCESS)
             return students
         } catch (e: IOException) {
             e.printStackTrace()
+            listener.invoke(ImportStatus.IMPORT_ERROR)
             return ArrayList()
         }
     }

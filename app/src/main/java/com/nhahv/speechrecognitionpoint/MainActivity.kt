@@ -94,15 +94,18 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
             progress?.setMessage("Đang xử lý")
             progress?.setCancelable(false)
         }
-        if (progress != null && progress?.isShowing == false) {
-            progress?.show()
+        progress?.let {
+            if (!it.isShowing) {
+                it.show()
+            }
         }
     }
 
     fun hideProgress() {
-        if (progress != null && progress?.isShowing == true) {
-            progress?.dismiss()
+        progress?.let {
+            if (it.isShowing) {
+                it.dismiss()
+            }
         }
     }
-
 }

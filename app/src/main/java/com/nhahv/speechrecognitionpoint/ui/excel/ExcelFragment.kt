@@ -1,5 +1,7 @@
 package com.nhahv.speechrecognitionpoint.ui.excel
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -18,6 +20,8 @@ import com.nhahv.speechrecognitionpoint.util.Constant.NAME_SUBJECT_LIST
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
 import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
+import java.util.*
+import kotlin.concurrent.schedule
 
 class ExcelFragment : Fragment() {
     private lateinit var viewModel: ExcelViewModel
@@ -27,20 +31,16 @@ class ExcelFragment : Fragment() {
 
     private val excelFiles: ArrayList<FileExcel> = ArrayList()
     private val excelFileAdapter = ExcelFilesAdapter(excelFiles) { _, excelFile, _ ->
-        if (aClass == null || aClass?.name == null) {
+        if (aClass == null || TextUtils.isEmpty(aClass?.name)) {
             toast("Không thể import bảng điểm kiểm tra lại lớp học và môn học")
             return@ExcelFilesAdapter
         }
-        Thread().run {
-            excelFile.path?.let {
-                val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it, aClass!!.name)
-                if (students.isEmpty()) {
-                    toast("Không import được bảng điểm kiểm tra lại bảng điêm, có thể bảng điểm không phải của lớp học này")
-                    return@let
-                }
-                updateSubjects(subject, excelFile)
-                sharePrefs().put(NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, subject?.subjectName, semester), students)
-                (requireActivity() as MainActivity).back()
+        val value = getStudentList()
+        aClass?.name?.let {
+            if (value.size > 0) {
+                showDialogConfirmImport(excelFile, it)
+            } else {
+                readFileExcel(excelFile, it)
             }
         }
     }
@@ -122,5 +122,65 @@ class ExcelFragment : Fragment() {
         if (isChanged) {
             sharePrefs().put(NAME_SUBJECT_LIST(requireContext(), aClass?.name), subjects)
         }
+    }
+
+    private fun showDialogConfirmImport(excelFile: FileExcel, nameClass: String) {
+        AlertDialog.Builder(requireContext())
+                .setTitle("Import danh sách học sinh")
+                .setMessage("Môn học đã có danh sách học sinh, bạn có muốn tiếp tục import hay không")
+                .setPositiveButton("Có") { dialog, which ->
+                    dialog.dismiss()
+                    readFileExcel(excelFile, nameClass)
+                }
+                .setNegativeButton("Không") { dialog, which ->
+                    dialog.dismiss()
+                }.show()
+
+    }
+
+    private fun readFileExcel(excelFile: FileExcel?, nameClass: String) {
+        Thread().run {
+            excelFile?.path?.let {
+                (requireActivity() as MainActivity).showProgress()
+                val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it, nameClass) { importStatus ->
+                    when (importStatus) {
+                        ReadWriteExcelFile.ImportStatus.SUCCESS -> {
+                            toast("Import bảng điểm thành công")
+                        }
+                        ReadWriteExcelFile.ImportStatus.ERROR_FILE -> {
+                            toast("File bảng điểm có định dạng không đúng, kiểm tra lại file Excel")
+                        }
+                        ReadWriteExcelFile.ImportStatus.CLASS_NAME -> {
+                            toast("Lớp trong File Excel không đúng với lớp học")
+                        }
+                        ReadWriteExcelFile.ImportStatus.IMPORT_ERROR -> {
+                            toast("Import không thành công, kiểm tra lại định dạng File Excel")
+                        }
+                    }
+                }
+                if (students.isEmpty()) {
+                    Timer().schedule(1000) {
+                        println("========== runing")
+                        (requireActivity() as MainActivity).hideProgress()
+                    }
+                    return@let
+                }
+                updateSubjects(subject, excelFile)
+                sharePrefs().put(NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, subject?.subjectName, semester), students)
+                Timer().schedule(1000) {
+                    println("========== runing")
+                    (requireActivity() as MainActivity).hideProgress()
+                    (requireActivity() as MainActivity).back()
+                }
+            }
+        }
+    }
+
+    private fun getStudentList(): ArrayList<Student> {
+        val value = sharePrefs().get(Constant.NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, subject?.subjectName, semester), "")
+        if (value.isEmpty()) {
+            return ArrayList()
+        }
+        return Gson().fromJson<ArrayList<Student>>(value)
     }
 }

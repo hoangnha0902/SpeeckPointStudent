@@ -51,7 +51,8 @@ class ClassCreateFragment : androidx.fragment.app.DialogFragment() {
                     return@setOnClickListener
                 }
             }
-            val aClass = AClass(subjectName.text.toString(), classNumber.text.toString().toInt(), spClassYear.selectedItem.toString())
+            val numberStudent = if (TextUtils.isEmpty(classNumber.text)) 0 else classNumber.text.toString().toInt()
+            val aClass = AClass(subjectName.text.toString(), numberStudent, spClassYear.selectedItem.toString())
             aClasses.add(aClass)
             putPref(Constant.NAME_CLASS_LIST(requireContext()), aClasses)
             toast("Tạo lớp học thành công!")
