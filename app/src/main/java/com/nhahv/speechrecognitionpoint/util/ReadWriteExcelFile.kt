@@ -29,13 +29,27 @@ object ReadWriteExcelFile {
     private const val SEMESTER_POINT = 19
     private const val TBM_POINT = 22
 
+    private const val ROW_CLASS = 3
+    private const val CELL_CLASS = 0
 
-    fun readStudentExcel(path: String): ArrayList<Student> {
+    fun readStudentExcel(path: String, name: String): ArrayList<Student> {
         try {
             val workbook = WorkbookFactory.create(File(path))
             val sheet = workbook.getSheetAt(0)
             val dataFormatter = DataFormatter()
             val students = ArrayList<Student>()
+
+            val cellClass = sheet.getRow(ROW_CLASS).getCell(CELL_CLASS)
+            if (cellClass.cellType != CellType.STRING) {
+                return ArrayList()
+            }
+
+            val stringTemp = cellClass.stringCellValue.trim().toUpperCase()
+            val isContainer = stringTemp.contains(name.trim().toUpperCase())
+            if (!isContainer) {
+                return ArrayList()
+            }
+
             val cell = sheet.getRow(5).getCell(0)
             if (cell.cellType != CellType.STRING) {
                 return ArrayList()
@@ -97,7 +111,7 @@ object ReadWriteExcelFile {
             val workbook = WorkbookFactory.create(File(excelFile.parent, excelFile.nameFile + ".xls"))
             val sheet = workbook.getSheetAt(0)
             for (i in rowStart..sheet.lastRowNum) {
-                if(i - rowStart < students.size){
+                if (i - rowStart < students.size) {
                     val student = students[i - rowStart]
                     val row = sheet.getRow(i)
                     if (student.stt == row.getCell(0).stringCellValue) {

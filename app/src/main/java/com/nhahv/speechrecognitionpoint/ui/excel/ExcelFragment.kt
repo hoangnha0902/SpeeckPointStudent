@@ -27,11 +27,15 @@ class ExcelFragment : Fragment() {
 
     private val excelFiles: ArrayList<FileExcel> = ArrayList()
     private val excelFileAdapter = ExcelFilesAdapter(excelFiles) { _, excelFile, _ ->
+        if (aClass == null || aClass?.name == null) {
+            toast("Không thể import bảng điểm kiểm tra lại lớp học và môn học")
+            return@ExcelFilesAdapter
+        }
         Thread().run {
             excelFile.path?.let {
-                val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it)
+                val students: ArrayList<Student> = ReadWriteExcelFile.readStudentExcel(it, aClass!!.name)
                 if (students.isEmpty()) {
-                    toast("Không import được bảng điểm kiểm tra lại file bảng điểm")
+                    toast("Không import được bảng điểm kiểm tra lại bảng điêm, có thể bảng điểm không phải của lớp học này")
                     return@let
                 }
                 updateSubjects(subject, excelFile)
