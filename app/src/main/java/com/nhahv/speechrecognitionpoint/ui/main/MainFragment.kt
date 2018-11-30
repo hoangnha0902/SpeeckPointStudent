@@ -250,6 +250,7 @@ class MainFragment : Fragment() {
         return Gson().fromJson<ArrayList<Student>>(value)
     }
 
+    // TODO word receiver from Speech
     fun onTextRecognition(matches: String) {
         textSpeech.text = matches
         if (checkNameIsExist(matches)) {

@@ -101,7 +101,8 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
             val excelFile = subject?.excel
             Thread().run {
                 (requireActivity() as MainActivity).showProgress()
-                val isWrite = ReadWriteExcelFile.writeStudentExcel(excelFile!!, pathFolder!!, "${subject?.subjectName}_${aClass?.name}_${subject?.semester?.getSemesterName()}_${aClass?.year}.xls", getStudentList())
+                val nameFile = "${subject?.subjectName}_${aClass?.name}_${subject?.semester?.getSemesterName()}_${aClass?.year}.xls"
+                val isWrite = ReadWriteExcelFile.writeStudentExcel(excelFile!!, pathFolder!!, nameFile, getStudentList(), subject?.subjectName)
                 if (isWrite) {
                     toast("Export bảng điểm thành công")
                 } else {
@@ -202,7 +203,7 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun getStudentList(): ArrayList<Student> {
-        val value = sharePrefs().get(Constant.NAME_STUDENT_OF_SUBJECT(requireContext(),aClass?.name, subject?.subjectName, subject?.semester), "")
+        val value = sharePrefs().get(Constant.NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, subject?.subjectName, subject?.semester), "")
         if (value.isEmpty()) {
             return ArrayList()
         }

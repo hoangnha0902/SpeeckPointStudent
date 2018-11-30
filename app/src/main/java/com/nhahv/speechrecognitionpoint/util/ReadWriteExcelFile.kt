@@ -1,5 +1,6 @@
 package com.nhahv.speechrecognitionpoint.util
 
+import android.text.TextUtils
 import com.nhahv.speechrecognitionpoint.data.models.FileExcel
 import com.nhahv.speechrecognitionpoint.data.models.Student
 import org.apache.poi.ss.usermodel.CellType
@@ -31,6 +32,8 @@ object ReadWriteExcelFile {
 
     private const val ROW_CLASS = 3
     private const val CELL_CLASS = 0
+
+    private const val TITLE_EXCEL = "BẢNG ĐIỂM MÔN %s HKI  LỚP 10A1\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
 
 
     enum class ImportStatus {
@@ -113,7 +116,7 @@ object ReadWriteExcelFile {
         }
     }
 
-    fun writeStudentExcel(excelFile: FileExcel, path: String, name: String, students: ArrayList<Student>): Boolean {
+    fun writeStudentExcel(excelFile: FileExcel, path: String, name: String, students: ArrayList<Student>, subjectName: String?): Boolean {
         try {
             val fileWrite = File(path, name)
             if (fileWrite.exists()) {
@@ -121,6 +124,14 @@ object ReadWriteExcelFile {
             }
             val workbook = WorkbookFactory.create(File(excelFile.parent, excelFile.nameFile + ".xls"))
             val sheet = workbook.getSheetAt(0)
+
+
+            val cellClass = sheet.getRow(ROW_CLASS).getCell(CELL_CLASS)
+
+            if (cellClass.cellType == CellType.STRING && !TextUtils.isEmpty(cellClass.stringCellValue)) {
+                cellClass.setCellValue(TITLE_EXCEL.format(subjectName?.toUpperCase()))
+            }
+
             for (i in rowStart..sheet.lastRowNum) {
                 if (i - rowStart < students.size) {
                     val student = students[i - rowStart]
