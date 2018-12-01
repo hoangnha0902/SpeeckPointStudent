@@ -250,26 +250,64 @@ class MainFragment : Fragment() {
         return Gson().fromJson<ArrayList<Student>>(value)
     }
 
-    // TODO word receiver from Speech
+    // todo receive string from speech
     fun onTextRecognition(matches: String) {
         textSpeech.text = matches
         if (checkNameIsExist(matches)) {
 
         } else if (isPointing) {
-            matches.replace(",", ".")
+            val textSpeech = replaceNumber(matches)
             try {
-                val point = CommonUtils.round(matches.toDouble(), 2)
+                val point = CommonUtils.round(textSpeech.toDouble(), 2)
                 writePointToStudent(point)
             } catch (ex: NumberFormatException) {
                 toast("Nhập lai điểm")
             }
+        } else if (!isPointing) {
+            try {
+                val textSpeech = replaceNumber(matches)
+                checkSTTOfStudent(textSpeech)
+            } catch (ex: NumberFormatException) {
+                toast("Nhập lai Tên học sinh, hoặc STT")
+            }
         }
+    }
+
+    private fun replaceNumber(textReplace: String): String {
+        return textReplace.toLowerCase()
+                .replace(" ","")
+                .replace(",", ".")
+                .replace("một", "1")
+                .replace("hai", "2")
+                .replace("hay", "2")
+                .replace("hài", "2")
+                .replace("bai", "3")
+                .replace("bốn", "4")
+                .replace("năm", "5")
+                .replace("sáu", "6")
+                .replace("bảy", "7")
+                .replace("tám", "8")
+                .replace("chín", "9")
+                .replace("mười", "10")
+                .replace("mười một", "11")
 
     }
 
     private fun checkNameIsExist(name: String): Boolean {
         for ((index, student) in students.withIndex()) {
             if (name.trim() == student.name) {
+                println("=============== $index")
+                indexChange = index
+                isPointing = true
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun checkSTTOfStudent(stt: String): Boolean {
+        for ((index, student) in students.withIndex()) {
+            if (stt.trim().toUpperCase() == student.stt.trim().toUpperCase()) {
                 println("=============== $index")
                 indexChange = index
                 isPointing = true
