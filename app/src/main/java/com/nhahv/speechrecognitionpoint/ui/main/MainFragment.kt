@@ -254,8 +254,9 @@ class MainFragment : Fragment() {
     fun onTextRecognition(matches: String) {
         textSpeech.text = matches
         if (checkNameIsExist(matches)) {
-
-        } else if (isPointing) {
+            return
+        }
+        if (isPointing) {
             val textSpeech = replaceNumber(matches)
             try {
                 val point = CommonUtils.round(textSpeech.toDouble(), 2)
@@ -263,19 +264,19 @@ class MainFragment : Fragment() {
             } catch (ex: NumberFormatException) {
                 toast("Nhập lai điểm")
             }
-        } else if (!isPointing) {
-            try {
-                val textSpeech = replaceNumber(matches)
-                checkSTTOfStudent(textSpeech)
-            } catch (ex: NumberFormatException) {
-                toast("Nhập lai Tên học sinh, hoặc STT")
-            }
+            return
+        }
+        try {
+            val textSpeech = replaceNumber(matches)
+            checkSTTOfStudent(textSpeech)
+        } catch (ex: NumberFormatException) {
+            toast("Nhập lai Tên học sinh, hoặc STT")
         }
     }
 
     private fun replaceNumber(textReplace: String): String {
         return textReplace.toLowerCase()
-                .replace(" ","")
+                .replace(" ", "")
                 .replace(",", ".")
                 .replace("một", "1")
                 .replace("hai", "2")
