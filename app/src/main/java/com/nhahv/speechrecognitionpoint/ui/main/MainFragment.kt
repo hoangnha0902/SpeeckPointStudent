@@ -283,14 +283,15 @@ class MainFragment : Fragment() {
                 .replace("hay", "2")
                 .replace("hài", "2")
                 .replace("bai", "3")
+                .replace("ba", "3")
                 .replace("bốn", "4")
                 .replace("năm", "5")
                 .replace("sáu", "6")
                 .replace("bảy", "7")
                 .replace("tám", "8")
                 .replace("chín", "9")
+                .replace("mườimột", "11")
                 .replace("mười", "10")
-                .replace("mười một", "11")
 
     }
 

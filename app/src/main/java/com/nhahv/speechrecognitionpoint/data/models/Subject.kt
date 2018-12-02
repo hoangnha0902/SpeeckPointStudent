@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Subject(var subjectName: String = "",
                    var semester: SemesterType = SemesterType.SEMESTER_I,
-                   var excel: FileExcel? = null) : Parcelable
+                   var excelFile: String? = null) : Parcelable
 
 @Parcelize
 enum class SemesterType(var type: Int) : Parcelable {

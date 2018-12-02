@@ -76,7 +76,7 @@ class SubjectsFragment : Fragment() {
         }
         val nameSubject = ArrayList<String>()
         val subjectsTemp = ArrayList<Subject>()
-        adapter.items.forEach { subject: Subject ->
+       viewModel.getSubjectList().forEach { subject: Subject ->
             if (hasStudentInSubject(subject.subjectName, subject.semester)) {
                 nameSubject.add("${subject.subjectName} - ${subject.semester.getSemester()}")
                 subjectsTemp.add(subject)
@@ -96,7 +96,10 @@ class SubjectsFragment : Fragment() {
                     val studentTemp = studentOfSubject(subjectsTemp[itemCheck].subjectName, subjectsTemp[itemCheck].semester)
 
                     val subjects = viewModel.getSubjectList()
-                    val subject = Subject(subjectName, semesterType, subjectsTemp[itemCheck].excel)
+                    val nameFile = Constant.nameFile(subjectName, semesterType, aClass)
+                    val nameFileSource = subjects[itemCheck].excelFile
+                    ReadWriteExcelFile.copyFileExcel(ReadWriteExcelFile.pathFile(nameFileSource), nameFile)
+                    val subject = Subject(subjectName, semesterType, nameFile)
                     subjects.add(subject)
                     sharePrefs().put(Constant.NAME_SUBJECT_LIST(requireContext(), aClass?.name), subjects)
                     sharePrefs().put(Constant.NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, subjectName, semesterType), studentTemp)

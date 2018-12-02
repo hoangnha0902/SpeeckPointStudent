@@ -23,7 +23,7 @@ class SpeechPoint(context: Context) : RecognitionListener {
         speechIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
         speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language)
         speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language)
-        speechIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, language)
+        speechIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 1000)
 
         speech = SpeechRecognizer.createSpeechRecognizer(context)
         speech.setRecognitionListener(this)

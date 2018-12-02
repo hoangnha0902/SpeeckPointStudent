@@ -1,7 +1,7 @@
 package com.nhahv.speechrecognitionpoint.util
 
+import android.os.Environment
 import android.text.TextUtils
-import com.nhahv.speechrecognitionpoint.data.models.FileExcel
 import com.nhahv.speechrecognitionpoint.data.models.Student
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.DataFormatter
@@ -34,6 +34,8 @@ object ReadWriteExcelFile {
     private const val CELL_CLASS = 0
 
     private const val TITLE_EXCEL = "BẢNG ĐIỂM MÔN %s HKI  LỚP 10A1\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+    private const val FOLDER_NAME = "/speech_point_student"
+    private var PATH_FILE = "${Environment.getExternalStorageDirectory()}$FOLDER_NAME/%s"
 
 
     enum class ImportStatus {
@@ -116,13 +118,14 @@ object ReadWriteExcelFile {
         }
     }
 
-    fun writeStudentExcel(excelFile: FileExcel, path: String, name: String, students: ArrayList<Student>, subjectName: String?): Boolean {
+    fun writeStudentExcel(excelFile: String, path: String, students: ArrayList<Student>, subjectName: String?): Boolean {
         try {
-            val fileWrite = File(path, name)
+            val fileWrite = File(path, excelFile)
             if (fileWrite.exists()) {
                 fileWrite.delete()
             }
-            val workbook = WorkbookFactory.create(File(excelFile.parent, excelFile.nameFile + ".xls"))
+            val pathFile = PATH_FILE.format(excelFile)
+            val workbook = WorkbookFactory.create(File(pathFile))
             val sheet = workbook.getSheetAt(0)
 
 
@@ -248,4 +251,14 @@ object ReadWriteExcelFile {
             return false
         }
     }
+
+    fun copyFileExcel(sourceFile: String, nameTargetFile: String) {
+        val folderSpeech = File("${Environment.getExternalStorageDirectory()}$FOLDER_NAME")
+        if (!folderSpeech.exists()) {
+            folderSpeech.mkdir()
+        }
+        File(sourceFile).copyTo(File(pathFile(nameTargetFile)), true)
+    }
+
+    fun pathFile(nameFile: String?) = PATH_FILE.format(nameFile)
 }

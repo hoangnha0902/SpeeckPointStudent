@@ -1,7 +1,6 @@
 package com.nhahv.speechrecognitionpoint.ui.excel
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -101,7 +100,7 @@ class ExcelFragment : Fragment() {
         }
     }
 
-    private fun updateSubjects(subject: Subject?, excelFile: FileExcel) {
+    private fun updateSubjects(subject: Subject?, excelFile: String) {
         if (subject == null) {
             toast("Cập nhật lớp học thất bại")
             return
@@ -115,7 +114,7 @@ class ExcelFragment : Fragment() {
         var isChanged = false
         for (item in subjects) {
             if (convertCompare(item.subjectName) == convertCompare(subject.subjectName)) {
-                item.excel = excelFile
+                item.excelFile = excelFile
                 isChanged = true
             }
         }
@@ -160,15 +159,16 @@ class ExcelFragment : Fragment() {
                 }
                 if (students.isEmpty()) {
                     Timer().schedule(1000) {
-                        println("========== runing")
                         (requireActivity() as MainActivity).hideProgress()
                     }
                     return@let
                 }
-                updateSubjects(subject, excelFile)
+                // copy file
+                val nameFile = "${subject?.subjectName}_${aClass?.name}_${subject?.semester?.getSemesterName()}_${aClass?.year}.xls"
+                ReadWriteExcelFile.copyFileExcel(it, nameFile)
+                updateSubjects(subject, nameFile)
                 sharePrefs().put(NAME_STUDENT_OF_SUBJECT(requireContext(), aClass?.name, subject?.subjectName, semester), students)
                 Timer().schedule(1000) {
-                    println("========== runing")
                     (requireActivity() as MainActivity).hideProgress()
                     (requireActivity() as MainActivity).back()
                 }

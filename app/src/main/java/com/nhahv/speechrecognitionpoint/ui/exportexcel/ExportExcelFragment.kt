@@ -89,7 +89,7 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
 
         exportExcel.setOnClickListener {
             // export excels
-            if (subject == null || subject?.excel == null) {
+            if (subject == null || subject?.excelFile == null) {
                 toast("Không đọc được link file bảng điểm gốc")
                 return@setOnClickListener
             }
@@ -98,17 +98,18 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
                 return@setOnClickListener
             }
 
-            val excelFile = subject?.excel
-            Thread().run {
-                (requireActivity() as MainActivity).showProgress()
-                val nameFile = "${subject?.subjectName}_${aClass?.name}_${subject?.semester?.getSemesterName()}_${aClass?.year}.xls"
-                val isWrite = ReadWriteExcelFile.writeStudentExcel(excelFile!!, pathFolder!!, nameFile, getStudentList(), subject?.subjectName)
-                if (isWrite) {
-                    toast("Export bảng điểm thành công")
-                } else {
-                    toast("Export bảng điểm thất bại")
+            val excelFile = subject?.excelFile
+            excelFile?.let {
+                Thread().run {
+                    (requireActivity() as MainActivity).showProgress()
+                    val isWrite = ReadWriteExcelFile.writeStudentExcel(it, pathFolder!!, getStudentList(), subject?.subjectName)
+                    if (isWrite) {
+                        toast("Export bảng điểm thành công")
+                    } else {
+                        toast("Export bảng điểm thất bại")
+                    }
+                    (requireActivity() as MainActivity).hideProgress()
                 }
-                (requireActivity() as MainActivity).hideProgress()
             }
 
 
