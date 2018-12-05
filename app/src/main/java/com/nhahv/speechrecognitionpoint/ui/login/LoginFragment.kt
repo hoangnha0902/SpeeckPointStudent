@@ -37,7 +37,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 
         val isLogin = sharePrefs().get(IS_LOGIN, false)
         if (isLogin) {
-            login.findNavController().navigate(R.id.classStudentFragment)
+            navigateClearStack(R.id.action_loginFragment_to_managerFragment)
         }
         val labelName = SharedPrefs.getInstance(requireContext()).get(USER_NAME, "")
         val labelPassword = SharedPrefs.getInstance(requireContext()).get(PASSWORD, "")
@@ -69,7 +69,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                     sharePrefs().put(IS_LOGIN, true)
                     sharePrefs().put(USER_NAME, userName.text.toString())
                     sharePrefs().put(PASSWORD, password.text.toString())
-                    navigateClearStack(login, R.id.action_loginFragment_to_classStudentFragment)
+                    navigateClearStack(login, R.id.action_loginFragment_to_managerFragment)
                 }
             }
         }
@@ -82,7 +82,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
         }
 
         loginWithoutUser.setOnClickListener {
-            navigateClearStack(loginWithoutUser, R.id.action_loginFragment_to_classStudentFragment)
+            navigateClearStack(loginWithoutUser, R.id.action_loginFragment_to_managerFragment)
         }
     }
 

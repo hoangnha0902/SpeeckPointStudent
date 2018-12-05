@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                 val exportFragment = currentFragment<ExportExcelFragment>()
                 exportFragment?.onBackPress()
             }
-            R.id.classStudentFragment -> finish()
+            R.id.managerFragment -> finish()
             R.id.loginFragment -> finish()
             else -> Navigation.findNavController(this, R.id.navLoginHost).popBackStack()
         }

@@ -14,8 +14,8 @@
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_classStudentFragment"
-            app:destination="@id/classStudentFragment" />
+            android:id="@+id/action_loginFragment_to_managerFragment"
+            app:destination="@id/managerFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_register_to_class"
             app:destination="@id/classStudentFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_managerFragment"
+            app:destination="@id/managerFragment" />
     </fragment>
     <fragment
         android:id="@+id/classStudentFragment"
@@ -112,5 +115,21 @@
             android:name="classes"
             app:argType="com.nhahv.speechrecognitionpoint.data.models.AClass" />
     </fragment>
+    <fragment
+        android:id="@+id/managerFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.manager.ManagerFragment"
+        android:label="manager_fragment"
+        tools:layout="@layout/manager_fragment" >
+        <action
+            android:id="@+id/action_managerFragment_to_classStudentFragment"
+            app:destination="@id/classStudentFragment" />
+        <action
+            android:id="@+id/action_managerFragment_to_examFragment"
+            app:destination="@id/examFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/examFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.exam.ExamFragment"
+        android:label="ExamFragment" />
 
 </navigation>

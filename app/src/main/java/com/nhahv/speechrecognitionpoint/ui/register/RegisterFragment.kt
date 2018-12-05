@@ -60,8 +60,7 @@ class RegisterFragment : androidx.fragment.app.Fragment() {
             sharePrefs().put(USER_NAME, userName.text.toString())
             sharePrefs().put(PASSWORD, password.text.toString())
             sharePrefs().get(Constant.IS_LOGIN, true)
-            register.findNavController().navigate(R.id.action_register_to_class, null, NavOptions.Builder().setClearTask(true).build())
-
+            navigateClearStack(R.id.action_registerFragment_to_managerFragment)
         }
         showPassword.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
