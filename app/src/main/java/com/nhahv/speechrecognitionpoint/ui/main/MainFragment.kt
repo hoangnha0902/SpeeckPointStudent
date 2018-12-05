@@ -44,7 +44,7 @@ class MainFragment : Fragment() {
     var typeOfPoint: TypeOfTypePoint = TypeOfTypePoint.TYPE_1
     lateinit var title: String
     private val studentAdapter by lazy {
-        StudentsAdapter(students, typePoint, typeOfPoint) { view, student, i -> }
+        StudentsAdapter(students, typePoint, typeOfPoint) { _, _, _ -> }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,11 +99,11 @@ class MainFragment : Fragment() {
                 AlertDialog.Builder(requireContext())
                         .setTitle("Xóa điểm của tất cả học sinh")
                         .setMessage("Xóa ${typeOfPoint.toString()}  của điểm ${typePoint.toString()} của tất cả học sinh")
-                        .setPositiveButton("OK") { dialog, which ->
+                        .setPositiveButton("OK") { dialog, _ ->
                             deletePointAllStudent()
                             dialog.dismiss()
                         }
-                        .setNegativeButton("Cancel") { dialog, which ->
+                        .setNegativeButton("Cancel") { dialog, _ ->
                             dialog.dismiss()
                         }
                         .show()
@@ -120,20 +120,20 @@ class MainFragment : Fragment() {
 
     private fun initViews() {
         studentList.adapter = studentAdapter
-        studentAdapter.setOnRestoreListener { swipeLayout, student, i ->
+        studentAdapter.setOnRestoreListener { _, student, i ->
             restorePointStudent(student, i)
             notifyAdapter()
         }
-        studentAdapter.setOnDeleteListener { swipeLayout, student, i ->
+        studentAdapter.setOnDeleteListener { _, student, _ ->
             AlertDialog.Builder(requireContext())
                     .setTitle("Xóa điểm của học sinh ${student.name}")
                     .setMessage("Xóa ${typeOfPoint.toString()}  của điểm ${typePoint.toString()}")
-                    .setPositiveButton("OK") { dialog, which ->
+                    .setPositiveButton("OK") { dialog, _ ->
                         deletePointOfStudent(student)
                         notifyAdapter()
                         dialog.dismiss()
                     }
-                    .setNegativeButton("Cancel") { dialog, which ->
+                    .setNegativeButton("Cancel") { dialog, _ ->
                         dialog.dismiss()
                     }
                     .show()

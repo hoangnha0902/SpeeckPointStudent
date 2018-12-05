@@ -127,11 +127,11 @@ class ExcelFragment : Fragment() {
         AlertDialog.Builder(requireContext())
                 .setTitle("Import danh sách học sinh")
                 .setMessage("Môn học đã có danh sách học sinh, bạn có muốn tiếp tục import hay không")
-                .setPositiveButton("Có") { dialog, which ->
+                .setPositiveButton("Có") { dialog, _ ->
                     dialog.dismiss()
                     readFileExcel(excelFile, nameClass)
                 }
-                .setNegativeButton("Không") { dialog, which ->
+                .setNegativeButton("Không") { dialog, _ ->
                     dialog.dismiss()
                 }.show()
 
