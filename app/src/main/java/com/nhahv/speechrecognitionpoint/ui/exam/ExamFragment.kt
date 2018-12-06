@@ -1,16 +1,22 @@
 package com.nhahv.speechrecognitionpoint.ui.exam
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
-
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.ExamObject
+import com.nhahv.speechrecognitionpoint.util.SharedPrefs
+import com.nhahv.speechrecognitionpoint.util.fromJson
+import com.nhahv.speechrecognitionpoint.util.put
+import com.nhahv.speechrecognitionpoint.util.sharePrefs
 import kotlinx.android.synthetic.main.exam_fragment.*
+import kotlinx.android.synthetic.main.item_exam.view.*
 
 class ExamFragment : Fragment() {
 
@@ -26,19 +32,44 @@ class ExamFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ExamViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        examObjectList.add(ExamObject())
-        examObjectList.add(ExamObject())
-        examObjectList.add(ExamObject())
-        examObjectList.add(ExamObject())
         examList.adapter = examAdapter
+        refresh()
+        examCreate.setOnClickListener {
+            fragmentManager?.let {
+                val fm = it.beginTransaction()
+                val prev = it.findFragmentByTag("examCreate")
+                if (prev != null) {
+                    fm.remove(prev)
+                }
+                fm.addToBackStack(null)
+                val dialog = ExamCreateFragment.newInstance()
+                dialog.createExamCallback { examObject ->
+                    examObjectList.add(examObject)
+                    updateExamList(examObjectList)
+                    refresh()
+                    println(examObject)
+                }
+                dialog.show(fm, "examCreate")
+            }
+        }
+    }
 
+    private fun refresh() {
+        examObjectList.clear()
+        val value = sharePrefs().getString(SharedPrefs.PREF_EXAM_LIST, "")
+        if (TextUtils.isEmpty(value) || value == null || value.isEmpty()) {
+            return
+        }
+        examObjectList.addAll(Gson().fromJson<ArrayList<ExamObject>>(value))
+    }
 
+    private fun updateExamList(list: ArrayList<ExamObject>) {
+        sharePrefs().put(SharedPrefs.PREF_EXAM_LIST, list)
     }
 
     class ExamAdapter(
@@ -48,6 +79,14 @@ class ExamFragment : Fragment() {
 
         override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
             super.onBindViewHolder(holder, position)
+
+            val item = items[position]
+            holder.itemView.apply {
+                idExam.text = item.idExam
+                titleExam.text = item.nameExam
+                idSchoolYear.text = item.idSchoolYear
+                nameSchoolYear.text = item.nameSchoolYear
+            }
         }
     }
 
