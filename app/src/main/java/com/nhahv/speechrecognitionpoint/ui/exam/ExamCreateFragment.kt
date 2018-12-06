@@ -26,6 +26,7 @@ class ExamCreateFragment : DialogFragment() {
     }
 
     var listener: ((ExamObject) -> Unit)? = null
+    val items: String = String()
 
     private val yearAdapter: ArrayAdapter<String> by lazy { ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1) }
 
@@ -40,18 +41,16 @@ class ExamCreateFragment : DialogFragment() {
 
         isCancelable = false
         yearAdapter.addAll(Constant.arrayYear)
-
-
         spYear.adapter = yearAdapter
         spYear.setSelection(4)
         cancel.setOnClickListener { dismiss() }
         createGroupExam.setOnClickListener {
 
-            if (TextUtils.isEmpty(edtIdGroupExam.text)) {
+            if (TextUtils.isEmpty(edtSttSubjectExam.text)) {
                 toast("Mã kỳ thi không được để trống")
                 return@setOnClickListener
             }
-            if (TextUtils.isEmpty(edtNameGroupExam.text)) {
+            if (TextUtils.isEmpty(edtIdSubjectExam.text)) {
                 toast("Tên kỳ thi không được để trống")
                 return@setOnClickListener
             }
@@ -60,12 +59,12 @@ class ExamCreateFragment : DialogFragment() {
                 return@setOnClickListener
             }
             getExamList().forEach { it ->
-                if (it.idExam.trim().toLowerCase() == edtIdGroupExam.text.toString().trim().toLowerCase()) {
+                if (it.idExam.trim().toLowerCase() == edtSttSubjectExam.text.toString().trim().toLowerCase()) {
                     toast("Mã kỳ thi đã tồn tại")
                     return@setOnClickListener
                 }
             }
-            val examObject = ExamObject(edtIdGroupExam.text.toString(), edtNameGroupExam.text.toString(), edtIdSchoolYear.text.toString(), spYear.selectedItem.toString())
+            val examObject = ExamObject(edtSttSubjectExam.text.toString(), edtIdSubjectExam.text.toString(), edtIdSchoolYear.text.toString(), spYear.selectedItem.toString())
             listener?.invoke(examObject)
             dismiss()
         }

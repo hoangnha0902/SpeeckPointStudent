@@ -30,5 +30,6 @@ class SharedPrefs private constructor(context: Context) {
         const val PREF_ACCOUNTS = "accounts"
         const val PREF_EXAM_LIST = "pref_exam_list"
         const val PREF_GROUP_EXAM_LIST = "pref_group_exam_list_%s"
+        const val PREF_SUBJECT_EXAM_LIST = "pref_subject_exam_list_%s_%s"
     }
 }

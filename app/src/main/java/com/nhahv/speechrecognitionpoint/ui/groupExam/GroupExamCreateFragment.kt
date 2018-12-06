@@ -37,23 +37,23 @@ class GroupExamCreateFragment : DialogFragment() {
 
         cancel.setOnClickListener { dismiss() }
         createGroupExam.setOnClickListener {
-            if (TextUtils.isEmpty(edtIdGroupExam.text)) {
+            if (TextUtils.isEmpty(edtSttSubjectExam.text)) {
                 toast("Mã nhóm thi không được để trống")
                 return@setOnClickListener
             }
-            if (TextUtils.isEmpty(edtNameGroupExam.text)) {
+            if (TextUtils.isEmpty(edtIdSubjectExam.text)) {
                 toast("Mã nhóm thi không được để trống")
                 return@setOnClickListener
             }
 
             getGroupExamLists().forEach { groupExam: GroupExam ->
-                if (groupExam.idGroupExam.trim().toLowerCase() == edtIdGroupExam.text.toString().trim().toLowerCase()) {
+                if (groupExam.idGroupExam.trim().toLowerCase() == edtSttSubjectExam.text.toString().trim().toLowerCase()) {
                     toast("Mã nhóm thi đã tồn tại")
                     return@setOnClickListener
                 }
             }
-            val groupExam = GroupExam(edtIdGroupExam.text.toString().trim(),
-                    edtNameGroupExam.text.toString().trim(),
+            val groupExam = GroupExam(edtSttSubjectExam.text.toString().trim(),
+                    edtIdSubjectExam.text.toString().trim(),
                     idExamObject ?: "",
                     spYearGroupExam.selectedItem.toString())
             listener?.invoke(groupExam)

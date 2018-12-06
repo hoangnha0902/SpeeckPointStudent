@@ -14,3 +14,9 @@ data class GroupExam(var idGroupExam: String = "",
                      var nameGroupExam: String = "",
                      val idExam: String = "",
                      var nameYearGroupExam: String = "") : Parcelable
+
+
+@Parcelize
+data class SubjectExam(var idSubjectExam: String = "",
+                       var nameSubjectExam: String = "",
+                       val stt: String = "") : Parcelable

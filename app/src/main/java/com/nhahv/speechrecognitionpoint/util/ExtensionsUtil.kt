@@ -105,3 +105,7 @@ fun <T : ViewModel> Fragment.obtainViewModel(viewModelClass: Class<T>, key: Stri
 fun Fragment.prefGroupExam(idExam: String?): String {
     return SharedPrefs.PREF_GROUP_EXAM_LIST.format(idExam)
 }
+
+fun Fragment.prefSubjectExam(idExam: String?, idGroupExam: String?): String {
+    return SharedPrefs.PREF_SUBJECT_EXAM_LIST.format(idExam, idGroupExam)
+}

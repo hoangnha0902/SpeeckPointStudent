@@ -17,12 +17,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Mã kỳ thi: "
-        app:layout_constraintBottom_toBottomOf="@id/edtIdGroupExam"
+        app:layout_constraintBottom_toBottomOf="@id/edtSttSubjectExam"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/edtIdGroupExam" />
+        app:layout_constraintTop_toTopOf="@id/edtSttSubjectExam" />
 
     <EditText
-        android:id="@+id/edtIdGroupExam"
+        android:id="@+id/edtSttSubjectExam"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="4dp"
@@ -43,12 +43,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Tên kỳ thi:"
-        app:layout_constraintBottom_toBottomOf="@+id/edtNameGroupExam"
+        app:layout_constraintBottom_toBottomOf="@+id/edtIdSubjectExam"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtNameGroupExam" />
+        app:layout_constraintTop_toTopOf="@+id/edtIdSubjectExam" />
 
     <EditText
-        android:id="@+id/edtNameGroupExam"
+        android:id="@+id/edtIdSubjectExam"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:minHeight="40dp"
@@ -57,9 +57,9 @@
         android:layout_marginTop="4dp"
         android:background="@drawable/spinner_bg"
         android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/edtIdGroupExam"
-        app:layout_constraintStart_toStartOf="@+id/edtIdGroupExam"
-        app:layout_constraintTop_toBottomOf="@+id/edtIdGroupExam" />
+        app:layout_constraintEnd_toEndOf="@+id/edtSttSubjectExam"
+        app:layout_constraintStart_toStartOf="@+id/edtSttSubjectExam"
+        app:layout_constraintTop_toBottomOf="@+id/edtSttSubjectExam" />
 
 
     <TextView
@@ -80,9 +80,9 @@
         android:background="@drawable/spinner_bg"
         android:inputType="text"
         android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/edtNameGroupExam"
-        app:layout_constraintStart_toStartOf="@+id/edtNameGroupExam"
-        app:layout_constraintTop_toBottomOf="@+id/edtNameGroupExam" />
+        app:layout_constraintEnd_toEndOf="@+id/edtIdSubjectExam"
+        app:layout_constraintStart_toStartOf="@+id/edtIdSubjectExam"
+        app:layout_constraintTop_toBottomOf="@+id/edtIdSubjectExam" />
 
 
     <TextView

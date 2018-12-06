@@ -12,6 +12,8 @@ import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.ExamObject
 import com.nhahv.speechrecognitionpoint.data.models.GroupExam
 import com.nhahv.speechrecognitionpoint.util.*
+import com.nhahv.speechrecognitionpoint.util.Constant.BUNDLE_ID_EXAM
+import com.nhahv.speechrecognitionpoint.util.Constant.BUNDLE_ID_GROUP_EXAM
 import com.nhahv.speechrecognitionpoint.util.Constant.BUNLE_EXAM_OBJECT
 import kotlinx.android.synthetic.main.fragment_group_exam.*
 import kotlinx.android.synthetic.main.item_group_exam.view.*
@@ -24,20 +26,21 @@ class GroupExamFragment : Fragment() {
     val groupExamList = ArrayList<GroupExam>()
     val groupExamAdapter: GroupExamAdapter by lazy {
         GroupExamAdapter(groupExamList) { view, groupExam, i ->
-
+            navigate(R.id.action_groupExam_to_subjectExam, Bundle().apply {
+                putString(BUNDLE_ID_EXAM, groupExam.idExam)
+                putString(BUNDLE_ID_GROUP_EXAM, groupExam.idGroupExam)
+            })
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_group_exam, container, false)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         groupExamLists.adapter = groupExamAdapter
         groupExamList.clear()
         groupExamList.addAll(getGroupExamLists())
@@ -53,7 +56,8 @@ class GroupExamFragment : Fragment() {
                 val dialog = GroupExamCreateFragment.newInstance()
                 dialog.idExamObject = examObject?.idExam
                 dialog.listenerCallback { groupExam ->
-                    groupExamList.add(groupExam)
+                    val temp = groupExam.copy(idExam = examObject?.idExam ?: "")
+                    groupExamList.add(temp)
                     updateGroupExams(groupExamList)
                     groupExamList.clear()
                     groupExamList.addAll(getGroupExamLists())

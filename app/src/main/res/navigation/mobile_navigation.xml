@@ -119,7 +119,7 @@
         android:id="@+id/managerFragment"
         android:name="com.nhahv.speechrecognitionpoint.ui.manager.ManagerFragment"
         android:label="manager_fragment"
-        tools:layout="@layout/manager_fragment" >
+        tools:layout="@layout/manager_fragment">
         <action
             android:id="@+id/action_managerFragment_to_classStudentFragment"
             app:destination="@id/classStudentFragment" />
@@ -130,7 +130,7 @@
     <fragment
         android:id="@+id/examFragment"
         android:name="com.nhahv.speechrecognitionpoint.ui.exam.ExamFragment"
-        android:label="ExamFragment" >
+        android:label="ExamFragment">
         <action
             android:id="@+id/action_examFragment_to_groupExamFragment"
             app:destination="@id/groupExamFragment" />
@@ -139,6 +139,15 @@
         android:id="@+id/groupExamFragment"
         android:name="com.nhahv.speechrecognitionpoint.ui.groupExam.GroupExamFragment"
         android:label="fragment_group_exam"
-        tools:layout="@layout/fragment_group_exam" />
+        tools:layout="@layout/fragment_group_exam">
+        <action
+            android:id="@+id/action_groupExam_to_subjectExam"
+            app:destination="@id/subjectExamFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/subjectExamFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.subjectExam.SubjectExamFragment"
+        android:label="fragment_subject_exam"
+        tools:layout="@layout/fragment_subject_exam" />
 
 </navigation>
