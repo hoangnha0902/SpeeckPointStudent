@@ -12,10 +12,18 @@ object Constant {
     const val IS_LOGIN = "is_login"
     const val CLASSES = "classes"
     const val SUBJECTS = "subjects"
+    const val BUNLE_EXAM_OBJECT = "exam_object"
+
+
     val PATH_APP = Environment.getExternalStorageDirectory().absolutePath + "/SpeechPoint"
     val arrayYear = arrayListOf(
             "2014 - 2015", "2015 - 2016", "2016 - 2017", "2017 - 2018", "2018 - 2019",
             "2019 - 2020", "2020 - 2021", "2021 - 2022", "2023 - 2024"
+    )
+
+    val arrayYearGroupExam = arrayListOf(
+            "2014", "2015", "2016", "2017", "2018",
+            "2019", "2020", "2021", "2023"
     )
 
     fun NAME_CLASS_LIST(context: Context): String {

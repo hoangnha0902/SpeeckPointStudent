@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Mã kỳ thi: "
+        android:text="Mã nhóm thi: "
         app:layout_constraintBottom_toBottomOf="@id/edtIdGroupExam"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/edtIdGroupExam" />
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Tên kỳ thi:"
+        android:text="Tên nhóm thi:"
         app:layout_constraintBottom_toBottomOf="@+id/edtNameGroupExam"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtNameGroupExam" />
@@ -50,12 +50,12 @@
     <EditText
         android:id="@+id/edtNameGroupExam"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:minHeight="40dp"
-        android:maxLines="3"
-        android:gravity="start"
+        android:layout_height="40dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/spinner_bg"
+        android:gravity="start"
+        android:maxLines="3"
+        android:minHeight="40dp"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="@+id/edtIdGroupExam"
         app:layout_constraintStart_toStartOf="@+id/edtIdGroupExam"
@@ -63,34 +63,11 @@
 
 
     <TextView
-        android:id="@+id/idSchoolYear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="Mã năm học:"
-        app:layout_constraintBottom_toBottomOf="@+id/edtIdSchoolYear"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtIdSchoolYear" />
-
-    <EditText
-        android:id="@+id/edtIdSchoolYear"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/spinner_bg"
-        android:inputType="text"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/edtNameGroupExam"
-        app:layout_constraintStart_toStartOf="@+id/edtNameGroupExam"
-        app:layout_constraintTop_toBottomOf="@+id/edtNameGroupExam" />
-
-
-    <TextView
         android:id="@+id/textClassYear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Tên năm học: "
+        android:text="Năm học: "
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/linearLayout" />
@@ -104,12 +81,12 @@
         android:orientation="vertical"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/edtIdSchoolYear"
-        app:layout_constraintStart_toStartOf="@+id/edtIdSchoolYear"
-        app:layout_constraintTop_toBottomOf="@+id/edtIdSchoolYear">
+        app:layout_constraintEnd_toEndOf="@+id/edtNameGroupExam"
+        app:layout_constraintStart_toStartOf="@+id/edtNameGroupExam"
+        app:layout_constraintTop_toBottomOf="@+id/edtNameGroupExam">
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spYear"
+            android:id="@+id/spYearGroupExam"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
@@ -149,7 +126,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Tạo kỳ thi"
+        android:text="Tạo nhóm thi"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"

@@ -130,6 +130,15 @@
     <fragment
         android:id="@+id/examFragment"
         android:name="com.nhahv.speechrecognitionpoint.ui.exam.ExamFragment"
-        android:label="ExamFragment" />
+        android:label="ExamFragment" >
+        <action
+            android:id="@+id/action_examFragment_to_groupExamFragment"
+            app:destination="@id/groupExamFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupExamFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.groupExam.GroupExamFragment"
+        android:label="fragment_group_exam"
+        tools:layout="@layout/fragment_group_exam" />
 
 </navigation>

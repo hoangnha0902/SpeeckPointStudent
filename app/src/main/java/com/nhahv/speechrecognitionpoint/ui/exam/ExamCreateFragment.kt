@@ -45,13 +45,13 @@ class ExamCreateFragment : DialogFragment() {
         spYear.adapter = yearAdapter
         spYear.setSelection(4)
         cancel.setOnClickListener { dismiss() }
-        createExan.setOnClickListener {
+        createGroupExam.setOnClickListener {
 
-            if (TextUtils.isEmpty(edtIdExam.text)) {
+            if (TextUtils.isEmpty(edtIdGroupExam.text)) {
                 toast("Mã kỳ thi không được để trống")
                 return@setOnClickListener
             }
-            if (TextUtils.isEmpty(edtNameExam.text)) {
+            if (TextUtils.isEmpty(edtNameGroupExam.text)) {
                 toast("Tên kỳ thi không được để trống")
                 return@setOnClickListener
             }
@@ -60,12 +60,12 @@ class ExamCreateFragment : DialogFragment() {
                 return@setOnClickListener
             }
             getExamList().forEach { it ->
-                if (it.idExam.trim().toLowerCase() == edtIdExam.text.toString().trim().toLowerCase()) {
+                if (it.idExam.trim().toLowerCase() == edtIdGroupExam.text.toString().trim().toLowerCase()) {
                     toast("Mã kỳ thi đã tồn tại")
                     return@setOnClickListener
                 }
             }
-            val examObject = ExamObject(edtIdExam.text.toString(), edtNameExam.text.toString(), edtIdSchoolYear.text.toString(), spYear.selectedItem.toString())
+            val examObject = ExamObject(edtIdGroupExam.text.toString(), edtNameGroupExam.text.toString(), edtIdSchoolYear.text.toString(), spYear.selectedItem.toString())
             listener?.invoke(examObject)
             dismiss()
         }

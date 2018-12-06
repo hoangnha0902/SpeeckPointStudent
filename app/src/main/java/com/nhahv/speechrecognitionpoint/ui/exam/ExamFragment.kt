@@ -11,10 +11,7 @@ import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
 import com.nhahv.speechrecognitionpoint.R
 import com.nhahv.speechrecognitionpoint.data.models.ExamObject
-import com.nhahv.speechrecognitionpoint.util.SharedPrefs
-import com.nhahv.speechrecognitionpoint.util.fromJson
-import com.nhahv.speechrecognitionpoint.util.put
-import com.nhahv.speechrecognitionpoint.util.sharePrefs
+import com.nhahv.speechrecognitionpoint.util.*
 import kotlinx.android.synthetic.main.exam_fragment.*
 import kotlinx.android.synthetic.main.item_exam.view.*
 
@@ -22,7 +19,13 @@ class ExamFragment : Fragment() {
 
     private lateinit var viewModel: ExamViewModel
     private val examObjectList = ArrayList<ExamObject>()
-    private val examAdapter: ExamAdapter by lazy { ExamAdapter(examObjectList) { view, examObject, i -> } }
+    private val examAdapter: ExamAdapter by lazy {
+        ExamAdapter(examObjectList) { view, examObject, i ->
+            navigate(R.id.action_examFragment_to_groupExamFragment, Bundle().apply {
+                putParcelable(Constant.BUNLE_EXAM_OBJECT, examObject)
+            })
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

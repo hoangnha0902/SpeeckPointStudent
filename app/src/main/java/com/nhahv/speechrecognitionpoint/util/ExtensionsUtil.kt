@@ -100,3 +100,8 @@ inline fun <reified T> Fragment.putPref(key: String, value: T) {
 
 fun <T : ViewModel> Fragment.obtainViewModel(viewModelClass: Class<T>, key: String?) =
         ViewModelProviders.of(this, ViewModelFactory.getInstance(requireContext(), key)).get(viewModelClass)
+
+
+fun Fragment.prefGroupExam(idExam: String?): String {
+    return SharedPrefs.PREF_GROUP_EXAM_LIST.format(idExam)
+}
