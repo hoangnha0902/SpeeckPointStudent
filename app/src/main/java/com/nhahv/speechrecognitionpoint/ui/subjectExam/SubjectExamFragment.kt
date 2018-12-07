@@ -22,7 +22,12 @@ class SubjectExamFragment : Fragment() {
     private val subjectExams = ArrayList<SubjectExam>()
     private val subjectExamAdapter: SubjectExamAdapter by lazy {
         SubjectExamAdapter(subjectExams) { view, subjectExam, i ->
-
+            navigate(R.id.action_subjectExamFragment_to_mainExamFragment, Bundle().apply {
+                putString(Constant.BUNDLE_ID_EXAM, idExamObject)
+                putString(Constant.BUNDLE_ID_GROUP_EXAM, idGroupExam)
+                putString(Constant.BUNDLE_ID_SUBJECT_EXAM, subjectExam.idSubjectExam)
+                putString(Constant.BUNDLE_NAME_SUBJECT_EXAM, subjectExam.nameSubjectExam)
+            })
         }
     }
 

@@ -148,6 +148,25 @@
         android:id="@+id/subjectExamFragment"
         android:name="com.nhahv.speechrecognitionpoint.ui.subjectExam.SubjectExamFragment"
         android:label="fragment_subject_exam"
-        tools:layout="@layout/fragment_subject_exam" />
+        tools:layout="@layout/fragment_subject_exam" >
+        <action
+            android:id="@+id/action_subjectExamFragment_to_mainExamFragment"
+            app:destination="@id/mainExamFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainExamFragment"
+        android:name="com.nhahv.speechrecognitionpoint.ui.mainExam.MainExamFragment"
+        android:label="main_exam_fragment"
+        tools:layout="@layout/main_exam_fragment" >
+        <action
+            android:id="@+id/action_mainExamFragment_to_exportExcelFragment"
+            app:destination="@id/exportExcelFragment" />
+        <action
+            android:id="@+id/action_mainExamFragment_to_fileExcelFragment"
+            app:destination="@id/fileExcelFragment" />
+        <action
+            android:id="@+id/action_mainExamFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 
 </navigation>
