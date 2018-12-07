@@ -109,3 +109,8 @@ fun Fragment.prefGroupExam(idExam: String?): String {
 fun Fragment.prefSubjectExam(idExam: String?, idGroupExam: String?): String {
     return SharedPrefs.PREF_SUBJECT_EXAM_LIST.format(idExam, idGroupExam)
 }
+
+fun Fragment.prefMarmotName(idExam: String?, idGroupExam: String?, idSubjectExam: String?): String {
+    return SharedPrefs.PREF_MARMOT_EXAM.format(idExam, idGroupExam, idSubjectExam)
+}
+

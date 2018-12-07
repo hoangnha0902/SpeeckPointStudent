@@ -2,6 +2,7 @@ package com.nhahv.speechrecognitionpoint.util
 
 import android.os.Environment
 import android.text.TextUtils
+import com.nhahv.speechrecognitionpoint.data.models.MarmotExam
 import com.nhahv.speechrecognitionpoint.data.models.Student
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.DataFormatter
@@ -36,6 +37,10 @@ object ReadWriteExcelFile {
     private const val TITLE_EXCEL = "BẢNG ĐIỂM MÔN %s HKI  LỚP 10A1\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
     private const val FOLDER_NAME = "/speech_point_student"
     private var PATH_FILE = "${Environment.getExternalStorageDirectory()}$FOLDER_NAME/%s"
+
+
+    private const val MARMOT_FIRST_CHECK = "Mã phách"
+    private const val MARMOT_SECOND_CHECK = "Số thí sinh"
 
 
     enum class ImportStatus {
@@ -252,12 +257,89 @@ object ReadWriteExcelFile {
         }
     }
 
+
+    private const val ROW_FIRST_CHECK = 0
+    private const val CELL_FIRST_CHECK = 0
+    private const val ROW_SECOND_CHECK = 0
+    private const val CELL_SECOND_CHECK = 1
+    private const val START_ROW_MARMOT = 1
+
+
+    enum class StatusMarmot {
+        ERROR_FILE, SUCCESS
+    }
+
+    fun readMarmotPoint(pathExcelFile: String, callback: ((ArrayList<MarmotExam>, StatusMarmot) -> Unit)) {
+        try {
+            val workbook = WorkbookFactory.create(File(pathExcelFile))
+            val sheet = workbook.getSheetAt(0)
+            val dataFormatter = DataFormatter()
+            val marmotExams = ArrayList<MarmotExam>()
+
+            val firstCheck = sheet.getRow(ROW_FIRST_CHECK).getCell(CELL_FIRST_CHECK)
+            if (firstCheck.cellType != CellType.STRING) {
+                callback.invoke(marmotExams, StatusMarmot.ERROR_FILE)
+                return
+            }
+            if (firstCheck.stringCellValue.trim().toLowerCase() != MARMOT_FIRST_CHECK.trim().toLowerCase()) {
+                callback.invoke(marmotExams, StatusMarmot.ERROR_FILE)
+                return
+            }
+
+            val secondCheck = sheet.getRow(ROW_SECOND_CHECK).getCell(CELL_SECOND_CHECK)
+            if (secondCheck.cellType != CellType.STRING) {
+                callback.invoke(marmotExams, StatusMarmot.ERROR_FILE)
+                return
+            }
+            if (secondCheck.stringCellValue.trim().toLowerCase() != MARMOT_SECOND_CHECK.trim().toLowerCase()) {
+                callback.invoke(marmotExams, StatusMarmot.ERROR_FILE)
+                return
+            }
+            for (row in sheet) {
+                if (row.rowNum >= START_ROW_MARMOT && row.rowNum <= sheet.lastRowNum) {
+                    val marmotExam = MarmotExam()
+                    for (cellRow in row) {
+                        val cellValue = dataFormatter.formatCellValue(cellRow)
+                        when (cellRow.columnIndex) {
+                            0 -> {
+                                marmotExam.idMarmot = cellValue
+                            }
+                            1 -> {
+                                marmotExam.numberStudent = cellValue
+                            }
+                            else -> {
+                                println("vuot qua chuoi")
+                            }
+                        }
+                    }
+                    marmotExams.add(marmotExam)
+                }
+            }
+            workbook.close()
+            callback.invoke(marmotExams, StatusMarmot.SUCCESS)
+            return
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            callback.invoke(ArrayList(), StatusMarmot.ERROR_FILE)
+        }
+    }
+
     fun copyFileExcel(sourceFile: String, nameTargetFile: String) {
         val folderSpeech = File("${Environment.getExternalStorageDirectory()}$FOLDER_NAME")
         if (!folderSpeech.exists()) {
             folderSpeech.mkdir()
         }
         File(sourceFile).copyTo(File(pathFile(nameTargetFile)), true)
+    }
+
+    fun copyFileExcel(sourceFile: String, nameTargetFile: String, callback: ((String, String) -> Unit)?) {
+        val folderSpeech = File("${Environment.getExternalStorageDirectory()}$FOLDER_NAME")
+        if (!folderSpeech.exists()) {
+            folderSpeech.mkdir()
+        }
+        val file = File(pathFile("$nameTargetFile.xls"))
+        File(sourceFile).copyTo(file, true)
+        callback?.invoke(nameTargetFile, file.path)
     }
 
     fun pathFile(nameFile: String?) = PATH_FILE.format(nameFile)

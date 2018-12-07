@@ -19,7 +19,9 @@ import com.nhahv.speechrecognitionpoint.util.Constant.NAME_SUBJECT_LIST
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
 import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
+import java.lang.NumberFormatException
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 
 class ExcelFragment : Fragment() {
@@ -28,18 +30,51 @@ class ExcelFragment : Fragment() {
     private var subject: Subject? = null
     var semester: SemesterType? = SemesterType.SEMESTER_I
 
+
+    private var idExamObject: String? = null
+    private var idGroupExam: String? = null
+    private var idSubjectExam: String? = null
+    private var nameSubjectExam: String? = null
+    private var isMainExam = false
+
     private val excelFiles: ArrayList<FileExcel> = ArrayList()
     private val excelFileAdapter = ExcelFilesAdapter(excelFiles) { _, excelFile, _ ->
-        if (aClass == null || TextUtils.isEmpty(aClass?.name)) {
-            toast("Không thể import bảng điểm kiểm tra lại lớp học và môn học")
-            return@ExcelFilesAdapter
-        }
-        val value = getStudentList()
-        aClass?.name?.let {
-            if (value.size > 0) {
-                showDialogConfirmImport(excelFile, it)
+        if (isMainExam) {
+            toast("dang la is main exam")
+
+            if (TextUtils.isEmpty(idExamObject)) {
+                toast("Đã xảy ra lỗi không thể import hãy logout và quay lại")
+                return@ExcelFilesAdapter
+            }
+            if (TextUtils.isEmpty(idGroupExam)) {
+                toast("Đã xảy ra lỗi không thể import hãy logout và quay lại")
+                return@ExcelFilesAdapter
+            }
+            if (TextUtils.isEmpty(idSubjectExam)) {
+                toast("Đã xảy ra lỗi không thể import hãy logout và quay lại")
+                return@ExcelFilesAdapter
+            }
+            // TODO import
+            val marmotExams = getMarmotList()
+            if (marmotExams.size > 0) {
+                // show dialog request import
             } else {
-                readFileExcel(excelFile, it)
+                // import now time
+                importMarmotFromExcel(excelFile.path)
+            }
+
+        } else {
+            if (aClass == null || TextUtils.isEmpty(aClass?.name)) {
+                toast("Không thể import bảng điểm kiểm tra lại lớp học và môn học")
+                return@ExcelFilesAdapter
+            }
+            val value = getStudentList()
+            aClass?.name?.let {
+                if (value.size > 0) {
+                    showDialogConfirmImport(excelFile, it)
+                } else {
+                    readFileExcel(excelFile, it)
+                }
             }
         }
     }
@@ -47,9 +82,19 @@ class ExcelFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            aClass = it.getParcelable(CLASSES)
-            subject = it.getParcelable(SUBJECTS)
-            semester = subject?.semester
+            with(it) {
+                isMainExam = getBoolean(Constant.BUNDLE_IS_MAIN_EXAM)
+                if (isMainExam) {
+                    idExamObject = getString(Constant.BUNDLE_ID_EXAM)
+                    idGroupExam = getString(Constant.BUNDLE_ID_GROUP_EXAM)
+                    idSubjectExam = getString(Constant.BUNDLE_ID_SUBJECT_EXAM)
+                    nameSubjectExam = getString(Constant.BUNDLE_NAME_SUBJECT_EXAM)
+                } else {
+                    aClass = it.getParcelable(CLASSES)
+                    subject = it.getParcelable(SUBJECTS)
+                    semester = subject?.semester
+                }
+            }
         }
         (requireActivity() as MainActivity).readExcel { excelFiles.addAll(FileExcelManager.getExcelFiles()) }
     }
@@ -182,5 +227,71 @@ class ExcelFragment : Fragment() {
             return ArrayList()
         }
         return Gson().fromJson<ArrayList<Student>>(value)
+    }
+
+
+    // TODO exam
+    private fun getMarmotList(): ArrayList<MarmotExam> {
+        val value = sharePrefs().get(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), "")
+        if (TextUtils.isEmpty(value)) {
+            return ArrayList()
+        }
+        return Gson().fromJson<ArrayList<MarmotExam>>(value)
+    }
+
+    private fun importMarmotFromExcel(pathFile: String?) {
+        Thread().run {
+            pathFile?.let {
+                (requireActivity() as MainActivity).showProgress()
+                ReadWriteExcelFile.readMarmotPoint(it) { marmotExams, statusMarmot ->
+                    when (statusMarmot) {
+                        ReadWriteExcelFile.StatusMarmot.ERROR_FILE -> {
+                            toast("Không thể import file excel, hãy thử import lại")
+                            Timer().schedule(1000) {
+                                (requireActivity() as MainActivity).hideProgress()
+                            }
+                        }
+                        ReadWriteExcelFile.StatusMarmot.SUCCESS -> {
+
+                            updateMarmotExamsToSharePref(marmotExams)
+                            ReadWriteExcelFile.copyFileExcel(pathFile, "MonThi_${nameSubjectExam}_MaKyThi_${idExamObject}_MaNhomThi_${idGroupExam}_MaMonThi_$idSubjectExam") { nameFile, pathFile ->
+                                println("name file $nameFile")
+                                println("path file $pathFile")
+                                updateSubjectExam(nameFile, pathFile)
+                            }
+                            Timer().schedule(1000) {
+                                (requireActivity() as MainActivity).hideProgress()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateMarmotExamsToSharePref(list: ArrayList<MarmotExam>) {
+        for (item in list) {
+            item.pointOfMarmot = generateMarmotExamItem(item)
+        }
+        println(list)
+        sharePrefs().put(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), list)
+    }
+
+    private fun updateSubjectExam(nameFile: String?, pathFile: String?) {
+
+    }
+
+    private fun generateMarmotExamItem(marmotExam: MarmotExam): ArrayList<MarmotExamItem> {
+        return try {
+            val marmotExamItems = ArrayList<MarmotExamItem>()
+            for (i in 0 until marmotExam.numberStudent.toInt()) {
+                val idMarmotExamItem = if (i < 10) "${marmotExam.idMarmot}0${i.plus(1)}" else "${marmotExam.idMarmot}i"
+                marmotExamItems.add(MarmotExamItem(idMarmotExamItem, ""))
+            }
+            marmotExamItems
+        } catch (ex: NumberFormatException) {
+            ex.printStackTrace()
+            ArrayList()
+        }
     }
 }

@@ -28,7 +28,6 @@ class MainExamFragment : Fragment() {
                 idSubjectExam = getString(Constant.BUNDLE_ID_SUBJECT_EXAM)
                 nameSubjectExam = getString(Constant.BUNDLE_NAME_SUBJECT_EXAM)
             }
-
         }
     }
 
@@ -56,7 +55,11 @@ class MainExamFragment : Fragment() {
         when (item?.itemId) {
             R.id.fileExcelFragment -> {
                 navigate(R.id.action_mainExamFragment_to_fileExcelFragment, Bundle().apply {
-
+                    putString(Constant.BUNDLE_ID_EXAM, idExamObject)
+                    putString(Constant.BUNDLE_ID_GROUP_EXAM, idGroupExam)
+                    putString(Constant.BUNDLE_ID_SUBJECT_EXAM, idSubjectExam)
+                    putString(Constant.BUNDLE_NAME_SUBJECT_EXAM, nameSubjectExam)
+                    putBoolean(Constant.BUNDLE_IS_MAIN_EXAM, true)
                 })
             }
             R.id.exportExcelFragment -> {

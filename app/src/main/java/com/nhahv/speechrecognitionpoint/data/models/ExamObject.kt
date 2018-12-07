@@ -19,4 +19,17 @@ data class GroupExam(var idGroupExam: String = "",
 @Parcelize
 data class SubjectExam(var idSubjectExam: String = "",
                        var nameSubjectExam: String = "",
-                       val stt: String = "") : Parcelable
+                       val stt: String = "",
+                       var nameFile: String? = null,
+                       var pathFile: String? = null) : Parcelable
+
+
+@Parcelize
+data class MarmotExam(var idMarmot: String = "",
+                      var numberStudent: String = "0",
+                      var pointOfMarmot: ArrayList<MarmotExamItem> = ArrayList()
+) : Parcelable
+
+@Parcelize
+data class MarmotExamItem(var idMarmot: String = "",
+                          var pointOfMarmot: String = "") : Parcelable

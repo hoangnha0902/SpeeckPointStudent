@@ -17,6 +17,7 @@ object Constant {
     const val BUNDLE_ID_GROUP_EXAM = "id_group_exam"
     const val BUNDLE_ID_SUBJECT_EXAM = "id_subject_exam"
     const val BUNDLE_NAME_SUBJECT_EXAM = "name_subject_exam"
+    const val BUNDLE_IS_MAIN_EXAM = "is_main_exam"
 
 
     val PATH_APP = Environment.getExternalStorageDirectory().absolutePath + "/SpeechPoint"
