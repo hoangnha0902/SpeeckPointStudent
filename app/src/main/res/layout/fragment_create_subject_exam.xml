@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
-    android:minWidth="350dp"
+    android:minWidth="370dp"
     android:minHeight="200dp"
     android:paddingStart="8dp"
     android:paddingEnd="8dp"
@@ -25,74 +25,47 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/sttSubjectExam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="STT: "
-        app:layout_constraintBottom_toBottomOf="@+id/edtSttSubject"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtSttSubject" />
-
-    <TextView
         android:id="@+id/idSubjectExam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mã môn thi:"
-        app:layout_constraintBottom_toBottomOf="@+id/edtIdSubjectExam"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtIdSubjectExam" />
+        app:layout_constraintBottom_toBottomOf="@+id/edtNameSubjectExam"
+        app:layout_constraintStart_toStartOf="@+id/nameSubjectExam"
+        app:layout_constraintTop_toTopOf="@+id/edtNameSubjectExam" />
 
     <TextView
         android:id="@+id/nameSubjectExam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tên môn thi:"
-        app:layout_constraintBottom_toBottomOf="@+id/edtNameSubject"
+        app:layout_constraintBottom_toBottomOf="@+id/edtIdSubjectExam"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtNameSubject" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="end"
-        app:constraint_referenced_ids="sttSubjectExam,idSubjectExam,nameSubjectExam" />
-
-    <EditText
-        android:id="@+id/edtSttSubject"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/spinner_bg"
-        android:inputType="textPersonName"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/barrier2"
-        app:layout_constraintTop_toBottomOf="@+id/titleSubjectExam" />
+        app:layout_constraintTop_toTopOf="@+id/edtIdSubjectExam" />
 
     <EditText
         android:id="@+id/edtIdSubjectExam"
         android:layout_width="0dp"
         android:layout_height="40dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/spinner_bg"
         android:inputType="textPersonName"
         android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/edtSttSubject"
-        app:layout_constraintStart_toStartOf="@+id/edtSttSubject"
-        app:layout_constraintTop_toBottomOf="@+id/edtSttSubject" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/nameSubjectExam"
+        app:layout_constraintTop_toBottomOf="@id/titleSubjectExam" />
 
     <EditText
-        android:id="@+id/edtNameSubject"
+        android:id="@+id/edtNameSubjectExam"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/spinner_bg"
         android:inputType="textPersonName"
         android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/edtSttSubject"
-        app:layout_constraintStart_toStartOf="@+id/edtSttSubject"
+        app:layout_constraintEnd_toEndOf="@+id/edtIdSubjectExam"
+        app:layout_constraintStart_toStartOf="@+id/edtIdSubjectExam"
         app:layout_constraintTop_toBottomOf="@+id/edtIdSubjectExam" />
 
     <Button
@@ -104,20 +77,20 @@
         android:background="@drawable/spinner_bg"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/createGroupExam"
+        app:layout_constraintEnd_toStartOf="@+id/createSubjectExam"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="@+id/edtSttSubject"
-        app:layout_constraintTop_toBottomOf="@+id/edtNameSubject" />
+        app:layout_constraintStart_toStartOf="@+id/edtIdSubjectExam"
+        app:layout_constraintTop_toBottomOf="@+id/edtNameSubjectExam" />
 
     <Button
-        android:id="@+id/createGroupExam"
+        android:id="@+id/createSubjectExam"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/spinner_bg"
         android:text="Tạo"
-        app:layout_constraintEnd_toEndOf="@+id/edtNameSubject"
+        app:layout_constraintEnd_toEndOf="@+id/edtNameSubjectExam"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/cancel"
         app:layout_constraintTop_toTopOf="@+id/cancel" />

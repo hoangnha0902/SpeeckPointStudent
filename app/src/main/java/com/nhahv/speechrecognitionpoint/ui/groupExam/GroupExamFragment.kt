@@ -84,6 +84,19 @@ class GroupExamFragment : Fragment() {
     class GroupExamAdapter(groupExams: ArrayList<GroupExam>,
                            listener: ((View, GroupExam, Int) -> Unit)?
     ) : BaseRecyclerAdapter<GroupExam>(groupExams, R.layout.item_group_exam, listener) {
+
+        override fun onCreateViewHolder(p0: ViewGroup, p1: Int): BaseViewHolder {
+            val view = LayoutInflater.from(p0.context).inflate(R.layout.item_group_exam, p0, false)
+            val lp: androidx.recyclerview.widget.GridLayoutManager.LayoutParams = view.layoutParams as androidx.recyclerview.widget.GridLayoutManager.LayoutParams
+            lp.width = p0.measuredWidth / 2 - 32
+            lp.leftMargin = 16
+            lp.rightMargin = 16
+            lp.topMargin = 16
+            lp.bottomMargin = 16
+            view.layoutParams = lp
+            return BaseRecyclerAdapter.BaseViewHolder(view)
+        }
+
         override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
             super.onBindViewHolder(holder, position)
             val item = items[position]
