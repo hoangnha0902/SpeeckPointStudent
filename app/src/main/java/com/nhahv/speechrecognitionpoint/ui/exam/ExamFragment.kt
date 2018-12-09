@@ -69,6 +69,9 @@ class ExamFragment : Fragment() {
             return
         }
         examObjectList.addAll(Gson().fromJson<ArrayList<ExamObject>>(value))
+        if (examAdapter != null) {
+            examAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun updateExamList(list: ArrayList<ExamObject>) {

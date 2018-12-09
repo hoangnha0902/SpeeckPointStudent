@@ -94,7 +94,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/studentList"
+        android:id="@+id/pointOfMarmotList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="8dp"
@@ -155,7 +155,7 @@
         app:layout_constraintEnd_toStartOf="@+id/startMic"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/swap"
-        app:layout_constraintTop_toBottomOf="@+id/studentList"
+        app:layout_constraintTop_toBottomOf="@+id/pointOfMarmotList"
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <TextView

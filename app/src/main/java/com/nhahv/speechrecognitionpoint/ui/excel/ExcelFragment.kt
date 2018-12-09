@@ -40,8 +40,6 @@ class ExcelFragment : Fragment() {
     private val excelFiles: ArrayList<FileExcel> = ArrayList()
     private val excelFileAdapter = ExcelFilesAdapter(excelFiles) { _, excelFile, _ ->
         if (isMainExam) {
-            toast("dang la is main exam")
-
             if (TextUtils.isEmpty(idExamObject)) {
                 toast("Đã xảy ra lỗi không thể import hãy logout và quay lại")
                 return@ExcelFilesAdapter
@@ -58,6 +56,16 @@ class ExcelFragment : Fragment() {
             val marmotExams = getMarmotList()
             if (marmotExams.size > 0) {
                 // show dialog request import
+                AlertDialog.Builder(requireContext())
+                        .setTitle("Import danh sách mã phách")
+                        .setMessage("Danh sách mã phách và điểm đã có bạn có muốn import hay không ")
+                        .setPositiveButton(android.R.string.ok) { dialog, which ->
+                            importMarmotFromExcel(excelFile.path)
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(android.R.string.no) { dialog, which ->
+                            dialog.dismiss()
+                        }.show()
             } else {
                 // import now time
                 importMarmotFromExcel(excelFile.path)
@@ -231,12 +239,12 @@ class ExcelFragment : Fragment() {
 
 
     // TODO exam
-    private fun getMarmotList(): ArrayList<MarmotExam> {
+    private fun getMarmotList(): ArrayList<MarmotExamItem> {
         val value = sharePrefs().get(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), "")
         if (TextUtils.isEmpty(value)) {
             return ArrayList()
         }
-        return Gson().fromJson<ArrayList<MarmotExam>>(value)
+        return Gson().fromJson<ArrayList<MarmotExamItem>>(value)
     }
 
     private fun importMarmotFromExcel(pathFile: String?) {
@@ -261,6 +269,7 @@ class ExcelFragment : Fragment() {
                             }
                             Timer().schedule(1000) {
                                 (requireActivity() as MainActivity).hideProgress()
+                                (requireActivity() as MainActivity).back()
                             }
                         }
                     }
@@ -270,22 +279,42 @@ class ExcelFragment : Fragment() {
     }
 
     private fun updateMarmotExamsToSharePref(list: ArrayList<MarmotExam>) {
+        val marmotExamItems = ArrayList<MarmotExamItem>()
         for (item in list) {
-            item.pointOfMarmot = generateMarmotExamItem(item)
+            marmotExamItems.addAll(generateMarmotExamItem(item))
         }
-        println(list)
-        sharePrefs().put(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), list)
+        println(marmotExamItems)
+        sharePrefs().put(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), marmotExamItems)
     }
 
     private fun updateSubjectExam(nameFile: String?, pathFile: String?) {
+        val subjectExams = getSubjectExams()
+        subjectExams.forEach {
+            if (it.idSubjectExam.trim().toLowerCase() == idSubjectExam?.trim()?.toLowerCase()) {
+                it.nameFile = nameFile
+                it.pathFile = pathFile
+            }
+        }
+        println(subjectExams)
+        sharePrefs().put(prefSubjectExam(idExamObject, idGroupExam), subjectExams)
+    }
 
+    private fun getSubjectExams(): ArrayList<SubjectExam> {
+        val value = sharePrefs().get(prefSubjectExam(idExamObject, idGroupExam), "")
+        if (TextUtils.isEmpty(value)) {
+            return ArrayList()
+        }
+        return Gson().fromJson<ArrayList<SubjectExam>>(value)
     }
 
     private fun generateMarmotExamItem(marmotExam: MarmotExam): ArrayList<MarmotExamItem> {
         return try {
             val marmotExamItems = ArrayList<MarmotExamItem>()
             for (i in 0 until marmotExam.numberStudent.toInt()) {
-                val idMarmotExamItem = if (i < 10) "${marmotExam.idMarmot}0${i.plus(1)}" else "${marmotExam.idMarmot}i"
+                var idMarmotExamItem = "${marmotExam.idMarmot}0${i + 1}"
+                if (i >= 9) {
+                    idMarmotExamItem = "${marmotExam.idMarmot}${i + 1}"
+                }
                 marmotExamItems.add(MarmotExamItem(idMarmotExamItem, ""))
             }
             marmotExamItems

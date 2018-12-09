@@ -119,7 +119,7 @@ class MainFragment : Fragment() {
     }
 
     private fun initViews() {
-        studentList.adapter = studentAdapter
+        pointOfMarmotList.adapter = studentAdapter
         studentAdapter.setOnRestoreListener { _, student, i ->
             restorePointStudent(student, i)
             notifyAdapter()
@@ -157,7 +157,7 @@ class MainFragment : Fragment() {
         }
 
         swap.setOnClickListener {
-            studentList.visibility = if (studentList.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            pointOfMarmotList.visibility = if (pointOfMarmotList.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             studentListSwap.visibility = if (studentListSwap.visibility == View.VISIBLE) View.GONE else View.VISIBLE
         }
 

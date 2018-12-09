@@ -1,12 +1,19 @@
 package com.nhahv.speechrecognitionpoint.ui.mainExam
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.google.gson.Gson
+import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.data.models.MarmotExam
+import com.nhahv.speechrecognitionpoint.data.models.MarmotExamItem
+import com.nhahv.speechrecognitionpoint.data.models.SubjectExam
 import com.nhahv.speechrecognitionpoint.util.*
 import kotlinx.android.synthetic.main.item_group_exam.*
+import kotlinx.android.synthetic.main.item_main_exam.view.*
 import kotlinx.android.synthetic.main.main_exam_fragment.*
 
 class MainExamFragment : Fragment() {
@@ -16,6 +23,12 @@ class MainExamFragment : Fragment() {
     private var idGroupExam: String? = null
     private var idSubjectExam: String? = null
     private var nameSubjectExam: String? = null
+
+    private val marmotExamItems = ArrayList<MarmotExamItem>()
+    private val marmotExamAdapter: PointOfSubjectAdapter by lazy {
+        PointOfSubjectAdapter(marmotExamItems) { view, marmotExamItem, i ->
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +52,9 @@ class MainExamFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar(toolbar2, "Nhập điểm môn thi $nameSubjectExam")
+
+        pointOfMarmotList.adapter = marmotExamAdapter
+        fetchPointOfSubject()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -71,5 +87,36 @@ class MainExamFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+    private fun fetchPointOfSubject() {
+        marmotExamItems.clear()
+        marmotExamItems.addAll(getMarmotExamItems())
+        marmotExamAdapter.notifyDataSetChanged()
+    }
+
+    private fun getMarmotExamItems(): ArrayList<MarmotExamItem> {
+        val value = sharePrefs().get(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), "")
+        if (TextUtils.isEmpty(value)) {
+            return ArrayList()
+        }
+        return Gson().fromJson<ArrayList<MarmotExamItem>>(value)
+    }
+
+
+    class PointOfSubjectAdapter(val marmotExams: ArrayList<MarmotExamItem>,
+                                listener: ((View, MarmotExamItem, Int) -> Unit)?
+    ) : BaseRecyclerAdapter<MarmotExamItem>(marmotExams, R.layout.item_main_exam, listener) {
+
+        override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+            super.onBindViewHolder(holder, position)
+            with(marmotExams[position]) {
+                holder.itemView.apply {
+                    idMarmotExam.text = idMarmot
+                    pointOfMarmotExam.text = pointOfMarmot
+                }
+            }
+        }
     }
 }
