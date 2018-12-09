@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:minWidth="340dp"
+    android:minHeight="300dp"
+    android:paddingBottom="4dp"
+    tools:context=".ui.pointInput.PointInputFragment">
+
+    <LinearLayout
+        android:id="@+id/titleInputPoint"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/ic_clear_24px" />
+
+        <TextView
+            android:id="@+id/labelDialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Nhập điểm "
+            android:textColor="@color/white"
+            android:textFontWeight="1"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/done"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/ic_done" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/pointShow"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/color_back_input_point"
+        android:gravity="right|center_vertical"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:textColor="@color/red"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleInputPoint" />
+
+    <TextView
+        android:id="@+id/lineInput"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/color_line3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pointShow" />
+
+    <TextView
+        android:id="@+id/number7"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:background="@color/color_back_input_point"
+        android:gravity="center"
+        android:text="7"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/number8"
+        app:layout_constraintEnd_toStartOf="@+id/number8"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/number8" />
+
+    <TextView
+        android:id="@+id/number8"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/color_back_input_point"
+        android:drawableStart="@drawable/ic_line_vertical"
+        android:drawableEnd="@drawable/ic_line_vertical"
+        android:gravity="center"
+        android:text="8"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/number9"
+        app:layout_constraintEnd_toStartOf="@+id/number9"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/number7"
+        app:layout_constraintTop_toBottomOf="@+id/lineInput" />
+
+    <TextView
+        android:id="@+id/number9"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/color_back_input_point"
+        android:gravity="center"
+        android:text="9"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/number8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/number8"
+        app:layout_constraintTop_toTopOf="@id/number8" />
+
+    <TextView
+        android:id="@+id/lineInput2"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/color_line3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/number8" />
+
+    <TextView
+        android:id="@+id/number4"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:background="@color/color_back_input_point"
+        android:gravity="center"
+        android:text="4"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/number5"
+        app:layout_constraintEnd_toStartOf="@+id/number5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/number5"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/color_back_input_point"
+        android:drawableStart="@drawable/ic_line_vertical"
+        android:drawableEnd="@drawable/ic_line_vertical"
+        android:gravity="center"
+        android:text="5"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/number4"
+        app:layout_constraintEnd_toStartOf="@+id/number6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/number4"
+        app:layout_constraintTop_toBottomOf="@id/lineInput2" />
+
+    <TextView
+        android:id="@+id/number6"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/color_back_input_point"
+        android:gravity="center"
+        android:text="6"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/number5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/number5" />
+
+    <TextView
+        android:id="@+id/lineInput3"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/color_line3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/number5" />
+
+
+    <TextView
+        android:id="@+id/number1"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:background="@color/color_back_input_point"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/number2"
+        app:layout_constraintEnd_toStartOf="@+id/number2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/number2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/color_back_input_point"
+        android:drawableStart="@drawable/ic_line_vertical"
+        android:drawableEnd="@drawable/ic_line_vertical"
+        android:gravity="center"
+        android:text="2"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/number1"
+        app:layout_constraintEnd_toStartOf="@+id/number3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/number1"
+        app:layout_constraintTop_toBottomOf="@+id/lineInput3" />
+
+    <TextView
+        android:id="@+id/number3"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/color_back_input_point"
+        android:gravity="center"
+        android:text="3"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/number2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/number2" />
+
+    <TextView
+        android:id="@+id/lineInput4"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/color_line3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/number2" />
+
+    <TextView
+        android:id="@+id/number0"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:background="@color/color_back_input_point"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/numberDot"
+        app:layout_constraintEnd_toStartOf="@+id/numberDot"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/numberDot"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/color_back_input_point"
+        android:drawableStart="@drawable/ic_line_vertical"
+        android:drawableEnd="@drawable/ic_line_vertical"
+        android:gravity="center"
+        android:text="."
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/number3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/number1"
+        app:layout_constraintTop_toBottomOf="@+id/lineInput4" />
+
+    <TextView
+        android:id="@+id/delete"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/color_back_input_point"
+        android:gravity="center"
+        android:text="Xóa"
+        android:textColor="@color/red"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/numberDot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/numberDot" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,8 +53,7 @@ class ExcelFragment : Fragment() {
                 return@ExcelFilesAdapter
             }
             // TODO import
-            val marmotExams = getMarmotList()
-            if (marmotExams.size > 0) {
+            if (isMarmotExamPoint()) {
                 // show dialog request import
                 AlertDialog.Builder(requireContext())
                         .setTitle("Import danh sách mã phách")
@@ -239,12 +238,12 @@ class ExcelFragment : Fragment() {
 
 
     // TODO exam
-    private fun getMarmotList(): ArrayList<MarmotExamItem> {
+    private fun isMarmotExamPoint(): Boolean {
         val value = sharePrefs().get(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), "")
         if (TextUtils.isEmpty(value)) {
-            return ArrayList()
+            return false
         }
-        return Gson().fromJson<ArrayList<MarmotExamItem>>(value)
+        return true
     }
 
     private fun importMarmotFromExcel(pathFile: String?) {
@@ -263,8 +262,6 @@ class ExcelFragment : Fragment() {
 
                             updateMarmotExamsToSharePref(marmotExams)
                             ReadWriteExcelFile.copyFileExcel(pathFile, "MonThi_${nameSubjectExam}_MaKyThi_${idExamObject}_MaNhomThi_${idGroupExam}_MaMonThi_$idSubjectExam") { nameFile, pathFile ->
-                                println("name file $nameFile")
-                                println("path file $pathFile")
                                 updateSubjectExam(nameFile, pathFile)
                             }
                             Timer().schedule(1000) {
@@ -284,7 +281,8 @@ class ExcelFragment : Fragment() {
             marmotExamItems.addAll(generateMarmotExamItem(item))
         }
         println(marmotExamItems)
-        sharePrefs().put(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), marmotExamItems)
+        val marmotExamPointItem = MarmotExamPointItem(list, marmotExamItems)
+        sharePrefs().put(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), marmotExamPointItem)
     }
 
     private fun updateSubjectExam(nameFile: String?, pathFile: String?) {
@@ -311,10 +309,7 @@ class ExcelFragment : Fragment() {
         return try {
             val marmotExamItems = ArrayList<MarmotExamItem>()
             for (i in 0 until marmotExam.numberStudent.toInt()) {
-                var idMarmotExamItem = "${marmotExam.idMarmot}0${i + 1}"
-                if (i >= 9) {
-                    idMarmotExamItem = "${marmotExam.idMarmot}${i + 1}"
-                }
+                var idMarmotExamItem = if (i < 9) " ${marmotExam.idMarmot}0${i + 1}" else "${marmotExam.idMarmot}${i + 1}"
                 marmotExamItems.add(MarmotExamItem(idMarmotExamItem, ""))
             }
             marmotExamItems

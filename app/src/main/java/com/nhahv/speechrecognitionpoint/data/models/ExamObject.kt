@@ -26,10 +26,13 @@ data class SubjectExam(var idSubjectExam: String = "",
 
 @Parcelize
 data class MarmotExam(var idMarmot: String = "",
-                      var numberStudent: String = "0",
-                      var pointOfMarmot: ArrayList<MarmotExamItem> = ArrayList()
+                      var numberStudent: String = "0"
 ) : Parcelable
 
 @Parcelize
 data class MarmotExamItem(var idMarmot: String = "",
                           var pointOfMarmot: String = "") : Parcelable
+
+@Parcelize
+data class MarmotExamPointItem(var marmotExams: ArrayList<MarmotExam> = ArrayList(),
+                               var marmotExamItems: ArrayList<MarmotExamItem> = ArrayList()) : Parcelable

@@ -8,9 +8,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
 import com.nhahv.speechrecognitionpoint.R
-import com.nhahv.speechrecognitionpoint.data.models.MarmotExam
-import com.nhahv.speechrecognitionpoint.data.models.MarmotExamItem
-import com.nhahv.speechrecognitionpoint.data.models.SubjectExam
+import com.nhahv.speechrecognitionpoint.data.models.*
+import com.nhahv.speechrecognitionpoint.ui.pointInput.PointInputFragment
 import com.nhahv.speechrecognitionpoint.util.*
 import kotlinx.android.synthetic.main.item_group_exam.*
 import kotlinx.android.synthetic.main.item_main_exam.view.*
@@ -23,10 +22,11 @@ class MainExamFragment : Fragment() {
     private var idGroupExam: String? = null
     private var idSubjectExam: String? = null
     private var nameSubjectExam: String? = null
-
+    private var marmotExamPointItem: MarmotExamPointItem? = null
     private val marmotExamItems = ArrayList<MarmotExamItem>()
     private val marmotExamAdapter: PointOfSubjectAdapter by lazy {
         PointOfSubjectAdapter(marmotExamItems) { view, marmotExamItem, i ->
+            showInputExamPoint("Nhập điểm mã phách ${marmotExamItem.idMarmot}", i)
         }
     }
 
@@ -92,18 +92,50 @@ class MainExamFragment : Fragment() {
 
     private fun fetchPointOfSubject() {
         marmotExamItems.clear()
-        marmotExamItems.addAll(getMarmotExamItems())
-        marmotExamAdapter.notifyDataSetChanged()
+        marmotExamPointItem = getMarmotExamItems()
+        if (marmotExamPointItem != null) {
+
+        }
+        marmotExamPointItem?.let {
+            marmotExamItems.addAll(it.marmotExamItems)
+            marmotExamAdapter.notifyDataSetChanged()
+        }
     }
 
-    private fun getMarmotExamItems(): ArrayList<MarmotExamItem> {
+    private fun getMarmotExamItems(): MarmotExamPointItem? {
         val value = sharePrefs().get(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), "")
         if (TextUtils.isEmpty(value)) {
-            return ArrayList()
+            return null
         }
-        return Gson().fromJson<ArrayList<MarmotExamItem>>(value)
+        return Gson().fromJson(value, MarmotExamPointItem::class.java)
     }
 
+
+    private fun showInputExamPoint(label: String, position: Int) {
+        fragmentManager?.let {
+            val fm = it.beginTransaction()
+            val prev = it.findFragmentByTag("inputPointExam")
+            if (prev != null) {
+                fm.remove(prev)
+            }
+            fm.addToBackStack(null)
+            val dialog = InputPointExamFragment.newInstance(label, position)
+            dialog.show(fm, "inputPointExam")
+            dialog.inputExamPointCallback { pointValue, position ->
+                println("=========== $pointValue  = $position")
+                position?.let {
+                    marmotExamItems[it].pointOfMarmot = pointValue.toString()
+                    marmotExamPointItem?.marmotExamItems = marmotExamItems
+                    updateMarmotExamPointToSharePref(marmotExamPointItem)
+                    marmotExamAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    private fun updateMarmotExamPointToSharePref(marmotExamPointItem: MarmotExamPointItem?) {
+        sharePrefs().put(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), marmotExamPointItem)
+    }
 
     class PointOfSubjectAdapter(val marmotExams: ArrayList<MarmotExamItem>,
                                 listener: ((View, MarmotExamItem, Int) -> Unit)?
