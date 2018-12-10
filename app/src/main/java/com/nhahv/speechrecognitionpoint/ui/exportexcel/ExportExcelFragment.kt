@@ -3,6 +3,7 @@ package com.nhahv.speechrecognitionpoint.ui.exportexcel
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.os.Environment
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +14,9 @@ import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerViewAdapter
 import com.nhahv.speechrecognitionpoint.MainActivity
 import com.nhahv.speechrecognitionpoint.R
-import com.nhahv.speechrecognitionpoint.data.models.AClass
-import com.nhahv.speechrecognitionpoint.data.models.Folder
-import com.nhahv.speechrecognitionpoint.data.models.Student
-import com.nhahv.speechrecognitionpoint.data.models.Subject
+import com.nhahv.speechrecognitionpoint.data.models.*
 import com.nhahv.speechrecognitionpoint.util.*
+import com.nhahv.speechrecognitionpoint.util.Constant.BUNDLE_IS_MAIN_EXAM
 import com.nhahv.speechrecognitionpoint.util.Constant.CLASSES
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
 import kotlinx.android.synthetic.main.export_excel_fragment.*
@@ -35,18 +34,33 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
     private var pathFolder: String? = null
     private var aClass: AClass? = null
     private var subject: Subject? = null
+
+    private var isMainExam: Boolean = false
+    private var idExamObject: String? = null
+    private var idGroupExam: String? = null
+    private var idSubjectExam: String? = null
+    private var nameSubjectExam: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val folder = folder(Environment.getExternalStorageDirectory().path)
-        if (folder != null) {
-            pathFolder = folder.path
-            folders.add(folder)
-        }
-
         arguments?.let {
-            aClass = it.getParcelable(CLASSES)
-            subject = it.getParcelable(SUBJECTS)
+            with(it) {
+                isMainExam = getBoolean(BUNDLE_IS_MAIN_EXAM, false)
+                if (isMainExam) {
+                    idExamObject = getString(Constant.BUNDLE_ID_EXAM)
+                    idGroupExam = getString(Constant.BUNDLE_ID_GROUP_EXAM)
+                    idSubjectExam = getString(Constant.BUNDLE_ID_SUBJECT_EXAM)
+                    nameSubjectExam = getString(Constant.BUNDLE_NAME_SUBJECT_EXAM)
+                } else {
+                    val folder = folder(Environment.getExternalStorageDirectory().path)
+                    if (folder != null) {
+                        pathFolder = folder.path
+                        folders.add(folder)
+                    }
+                    aClass = getParcelable(CLASSES)
+                    subject = getParcelable(SUBJECTS)
+                }
+            }
         }
     }
 
@@ -88,6 +102,27 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
         adapter.notifyDataSetChanged()
 
         exportExcel.setOnClickListener {
+            if (isMainExam) {
+                toast("export is Main Exam")
+                val marmotExamPointItem = getMarmotExamPointItem()
+                if (marmotExamPointItem == null) {
+                    toast("Không thể Export dữ liệu, có thể do dữ liệu không tồn tại")
+                    return@setOnClickListener
+                }
+                if (marmotExamPointItem.marmotExamItems.isEmpty()) {
+                    toast("Không thể Export dữ liệu, có thể do dữ liệu không tồn tại")
+                    return@setOnClickListener
+                }
+                marmotExamPointItem.marmotExamItems.let {
+                    val pathFile = Constant.marmotExamPointNameFile(idExamObject, idGroupExam, idSubjectExam, nameSubjectExam)
+                    ReadWriteExcelFile.exportMarmotExamPointItem(pathFile, it){
+
+                    }
+                }
+
+
+                return@setOnClickListener
+            }
             // export excels
             if (subject == null || subject?.excelFile == null) {
                 toast("Không đọc được link file bảng điểm gốc")
@@ -111,8 +146,6 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
                     (requireActivity() as MainActivity).hideProgress()
                 }
             }
-
-
         }
     }
 
@@ -210,4 +243,14 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
         }
         return Gson().fromJson<ArrayList<Student>>(value)
     }
+
+    // TODO IS Main exam point export
+    private fun getMarmotExamPointItem(): MarmotExamPointItem? {
+        val value = sharePrefs().get(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), "")
+        if (TextUtils.isEmpty(value)) {
+            return null
+        }
+        return Gson().fromJson(value, MarmotExamPointItem::class.java)
+    }
+
 }

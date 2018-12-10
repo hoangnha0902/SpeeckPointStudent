@@ -259,11 +259,9 @@ class ExcelFragment : Fragment() {
                             }
                         }
                         ReadWriteExcelFile.StatusMarmot.SUCCESS -> {
-
                             updateMarmotExamsToSharePref(marmotExams)
-                            ReadWriteExcelFile.copyFileExcel(pathFile, "MonThi_${nameSubjectExam}_MaKyThi_${idExamObject}_MaNhomThi_${idGroupExam}_MaMonThi_$idSubjectExam") { nameFile, pathFile ->
-                                updateSubjectExam(nameFile, pathFile)
-                            }
+                            val nameFile = "MonThi_${nameSubjectExam}_MaKyThi_${idExamObject}_MaNhomThi_${idGroupExam}_MaMonThi_$idSubjectExam"
+                            updateSubjectExam(nameFile, ReadWriteExcelFile.pathFile("$nameFile.xls"))
                             Timer().schedule(1000) {
                                 (requireActivity() as MainActivity).hideProgress()
                                 (requireActivity() as MainActivity).back()
@@ -293,7 +291,6 @@ class ExcelFragment : Fragment() {
                 it.pathFile = pathFile
             }
         }
-        println(subjectExams)
         sharePrefs().put(prefSubjectExam(idExamObject, idGroupExam), subjectExams)
     }
 

@@ -3,13 +3,21 @@ package com.nhahv.speechrecognitionpoint.util
 import android.os.Environment
 import android.text.TextUtils
 import com.nhahv.speechrecognitionpoint.data.models.MarmotExam
+import com.nhahv.speechrecognitionpoint.data.models.MarmotExamItem
 import com.nhahv.speechrecognitionpoint.data.models.Student
-import org.apache.poi.ss.usermodel.CellType
-import org.apache.poi.ss.usermodel.DataFormatter
-import org.apache.poi.ss.usermodel.WorkbookFactory
+import org.apache.poi.hssf.usermodel.HSSFWorkbook
+import org.apache.poi.ss.usermodel.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import org.apache.poi.ss.usermodel.IndexedColors
+import javax.swing.text.StyleConstants.setBold
+import org.apache.poi.ss.util.CellUtil.setFont
+import org.apache.poi.ss.usermodel.CellStyle
+
+
+
+
 
 object ReadWriteExcelFile {
     private const val rowStart = 7
@@ -258,6 +266,7 @@ object ReadWriteExcelFile {
     }
 
 
+    // TODO Support Main Exam Marmot
     private const val ROW_FIRST_CHECK = 0
     private const val CELL_FIRST_CHECK = 0
     private const val ROW_SECOND_CHECK = 0
@@ -267,6 +276,10 @@ object ReadWriteExcelFile {
 
     enum class StatusMarmot {
         ERROR_FILE, SUCCESS
+    }
+
+    enum class StatusExport {
+        ERROR, SUCCESS
     }
 
     fun readMarmotPoint(pathExcelFile: String, callback: ((ArrayList<MarmotExam>, StatusMarmot) -> Unit)) {
@@ -322,6 +335,30 @@ object ReadWriteExcelFile {
             ex.printStackTrace()
             callback.invoke(ArrayList(), StatusMarmot.ERROR_FILE)
         }
+    }
+
+    fun exportMarmotExamPointItem(pathFile: String, datas: ArrayList<MarmotExamItem>, callback: ((StatusExport) -> Unit)?) {
+        if (datas.isEmpty()) {
+            callback?.invoke(StatusExport.ERROR)
+            return
+        }
+
+        val workbook = HSSFWorkbook()
+        val createHelper = workbook.creationHelper
+        val sheet: Sheet = workbook.createSheet("Bảng điểm")
+        val headerFont : Font = workbook.createFont()
+        headerFont.bold = true
+        headerFont.fontHeightInPoints = 14.toShort()
+        headerFont.color = IndexedColors.RED.getIndex()
+        // Create a CellStyle with the font
+        val headerCellStyle = workbook.createCellStyle()
+        headerCellStyle.setFont(headerFont)
+
+
+        val headerRow = sheet.createRow(0)
+        val callHeaderMarmot = headerRow.createCell(0)
+        callHeaderMarmot.setCellValue(MARMOT_FIRST_CHECK)
+
     }
 
     fun copyFileExcel(sourceFile: String, nameTargetFile: String) {

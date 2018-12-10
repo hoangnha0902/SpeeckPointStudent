@@ -79,7 +79,13 @@ class MainExamFragment : Fragment() {
                 })
             }
             R.id.exportExcelFragment -> {
-                navigate(R.id.action_mainExamFragment_to_exportExcelFragment, arguments!!)
+                navigate(R.id.action_mainExamFragment_to_exportExcelFragment, Bundle().apply {
+                    putString(Constant.BUNDLE_ID_EXAM, idExamObject)
+                    putString(Constant.BUNDLE_ID_GROUP_EXAM, idGroupExam)
+                    putString(Constant.BUNDLE_ID_SUBJECT_EXAM, idSubjectExam)
+                    putString(Constant.BUNDLE_NAME_SUBJECT_EXAM, nameSubjectExam)
+                    putBoolean(Constant.BUNDLE_IS_MAIN_EXAM, true)
+                })
             }
             R.id.logout -> {
                 SharedPrefs.getInstance(requireContext()).put(Constant.IS_LOGIN, false)
@@ -122,7 +128,6 @@ class MainExamFragment : Fragment() {
             val dialog = InputPointExamFragment.newInstance(label, position)
             dialog.show(fm, "inputPointExam")
             dialog.inputExamPointCallback { pointValue, position ->
-                println("=========== $pointValue  = $position")
                 position?.let {
                     marmotExamItems[it].pointOfMarmot = pointValue.toString()
                     marmotExamPointItem?.marmotExamItems = marmotExamItems
@@ -137,7 +142,7 @@ class MainExamFragment : Fragment() {
         sharePrefs().put(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), marmotExamPointItem)
     }
 
-    class PointOfSubjectAdapter(val marmotExams: ArrayList<MarmotExamItem>,
+    class PointOfSubjectAdapter(private val marmotExams: ArrayList<MarmotExamItem>,
                                 listener: ((View, MarmotExamItem, Int) -> Unit)?
     ) : BaseRecyclerAdapter<MarmotExamItem>(marmotExams, R.layout.item_main_exam, listener) {
 

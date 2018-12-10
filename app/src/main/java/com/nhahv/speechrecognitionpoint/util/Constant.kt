@@ -48,6 +48,10 @@ object Constant {
 
     fun nameFile(subjectName: String?, semester: SemesterType, aClass: AClass?): String {
         return "${subjectName}_${aClass?.name}_${semester.getSemesterName()}_${aClass?.year}.xls"
+    }
 
+    fun marmotExamPointNameFile(idExamObject: String?, idGroupExam: String?, idSubjectExam: String?, nameSubjectExam: String?): String {
+        val nameFile = "MonThi_${nameSubjectExam}_MaKyThi_${idExamObject}_MaNhomThi_${idGroupExam}_MaMonThi_$idSubjectExam"
+        return ReadWriteExcelFile.pathFile("$nameFile.xls")
     }
 }
