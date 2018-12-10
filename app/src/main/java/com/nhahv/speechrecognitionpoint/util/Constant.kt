@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Environment
 import com.nhahv.speechrecognitionpoint.data.models.AClass
 import com.nhahv.speechrecognitionpoint.data.models.SemesterType
-import com.nhahv.speechrecognitionpoint.data.models.Subject
 
 object Constant {
     const val USER_NAME = "user_name"
@@ -51,7 +50,6 @@ object Constant {
     }
 
     fun marmotExamPointNameFile(idExamObject: String?, idGroupExam: String?, idSubjectExam: String?, nameSubjectExam: String?): String {
-        val nameFile = "MonThi_${nameSubjectExam}_MaKyThi_${idExamObject}_MaNhomThi_${idGroupExam}_MaMonThi_$idSubjectExam"
-        return ReadWriteExcelFile.pathFile("$nameFile.xls")
+        return "MonThi_${nameSubjectExam}_MaKyThi_${idExamObject}_MaNhomThi_${idGroupExam}_MaMonThi_$idSubjectExam"
     }
 }

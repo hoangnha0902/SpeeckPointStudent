@@ -10,13 +10,6 @@ import org.apache.poi.ss.usermodel.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import org.apache.poi.ss.usermodel.IndexedColors
-import javax.swing.text.StyleConstants.setBold
-import org.apache.poi.ss.util.CellUtil.setFont
-import org.apache.poi.ss.usermodel.CellStyle
-
-
-
 
 
 object ReadWriteExcelFile {
@@ -272,6 +265,7 @@ object ReadWriteExcelFile {
     private const val ROW_SECOND_CHECK = 0
     private const val CELL_SECOND_CHECK = 1
     private const val START_ROW_MARMOT = 1
+    private const val POINT_CELL = "Điểm"
 
 
     enum class StatusMarmot {
@@ -337,28 +331,42 @@ object ReadWriteExcelFile {
         }
     }
 
-    fun exportMarmotExamPointItem(pathFile: String, datas: ArrayList<MarmotExamItem>, callback: ((StatusExport) -> Unit)?) {
-        if (datas.isEmpty()) {
+    fun exportMarmotExamPointItem(pathFile: String, data: ArrayList<MarmotExamItem>, callback: ((StatusExport) -> Unit)?) {
+        if (data.isEmpty()) {
             callback?.invoke(StatusExport.ERROR)
             return
         }
+        try {
+            val workbook = HSSFWorkbook()
+            val sheet: Sheet = workbook.createSheet("Bảng điểm")
+            val headerFont: Font = workbook.createFont()
+            headerFont.bold = true
+            headerFont.fontHeightInPoints = 14.toShort()
+            headerFont.color = IndexedColors.RED.getIndex()
 
-        val workbook = HSSFWorkbook()
-        val createHelper = workbook.creationHelper
-        val sheet: Sheet = workbook.createSheet("Bảng điểm")
-        val headerFont : Font = workbook.createFont()
-        headerFont.bold = true
-        headerFont.fontHeightInPoints = 14.toShort()
-        headerFont.color = IndexedColors.RED.getIndex()
-        // Create a CellStyle with the font
-        val headerCellStyle = workbook.createCellStyle()
-        headerCellStyle.setFont(headerFont)
+            val headerRow = sheet.createRow(0)
+            val callHeaderMarmot = headerRow.createCell(0)
+            callHeaderMarmot.setCellValue(MARMOT_FIRST_CHECK)
 
+            val cellHeaderPoint = headerRow.createCell(1)
+            cellHeaderPoint.setCellValue(POINT_CELL)
 
-        val headerRow = sheet.createRow(0)
-        val callHeaderMarmot = headerRow.createCell(0)
-        callHeaderMarmot.setCellValue(MARMOT_FIRST_CHECK)
+            for (index in 0 until data.size) {
+                val rowTemp = sheet.createRow(index + 1)
+                rowTemp.createCell(0).setCellValue(data[index].idMarmot)
+                rowTemp.createCell(1).setCellValue(data[index].pointOfMarmot)
+            }
+            val fileOut = FileOutputStream(pathFile)
+            workbook.write(fileOut)
+            fileOut.flush()
+            fileOut.close()
+            workbook.close()
 
+            callback?.invoke(StatusExport.SUCCESS)
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            callback?.invoke(StatusExport.ERROR)
+        }
     }
 
     fun copyFileExcel(sourceFile: String, nameTargetFile: String) {
@@ -367,16 +375,6 @@ object ReadWriteExcelFile {
             folderSpeech.mkdir()
         }
         File(sourceFile).copyTo(File(pathFile(nameTargetFile)), true)
-    }
-
-    fun copyFileExcel(sourceFile: String, nameTargetFile: String, callback: ((String, String) -> Unit)?) {
-        val folderSpeech = File("${Environment.getExternalStorageDirectory()}$FOLDER_NAME")
-        if (!folderSpeech.exists()) {
-            folderSpeech.mkdir()
-        }
-        val file = File(pathFile("$nameTargetFile.xls"))
-        File(sourceFile).copyTo(file, true)
-        callback?.invoke(nameTargetFile, file.path)
     }
 
     fun pathFile(nameFile: String?) = PATH_FILE.format(nameFile)

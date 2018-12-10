@@ -22,7 +22,6 @@ import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
 import kotlinx.android.synthetic.main.export_excel_fragment.*
 import kotlinx.android.synthetic.main.item_export_excel.view.*
 import java.io.File
-import java.util.*
 
 class ExportExcelFragment : androidx.fragment.app.Fragment() {
 
@@ -42,7 +41,11 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
     private var nameSubjectExam: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val folder = folder(Environment.getExternalStorageDirectory().path)
+        if (folder != null) {
+            pathFolder = folder.path
+            folders.add(folder)
+        }
         arguments?.let {
             with(it) {
                 isMainExam = getBoolean(BUNDLE_IS_MAIN_EXAM, false)
@@ -52,11 +55,6 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
                     idSubjectExam = getString(Constant.BUNDLE_ID_SUBJECT_EXAM)
                     nameSubjectExam = getString(Constant.BUNDLE_NAME_SUBJECT_EXAM)
                 } else {
-                    val folder = folder(Environment.getExternalStorageDirectory().path)
-                    if (folder != null) {
-                        pathFolder = folder.path
-                        folders.add(folder)
-                    }
                     aClass = getParcelable(CLASSES)
                     subject = getParcelable(SUBJECTS)
                 }
@@ -114,9 +112,9 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
                     return@setOnClickListener
                 }
                 marmotExamPointItem.marmotExamItems.let {
-                    val pathFile = Constant.marmotExamPointNameFile(idExamObject, idGroupExam, idSubjectExam, nameSubjectExam)
-                    ReadWriteExcelFile.exportMarmotExamPointItem(pathFile, it){
-
+                    val nameFile = Constant.marmotExamPointNameFile(idExamObject, idGroupExam, idSubjectExam, nameSubjectExam)
+                    ReadWriteExcelFile.exportMarmotExamPointItem("$pathFolder/$nameFile.xls", it) { statusExport ->
+                        println("======== $statusExport")
                     }
                 }
 
@@ -252,5 +250,4 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
         }
         return Gson().fromJson(value, MarmotExamPointItem::class.java)
     }
-
 }

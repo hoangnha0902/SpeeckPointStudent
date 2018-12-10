@@ -20,8 +20,7 @@ data class GroupExam(var idGroupExam: String = "",
 data class SubjectExam(var idSubjectExam: String = "",
                        var nameSubjectExam: String = "",
                        val stt: String = "",
-                       var nameFile: String? = null,
-                       var pathFile: String? = null) : Parcelable
+                       var nameFile: String? = null) : Parcelable
 
 
 @Parcelize

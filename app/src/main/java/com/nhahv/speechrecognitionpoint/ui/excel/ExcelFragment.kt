@@ -19,7 +19,6 @@ import com.nhahv.speechrecognitionpoint.util.Constant.NAME_SUBJECT_LIST
 import com.nhahv.speechrecognitionpoint.util.Constant.SUBJECTS
 import kotlinx.android.synthetic.main.file_excel_fragment.*
 import kotlinx.android.synthetic.main.item_excel_files.view.*
-import java.lang.NumberFormatException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
@@ -260,8 +259,6 @@ class ExcelFragment : Fragment() {
                         }
                         ReadWriteExcelFile.StatusMarmot.SUCCESS -> {
                             updateMarmotExamsToSharePref(marmotExams)
-                            val nameFile = "MonThi_${nameSubjectExam}_MaKyThi_${idExamObject}_MaNhomThi_${idGroupExam}_MaMonThi_$idSubjectExam"
-                            updateSubjectExam(nameFile, ReadWriteExcelFile.pathFile("$nameFile.xls"))
                             Timer().schedule(1000) {
                                 (requireActivity() as MainActivity).hideProgress()
                                 (requireActivity() as MainActivity).back()
@@ -281,17 +278,6 @@ class ExcelFragment : Fragment() {
         println(marmotExamItems)
         val marmotExamPointItem = MarmotExamPointItem(list, marmotExamItems)
         sharePrefs().put(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), marmotExamPointItem)
-    }
-
-    private fun updateSubjectExam(nameFile: String?, pathFile: String?) {
-        val subjectExams = getSubjectExams()
-        subjectExams.forEach {
-            if (it.idSubjectExam.trim().toLowerCase() == idSubjectExam?.trim()?.toLowerCase()) {
-                it.nameFile = nameFile
-                it.pathFile = pathFile
-            }
-        }
-        sharePrefs().put(prefSubjectExam(idExamObject, idGroupExam), subjectExams)
     }
 
     private fun getSubjectExams(): ArrayList<SubjectExam> {

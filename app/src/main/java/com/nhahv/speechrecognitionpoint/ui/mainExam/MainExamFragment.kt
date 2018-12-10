@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.adapters.PointOfSubjectAdapter
 import com.nhahv.speechrecognitionpoint.data.models.*
 import com.nhahv.speechrecognitionpoint.ui.pointInput.PointInputFragment
 import com.nhahv.speechrecognitionpoint.util.*
@@ -25,7 +26,7 @@ class MainExamFragment : Fragment() {
     private var marmotExamPointItem: MarmotExamPointItem? = null
     private val marmotExamItems = ArrayList<MarmotExamItem>()
     private val marmotExamAdapter: PointOfSubjectAdapter by lazy {
-        PointOfSubjectAdapter(marmotExamItems) { view, marmotExamItem, i ->
+        PointOfSubjectAdapter(marmotExamItems) { _, marmotExamItem, i ->
             showInputExamPoint("Nhập điểm mã phách ${marmotExamItem.idMarmot}", i)
         }
     }
@@ -140,20 +141,5 @@ class MainExamFragment : Fragment() {
 
     private fun updateMarmotExamPointToSharePref(marmotExamPointItem: MarmotExamPointItem?) {
         sharePrefs().put(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), marmotExamPointItem)
-    }
-
-    class PointOfSubjectAdapter(private val marmotExams: ArrayList<MarmotExamItem>,
-                                listener: ((View, MarmotExamItem, Int) -> Unit)?
-    ) : BaseRecyclerAdapter<MarmotExamItem>(marmotExams, R.layout.item_main_exam, listener) {
-
-        override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-            super.onBindViewHolder(holder, position)
-            with(marmotExams[position]) {
-                holder.itemView.apply {
-                    idMarmotExam.text = idMarmot
-                    pointOfMarmotExam.text = pointOfMarmot
-                }
-            }
-        }
     }
 }
