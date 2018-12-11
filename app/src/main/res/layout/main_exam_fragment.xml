@@ -31,6 +31,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/spinner_bg"
         android:paddingLeft="30dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/typeMarmot"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,6 +47,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:src="@drawable/ic_tilda_icons_2web_magnifier"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/textSearchExamExam"
         app:layout_constraintStart_toStartOf="@id/textSearchExamExam"
         app:layout_constraintTop_toTopOf="@id/textSearchExamExam" />
@@ -67,7 +69,7 @@
         app:layout_constraintTop_toTopOf="@+id/textSearchExamExam">
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spTypePoint"
+            android:id="@+id/spMarmot"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

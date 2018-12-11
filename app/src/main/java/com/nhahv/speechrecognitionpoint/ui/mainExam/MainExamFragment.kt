@@ -3,6 +3,8 @@ package com.nhahv.speechrecognitionpoint.ui.mainExam
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
@@ -24,11 +26,16 @@ class MainExamFragment : Fragment() {
     private var idSubjectExam: String? = null
     private var nameSubjectExam: String? = null
     private var marmotExamPointItem: MarmotExamPointItem? = null
+
     private val marmotExamItems = ArrayList<MarmotExamItem>()
     private val marmotExamAdapter: PointOfSubjectAdapter by lazy {
         PointOfSubjectAdapter(marmotExamItems) { _, marmotExamItem, i ->
             showInputExamPoint("Nhập điểm mã phách ${marmotExamItem.idMarmot}", i)
         }
+    }
+
+    private val spinnerMarmotAdapter: ArrayAdapter<MarmotExam> by lazy {
+        ArrayAdapter<MarmotExam>(requireContext(), android.R.layout.simple_list_item_1)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +63,23 @@ class MainExamFragment : Fragment() {
 
         pointOfMarmotList.adapter = marmotExamAdapter
         fetchPointOfSubject()
+
+        marmotExamPointItem?.marmotExams?.let {
+            spinnerMarmotAdapter.addAll(it)
+        }
+        spMarmot.adapter = spinnerMarmotAdapter
+        spMarmot.setSelection(0)
+        spMarmot.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    spinnerMarmotAdapter.getItem(position)?.idMarmot?.let {
+                        marmotExamAdapter.filter.filter(it)
+                }
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -142,4 +166,6 @@ class MainExamFragment : Fragment() {
     private fun updateMarmotExamPointToSharePref(marmotExamPointItem: MarmotExamPointItem?) {
         sharePrefs().put(prefMarmotName(idExamObject, idGroupExam, idSubjectExam), marmotExamPointItem)
     }
+
+
 }

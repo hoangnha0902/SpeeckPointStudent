@@ -24,9 +24,11 @@ data class SubjectExam(var idSubjectExam: String = "",
 
 
 @Parcelize
-data class MarmotExam(var idMarmot: String = "",
-                      var numberStudent: String = "0"
-) : Parcelable
+class MarmotExam(var idMarmot: String = "",
+                 var numberStudent: String = "0"
+) : Parcelable {
+    override fun toString(): String = idMarmot
+}
 
 @Parcelize
 data class MarmotExamItem(var idMarmot: String = "",
