@@ -27,16 +27,15 @@
         android:id="@+id/textSearchExamExam"
         android:layout_width="0dp"
         android:layout_height="45dp"
+        android:visibility="invisible"
         android:layout_margin="8dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/spinner_bg"
         android:paddingLeft="30dp"
-        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/typeMarmot"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar2"
-        tools:text="text" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar2"/>
 
     <ImageView
         android:id="@+id/imageSearch"
@@ -45,9 +44,9 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
+        android:visibility="invisible"
         android:layout_marginRight="8dp"
         android:src="@drawable/ic_tilda_icons_2web_magnifier"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/textSearchExamExam"
         app:layout_constraintStart_toStartOf="@id/textSearchExamExam"
         app:layout_constraintTop_toTopOf="@id/textSearchExamExam" />

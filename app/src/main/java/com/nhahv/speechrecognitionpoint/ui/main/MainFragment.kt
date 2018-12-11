@@ -74,7 +74,9 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar(toolbar, title)
         speechPoint = SpeechPoint(requireContext())
-        speechPoint.setMainFragment(this)
+        speechPoint.speechPointCallback { textSpeech ->
+            onTextRecognition(textSpeech)
+        }
         initViews()
     }
 

@@ -356,12 +356,15 @@ object ReadWriteExcelFile {
                 rowTemp.createCell(0).setCellValue(data[index].idMarmot)
                 rowTemp.createCell(1).setCellValue(data[index].pointOfMarmot)
             }
+            val file = File(pathFile)
+            if (file.exists()) {
+                file.delete()
+            }
             val fileOut = FileOutputStream(pathFile)
             workbook.write(fileOut)
             fileOut.flush()
             fileOut.close()
             workbook.close()
-
             callback?.invoke(StatusExport.SUCCESS)
         } catch (ex: IOException) {
             ex.printStackTrace()

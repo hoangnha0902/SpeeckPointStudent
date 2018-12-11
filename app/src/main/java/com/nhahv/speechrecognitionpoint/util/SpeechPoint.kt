@@ -15,7 +15,7 @@ class SpeechPoint(context: Context) : RecognitionListener {
     private var speech: SpeechRecognizer
     var speechStarted: Boolean = false
     private val language: String = "vi"
-    private var mainFragment: MainFragment? = null
+    private var callback: ((String) -> Unit)? = null
 
     init {
         speechIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
@@ -29,8 +29,8 @@ class SpeechPoint(context: Context) : RecognitionListener {
         speech.setRecognitionListener(this)
     }
 
-    fun setMainFragment(fragment: MainFragment) {
-        mainFragment = fragment
+    fun speechPointCallback(cb: ((String) -> Unit)?) {
+        callback = cb
     }
 
     fun startSpeech() {
@@ -94,10 +94,8 @@ class SpeechPoint(context: Context) : RecognitionListener {
         results?.let {
             val matches = it.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
             if (matches != null && !matches.isEmpty()) {
-                mainFragment?.onTextRecognition(matches[0])
+                callback?.invoke(matches[0])
             }
-
         }
     }
-
 }

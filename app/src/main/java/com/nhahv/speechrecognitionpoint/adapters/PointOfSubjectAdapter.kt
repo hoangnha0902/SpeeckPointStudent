@@ -36,7 +36,7 @@ class PointOfSubjectAdapter(private val marmotExams: ArrayList<MarmotExamItem>,
             }else{
                 val filteredList = ArrayList<MarmotExamItem>()
                 for (row in marmotOriginal){
-                    if (row.idMarmot.trim().toUpperCase().contains(charFilter)){
+                    if (row.idMarmot.trim().toUpperCase().contains(charFilter.trim().toUpperCase())){
                         filteredList.add(row)
                     }
                 }

@@ -101,7 +101,6 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
 
         exportExcel.setOnClickListener {
             if (isMainExam) {
-                toast("export is Main Exam")
                 val marmotExamPointItem = getMarmotExamPointItem()
                 if (marmotExamPointItem == null) {
                     toast("Không thể Export dữ liệu, có thể do dữ liệu không tồn tại")
@@ -114,10 +113,12 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
                 marmotExamPointItem.marmotExamItems.let {
                     val nameFile = Constant.marmotExamPointNameFile(idExamObject, idGroupExam, idSubjectExam, nameSubjectExam)
                     ReadWriteExcelFile.exportMarmotExamPointItem("$pathFolder/$nameFile.xls", it) { statusExport ->
-                        println("======== $statusExport")
+                        when(statusExport){
+                            ReadWriteExcelFile.StatusExport.SUCCESS -> toast("Export bảng điểm mã phách thành công")
+                            ReadWriteExcelFile.StatusExport.ERROR -> toast("Export bảng điểm thất bại hãy thử lại")
+                        }
                     }
                 }
-
 
                 return@setOnClickListener
             }
