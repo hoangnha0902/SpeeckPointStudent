@@ -25,7 +25,7 @@ import java.io.File
 
 class ExportExcelFragment : androidx.fragment.app.Fragment() {
 
-    val FOLDER_STORAGE_INTERNAL = "/storage/emulated"
+    val FOLDER_STORAGE_INTERNAL = "/storage"
 
     private lateinit var viewModel: ExportExcelViewModel
     private val folders = ArrayList<Folder>()
@@ -148,16 +148,13 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
     }
 
     fun onBackPress() {
-        Log.d(TAG, "mPathFolder = $pathFolder")
         if (pathFolder == FOLDER_STORAGE_INTERNAL) {
-            Log.d(TAG, "mPathFolder$pathFolder")
             Navigation.findNavController(requireActivity(), R.id.navLoginHost).popBackStack()
             return
         }
         val path = File(pathFolder).parent
         if (path == FOLDER_STORAGE_INTERNAL) {
             pathFolder = path
-            Log.d(TAG, "mPathFolder$pathFolder")
             folders.clear()
             val folder = folder(Environment.getExternalStorageDirectory().path)
             if (folder != null) {
@@ -171,7 +168,6 @@ class ExportExcelFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun refresh(path: String) {
-        Log.d(TAG, "path = $path")
         val folder = folder(path)
         if (folder == null) {
             (requireActivity() as MainActivity).back()
