@@ -28,7 +28,7 @@ class MainExamFragment : Fragment() {
     private var nameSubjectExam: String? = null
     private var marmotExamPointItem: MarmotExamPointItem? = null
     private lateinit var speechPoint: SpeechPoint
-    private val textCheckList = arrayListOf<String>("Dừng", "dùng", "Đừng", "chừng", "bừng", "từng", "vừng", "xừng", "sừng", "sùng")
+    private val textCheckList = arrayListOf<String>("Dừng", "dùng", "Đừng", "chừng", "bừng", "từng", "rừng", "tùng", "tung", "vừng", "xừng", "sừng", "sùng")
     private var isPauseSpeech = true
     private var indexUpdatePoint = -1
 
@@ -106,8 +106,10 @@ class MainExamFragment : Fragment() {
 
         startMic.setOnClickListener {
             if (!speechPoint.speechStarted) {
-                (requireActivity() as MainActivity).startSpeech { speechPoint.startSpeech() }
-                startMic.setImageResource(R.drawable.ic_stop)
+                (requireActivity() as MainActivity).startSpeech {
+                    speechPoint.startSpeech()
+                    startMic.setImageResource(R.drawable.ic_stop)
+                }
             } else {
                 speechPoint.cancel()
                 textSpeech.text = ""
@@ -211,7 +213,7 @@ class MainExamFragment : Fragment() {
     }
 
     private fun doSomeThingWithTextSpeech(text: String) {
-        println("============= $text")
+        textSpeech.text = text
         if (isPauseSpeechPoint(text)) {
             isPauseSpeech = true
             return
@@ -236,7 +238,7 @@ class MainExamFragment : Fragment() {
             indexUpdatePoint += 1
             marmotExamPointItem?.marmotExamItems = marmotExamItems
             updateMarmotExamPointToSharePref(marmotExamPointItem)
-        } catch (ex: NumberFormatException) {
+        } catch (ex: Exception) {
             ex.printStackTrace()
             toast("Định dạng không đúng, nhập lai điểm")
         }
@@ -271,6 +273,7 @@ class MainExamFragment : Fragment() {
                 .replace("năm", "5")
                 .replace("sáu", "6")
                 .replace("bảy", "7")
+                .replace("vậy", "7")
                 .replace("tám", "8")
                 .replace("chín", "9")
                 .replace("mườimột", "11")

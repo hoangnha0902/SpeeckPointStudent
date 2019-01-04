@@ -4,6 +4,7 @@
     <string name="text_internal">Bộ nhớ trong</string>
     <string name="text_number_item">%1$s item</string>
     <string name="text_syntax"><![CDATA[Đọc theo cú pháp <Họ và Tên> <Điểm>]]></string>
+    <string name="text_syntax_exam"><![CDATA[Đọc theo cú pháp <Mã phách> <Điểm>]]></string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

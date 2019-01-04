@@ -7,7 +7,6 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
-import com.nhahv.speechrecognitionpoint.ui.main.MainFragment
 
 class SpeechPoint(context: Context) : RecognitionListener {
     private val TAG = SpeechPoint::class.java.simpleName
@@ -23,7 +22,7 @@ class SpeechPoint(context: Context) : RecognitionListener {
         speechIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
         speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language)
         speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language)
-        speechIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 1000)
+        speechIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 500)
 
         speech = SpeechRecognizer.createSpeechRecognizer(context)
         speech.setRecognitionListener(this)
