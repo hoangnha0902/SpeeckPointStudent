@@ -34,9 +34,14 @@ class MainExamFragment : Fragment() {
 
     private val marmotExamItems = ArrayList<MarmotExamItem>()
     private val marmotExamAdapter: PointOfSubjectAdapter by lazy {
-        PointOfSubjectAdapter(marmotExamItems) { _, marmotExamItem, i ->
+        PointOfSubjectAdapter(marmotExamItems, { view, marmotExamItem, i ->
             showInputExamPoint("Nhập điểm mã phách ${marmotExamItem.idMarmot}", i)
-        }
+        }, { marmotExamItem, i ->
+            marmotExamItems[i].pointOfMarmot = ""
+            marmotExamPointItem?.marmotExamItems = marmotExamItems
+            updateMarmotExamPointToSharePref(marmotExamPointItem)
+            marmotExamAdapter.notifyDataSetChanged()
+        })
     }
 
     private val spinnerMarmotAdapter: ArrayAdapter<MarmotExam> by lazy {

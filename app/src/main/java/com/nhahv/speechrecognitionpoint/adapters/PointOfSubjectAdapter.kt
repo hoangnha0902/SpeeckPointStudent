@@ -6,11 +6,15 @@ import android.widget.Filter
 import android.widget.Filterable
 import com.nhahv.speechrecognitionpoint.BaseRecyclerAdapter
 import com.nhahv.speechrecognitionpoint.R
+import com.nhahv.speechrecognitionpoint.R.id.deletePoint
+import com.nhahv.speechrecognitionpoint.R.id.deletePointExam
 import com.nhahv.speechrecognitionpoint.data.models.MarmotExamItem
 import kotlinx.android.synthetic.main.item_main_exam.view.*
+import org.w3c.dom.Text
 
 class PointOfSubjectAdapter(private val marmotExams: ArrayList<MarmotExamItem>,
-                            listener: ((View, MarmotExamItem, Int) -> Unit)?
+                            listener: ((View, MarmotExamItem, Int) -> Unit)?,
+                            val deletePoint: ((MarmotExamItem, Int) -> Unit)?
 ) : BaseRecyclerAdapter<MarmotExamItem>(marmotExams, R.layout.item_main_exam, listener), Filterable {
 
     val marmotOriginal = marmotExams
@@ -22,21 +26,34 @@ class PointOfSubjectAdapter(private val marmotExams: ArrayList<MarmotExamItem>,
             holder.itemView.apply {
                 idMarmotExam.text = idMarmot
                 pointOfMarmotExam.text = pointOfMarmot
+                deletePointExam.visibility = if (TextUtils.isEmpty(pointOfMarmot)) View.INVISIBLE else View.VISIBLE
             }
+        }
+
+        holder.itemView.deletePointExam.setOnClickListener {
+            deletePoint?.invoke(marmotFilter[position], position)
         }
     }
 
     override fun getItemCount() = marmotFilter.size
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     override fun getFilter() = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val charFilter = constraint.toString()
-            val temp = if (TextUtils.isEmpty(charFilter)){
+            val temp = if (TextUtils.isEmpty(charFilter)) {
                 marmotOriginal
-            }else{
+            } else {
                 val filteredList = ArrayList<MarmotExamItem>()
-                for (row in marmotOriginal){
-                    if (row.idMarmot.trim().toUpperCase().contains(charFilter.trim().toUpperCase())){
+                for (row in marmotOriginal) {
+                    if (row.idMarmot.trim().toUpperCase().contains(charFilter.trim().toUpperCase())) {
                         filteredList.add(row)
                     }
                 }
@@ -44,7 +61,7 @@ class PointOfSubjectAdapter(private val marmotExams: ArrayList<MarmotExamItem>,
             }
             val filterResults = Filter.FilterResults()
             filterResults.values = temp
-            return  filterResults
+            return filterResults
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {

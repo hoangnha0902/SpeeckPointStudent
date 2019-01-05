@@ -73,17 +73,21 @@ inline fun <reified T> AppCompatActivity.currentFragment(): T? {
     return supportFragmentManager.findFragmentById(R.id.navLoginHost)?.childFragmentManager?.fragments?.get(0) as T?
 }
 
+fun Fragment.navController() = Navigation.findNavController(requireActivity(), R.id.navLoginHost)
+
+fun AppCompatActivity.navController() = Navigation.findNavController(this, R.id.navLoginHost)
+
 fun AppCompatActivity.currentFragmentId(): Int? {
     return Navigation.findNavController(this, R.id.navLoginHost).currentDestination?.id
 }
 
 fun Fragment.navigateClearStack(view: View, action: Int) {
-    view.findNavController().navigate(action, null, NavOptions.Builder().setClearTask(true).build())
+    navController().navigate(action, null, NavOptions.Builder().setPopUpTo(action, true).build())
 
 }
 
 fun Fragment.navigateClearStack(action: Int) {
-    Navigation.findNavController(requireActivity(), R.id.navLoginHost).navigate(action, null, NavOptions.Builder().setClearTask(true).build())
+    navController().navigate(action, null, NavOptions.Builder().setPopUpTo(action, true).build())
 }
 
 fun Fragment.navigate(view: View, action: Int) {
